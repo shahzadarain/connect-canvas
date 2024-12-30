@@ -4,12 +4,12 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Card } from "./ui/card";
+import { supabase } from "@/integrations/supabase/client";
 
 interface IdeaSubmission {
   name: string;
   email: string;
   idea: string;
-  timestamp: string;
 }
 
 const SubmitIdea = () => {
@@ -19,6 +19,7 @@ const SubmitIdea = () => {
     email: '',
     idea: ''
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target;
@@ -29,33 +30,41 @@ const SubmitIdea = () => {
     console.log('Form data updated:', { [id]: value });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsSubmitting(true);
     
-    const submission: IdeaSubmission = {
-      ...formData,
-      timestamp: new Date().toISOString()
-    };
+    try {
+      console.log('Submitting idea to Supabase:', formData);
+      
+      const { error } = await supabase
+        .from('ideas')
+        .insert([formData]);
 
-    // Get existing submissions or initialize empty array
-    const existingSubmissions = JSON.parse(localStorage.getItem('ideaSubmissions') || '[]');
-    
-    // Add new submission
-    const updatedSubmissions = [...existingSubmissions, submission];
-    
-    // Save to localStorage
-    localStorage.setItem('ideaSubmissions', JSON.stringify(updatedSubmissions));
-    
-    console.log('Idea submitted:', submission);
-    console.log('All submissions:', updatedSubmissions);
+      if (error) {
+        console.error('Error submitting idea:', error);
+        throw error;
+      }
 
-    // Reset form
-    setFormData({ name: '', email: '', idea: '' });
-
-    toast({
-      title: "Idea submitted!",
-      description: "Thank you for sharing your idea. It has been saved successfully.",
-    });
+      console.log('Idea submitted successfully');
+      
+      // Reset form
+      setFormData({ name: '', email: '', idea: '' });
+      
+      toast({
+        title: "Success!",
+        description: "Thank you for sharing your idea. It has been saved successfully.",
+      });
+    } catch (error) {
+      console.error('Error in submission:', error);
+      toast({
+        title: "Error",
+        description: "There was a problem submitting your idea. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -111,8 +120,13 @@ const SubmitIdea = () => {
                   className="text-lg resize-none"
                 />
               </div>
-              <Button type="submit" className="w-full text-lg py-6" size="lg">
-                Submit Idea
+              <Button 
+                type="submit" 
+                className="w-full text-lg py-6" 
+                size="lg"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Submitting...' : 'Submit Idea'}
               </Button>
             </form>
           </Card>
