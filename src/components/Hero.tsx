@@ -15,7 +15,7 @@ const Hero = () => {
             </div>
             <div className="prose prose-invert max-w-none">
               <p className="text-lg md:text-xl text-gray-300 mb-8 leading-relaxed">
-                With over two decades of experience, I have leveraged IT infrastructure, cloud solutions, AI, and data analytics to drive informed decision-making and deliver critical support to vulnerable populations.
+                With two decades of experience, I've merged IT infrastructure, cloud services, AI, and analytics to support informed decisions and protect vulnerable communities. Highlights include integrating refugee data with national health systems, AI-enabled communication, data governance improvements, cloud-based helplines, digital capacity-building, predictive analytics for resource planning, cybersecurity awareness initiatives, and modernizing legacy systems. I welcome collaborations that apply technology for meaningful humanitarian outcomes.
               </p>
               <div className="space-y-6 text-gray-300">
                 <h3 className="text-white text-2xl font-semibold mb-4">Key Highlights:</h3>
