@@ -34,14 +34,24 @@ const Hero = () => {
           </div>
           
           <div className="flex flex-wrap gap-6 justify-start mt-8">
-            <button className="group px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-600 text-white rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/25 font-medium">
-              View Projects
+            <a 
+              href="https://www.linkedin.com/in/shahzadasghar1/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-600 text-white rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/25 font-medium"
+            >
+              View Profile
               <span className="inline-block transition-transform group-hover:translate-x-1 ml-2">→</span>
-            </button>
-            <button className="group px-8 py-4 bg-white/[0.08] hover:bg-white/[0.12] text-white rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-white/10 backdrop-blur-sm font-medium border border-white/10 hover:border-white/20">
-              Contact Me
+            </a>
+            <a
+              href="https://www.linkedin.com/in/shahzadasghar1/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group px-8 py-4 bg-white/[0.08] hover:bg-white/[0.12] text-white rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-white/10 backdrop-blur-sm font-medium border border-white/10 hover:border-white/20"
+            >
+              Connect with Me
               <span className="inline-block transition-transform group-hover:translate-x-1 ml-2">→</span>
-            </button>
+            </a>
           </div>
         </div>
       </div>
