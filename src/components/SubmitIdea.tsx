@@ -1,25 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
-import ReCAPTCHA from "react-google-recaptcha";
 import { Card } from "./ui/card";
 
 const SubmitIdea = () => {
   const { toast } = useToast();
-  const [captchaValue, setCaptchaValue] = useState<string | null>(null);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!captchaValue) {
-      toast({
-        title: "CAPTCHA Required",
-        description: "Please complete the CAPTCHA verification.",
-        variant: "destructive"
-      });
-      return;
-    }
     toast({
       title: "Idea submitted!",
       description: "Thank you for sharing your idea. I'll review it soon.",
@@ -71,12 +61,6 @@ const SubmitIdea = () => {
                   rows={6}
                   placeholder="Describe your idea for using AI and data in humanitarian projects..."
                   className="text-lg resize-none"
-                />
-              </div>
-              <div className="flex justify-center my-6">
-                <ReCAPTCHA
-                  sitekey="6Ld1C6oqAAAAAHAjAXTjxszCgtl4qXhxQdSMa0gk"
-                  onChange={(value) => setCaptchaValue(value)}
                 />
               </div>
               <Button type="submit" className="w-full text-lg py-6" size="lg">
