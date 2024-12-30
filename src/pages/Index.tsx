@@ -3,6 +3,8 @@ import Hero from '@/components/Hero';
 import WorldMap from '@/components/WorldMap';
 import Projects from '@/components/Projects';
 import ReadingList from '@/components/ReadingList';
+import Certificates from '@/components/Certificates';
+import SubmitIdea from '@/components/SubmitIdea';
 import Contact from '@/components/Contact';
 
 const Index = () => {
@@ -12,6 +14,8 @@ const Index = () => {
       <WorldMap />
       <Projects />
       <ReadingList />
+      <Certificates />
+      <SubmitIdea />
       <Contact />
     </div>
   );
