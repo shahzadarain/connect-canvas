@@ -1,14 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
+import ReCAPTCHA from "react-google-recaptcha";
+import { Card } from "./ui/card";
 
 const SubmitIdea = () => {
   const { toast } = useToast();
+  const [captchaValue, setCaptchaValue] = useState<string | null>(null);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!captchaValue) {
+      toast({
+        title: "CAPTCHA Required",
+        description: "Please complete the CAPTCHA verification.",
+        variant: "destructive"
+      });
+      return;
+    }
     toast({
       title: "Idea submitted!",
       description: "Thank you for sharing your idea. I'll review it soon.",
@@ -16,49 +27,63 @@ const SubmitIdea = () => {
   };
 
   return (
-    <section className="py-20 bg-background">
+    <section className="py-20 bg-gradient-to-b from-background to-secondary/5">
       <div className="container mx-auto px-4">
-        <div className="max-w-2xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-primary text-center mb-12">
-            Submit Your Idea
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-4xl md:text-5xl font-bold text-primary text-center mb-6">
+            Submit Your Innovative Idea
           </h2>
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label htmlFor="ideaName" className="block text-sm font-medium text-gray-700 mb-2">
-                Name
-              </label>
-              <Input
-                id="ideaName"
-                required
-                placeholder="Your name"
-              />
-            </div>
-            <div>
-              <label htmlFor="ideaEmail" className="block text-sm font-medium text-gray-700 mb-2">
-                Email
-              </label>
-              <Input
-                type="email"
-                id="ideaEmail"
-                required
-                placeholder="your@email.com"
-              />
-            </div>
-            <div>
-              <label htmlFor="ideaDescription" className="block text-sm font-medium text-gray-700 mb-2">
-                Your Idea
-              </label>
-              <Textarea
-                id="ideaDescription"
-                required
-                rows={6}
-                placeholder="Describe your idea in detail..."
-              />
-            </div>
-            <Button type="submit" className="w-full">
-              Submit Idea
-            </Button>
-          </form>
+          <p className="text-lg text-center text-muted-foreground mb-12">
+            Share your ideas for AI and data-driven solutions in the humanitarian sector
+          </p>
+          <Card className="p-8 shadow-lg backdrop-blur-sm bg-card/50">
+            <form onSubmit={handleSubmit} className="space-y-8">
+              <div>
+                <label htmlFor="ideaName" className="block text-lg font-medium text-primary mb-2">
+                  Your Name
+                </label>
+                <Input
+                  id="ideaName"
+                  required
+                  placeholder="Enter your name"
+                  className="text-lg"
+                />
+              </div>
+              <div>
+                <label htmlFor="ideaEmail" className="block text-lg font-medium text-primary mb-2">
+                  Email
+                </label>
+                <Input
+                  type="email"
+                  id="ideaEmail"
+                  required
+                  placeholder="your@email.com"
+                  className="text-lg"
+                />
+              </div>
+              <div>
+                <label htmlFor="ideaDescription" className="block text-lg font-medium text-primary mb-2">
+                  Your Idea
+                </label>
+                <Textarea
+                  id="ideaDescription"
+                  required
+                  rows={6}
+                  placeholder="Describe your idea for using AI and data in humanitarian projects..."
+                  className="text-lg resize-none"
+                />
+              </div>
+              <div className="flex justify-center my-6">
+                <ReCAPTCHA
+                  sitekey="YOUR_RECAPTCHA_SITE_KEY"
+                  onChange={(value) => setCaptchaValue(value)}
+                />
+              </div>
+              <Button type="submit" className="w-full text-lg py-6" size="lg">
+                Submit Idea
+              </Button>
+            </form>
+          </Card>
         </div>
       </div>
     </section>
