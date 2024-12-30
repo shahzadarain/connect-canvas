@@ -12,7 +12,7 @@ const Contact = () => {
           </h2>
           <Card className="p-8 bg-white/10 backdrop-blur-sm">
             <a
-              href="https://linkedin.com/in/your-profile"
+              href="https://www.linkedin.com/in/shahzadasghar1/"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-3 text-white hover:text-accent transition-colors text-lg"

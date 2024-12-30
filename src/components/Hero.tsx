@@ -6,29 +6,48 @@ const Hero = () => {
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row items-center justify-between gap-12">
           <div className="flex-1 text-center md:text-left">
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 animate-float">
-              Building Technology<br />for Global Impact
-            </h1>
-            <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl">
-              International technology leader with 15+ years of experience developing solutions
-              across AI, cybersecurity, and digital transformation in humanitarian contexts.
-            </p>
-            <div className="flex flex-wrap gap-4 justify-center md:justify-start">
+            <div className="mb-8">
+              <img 
+                src="/lovable-uploads/8cac0737-3e7f-4979-8c34-0aee6a5c5f26.png" 
+                alt="UNHCR Jordan Data Analysis Group Header"
+                className="w-full rounded-lg shadow-xl mb-6"
+              />
+            </div>
+            <div className="prose prose-invert max-w-none">
+              <p className="text-lg md:text-xl text-gray-300 mb-8">
+                With over two decades of experience, I have leveraged IT infrastructure, cloud solutions, AI, and data analytics to drive informed decision-making and deliver critical support to vulnerable populations.
+              </p>
+              <div className="space-y-4 text-gray-300">
+                <h3 className="text-white text-xl font-semibold">Key Highlights:</h3>
+                <ul className="list-disc pl-5 space-y-2">
+                  <li>Data Integration for Crisis Response: Integrated refugee data with national health systems using scalable cloud platforms, resulting in improved access to essential services.</li>
+                  <li>AI-Enhanced Communication: Introduced speech-to-text analytics and machine learning models, automating transcription and classification to enhance response times, accuracy, and inclusivity.</li>
+                  <li>Data Governance & Intelligence: Implemented robust data governance measures and upgraded security protocols, leading to faster and more confident decision-making.</li>
+                  <li>Scalable Information Channels: Deployed cloud-based helpline systems, automating thousands of daily inquiries to elevate service standards.</li>
+                  <li>Building Technical Capacity: Collaborated with industry leaders to design training programs, developing essential digital competencies.</li>
+                  <li>Predictive Analytics for Resource Allocation: Deployed machine learning models to strategically allocate resources.</li>
+                  <li>Cybersecurity Leadership: Initiated the 'Cyber Security Hygiene' program, delivering over 20 targeted training sessions.</li>
+                  <li>Infrastructure & Cloud Modernization: Migrated legacy environments to cloud-based architectures.</li>
+                </ul>
+              </div>
+              <p className="text-lg mt-6 text-gray-300">
+                I am passionate about collaborating on innovative solutions that leverage technology to address humanitarian challenges. Let's connect to discuss how we can drive impactful change together.
+              </p>
+              <div className="flex flex-wrap gap-2 mt-4">
+                {['DigitalTransformation', 'HumanitarianTech', 'AIInnovation', 'CloudComputing', 'Cybersecurity'].map((tag) => (
+                  <span key={tag} className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-500/20 text-blue-200">
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-4 justify-center md:justify-start mt-8">
               <button className="px-8 py-3 bg-accent hover:bg-accent/90 text-white rounded-full transition-colors">
                 View Projects
               </button>
               <button className="px-8 py-3 bg-white/10 hover:bg-white/20 text-white rounded-full transition-colors">
                 Contact Me
               </button>
-            </div>
-          </div>
-          <div className="flex-1 relative">
-            <div className="w-64 h-64 md:w-96 md:h-96 rounded-full overflow-hidden border-4 border-white/20 shadow-xl animate-float">
-              <img
-                src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158"
-                alt="Profile"
-                className="w-full h-full object-cover"
-              />
             </div>
           </div>
         </div>
