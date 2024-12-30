@@ -1,20 +1,22 @@
-import React from 'react';
-import Navigation from '@/components/Navigation';
-import Hero from '@/components/Hero';
-import WorldMap from '@/components/WorldMap';
-import Projects from '@/components/Projects';
-import ReadingList from '@/components/ReadingList';
-import Certificates from '@/components/Certificates';
-import SubmitIdea from '@/components/SubmitIdea';
-import Contact from '@/components/Contact';
+import React from "react";
+import Navigation from "@/components/Navigation";
+import Hero from "@/components/Hero";
+import Projects from "@/components/Projects";
+import WorldMap from "@/components/WorldMap";
+import Certificates from "@/components/Certificates";
+import SubmitIdea from "@/components/SubmitIdea";
+import Contact from "@/components/Contact";
+import ReadingList from "@/components/ReadingList";
+import LearningAchievements from "@/components/LearningAchievements";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background pt-16">
+    <div className="min-h-screen bg-background">
       <Navigation />
       <Hero />
-      <WorldMap />
       <Projects />
+      <WorldMap />
+      <LearningAchievements />
       <ReadingList />
       <Certificates />
       <SubmitIdea />
