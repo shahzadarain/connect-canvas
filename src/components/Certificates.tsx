@@ -6,28 +6,28 @@ const certificates = [
     title: "AWS Solutions Architect",
     issuer: "Amazon Web Services",
     date: "2023",
-    image: "https://images.unsplash.com/photo-1523580846011-d3a5bc25702b",
+    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158",
     link: "#"
   },
   {
     title: "Google Cloud Professional",
     issuer: "Google Cloud",
     date: "2023",
-    image: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4",
+    image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d",
     link: "#"
   },
   {
     title: "Azure DevOps Engineer",
     issuer: "Microsoft",
     date: "2023",
-    image: "https://images.unsplash.com/photo-1496171367470-9ed9a91ea931",
+    image: "https://images.unsplash.com/photo-1434494878577-86c23bcb06b9",
     link: "#"
   },
   {
     title: "Certified Ethical Hacker",
     issuer: "EC-Council",
     date: "2023",
-    image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b",
+    image: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952",
     link: "#"
   },
 ];

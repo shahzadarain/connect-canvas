@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
@@ -23,50 +23,43 @@ const locations: [string, [number, number]][] = [
 const WorldMap = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
-  const [mapboxToken, setMapboxToken] = useState('');
 
   useEffect(() => {
     if (!mapContainer.current) return;
 
-    const initializeMap = (token: string) => {
-      if (!token) return;
+    try {
+      mapboxgl.accessToken = 'pk.eyJ1Ijoic2FtZWVyeCIsImEiOiJjbTR2dG10aGcwNnY2MmlzYml2bWV3MXQ1In0.i1afv65TWj9-t5r5mWOaEQ';
       
-      try {
-        mapboxgl.accessToken = token;
-        
-        map.current = new mapboxgl.Map({
-          container: mapContainer.current!,
-          style: 'mapbox://styles/mapbox/dark-v11',
-          center: [0, 20],
-          zoom: 1.5,
-        });
+      map.current = new mapboxgl.Map({
+        container: mapContainer.current,
+        style: 'mapbox://styles/mapbox/dark-v11',
+        center: [0, 20],
+        zoom: 1.5,
+      });
 
-        // Add markers for each location
-        locations.forEach(([name, coordinates]) => {
-          const marker = new mapboxgl.Marker({
-            color: "#10B981",
-          })
-            .setLngLat(coordinates)
-            .setPopup(
-              new mapboxgl.Popup({ offset: 25 })
-                .setHTML(`<h3 class="text-sm font-bold">${name}</h3>`)
-            )
-            .addTo(map.current!);
-        });
+      locations.forEach(([name, coordinates]) => {
+        new mapboxgl.Marker({
+          color: "#10B981",
+        })
+          .setLngLat(coordinates)
+          .setPopup(
+            new mapboxgl.Popup({ offset: 25 })
+              .setHTML(`<h3 class="text-sm font-bold">${name}</h3>`)
+          )
+          .addTo(map.current!);
+      });
 
-        console.log('Map initialized successfully');
-      } catch (error) {
-        console.error('Error initializing map:', error);
-      }
-    };
+      console.log('Map initialized successfully');
+    } catch (error) {
+      console.error('Error initializing map:', error);
+    }
 
-    // Cleanup function
     return () => {
       if (map.current) {
         map.current.remove();
       }
     };
-  }, [mapboxToken]);
+  }, []);
 
   return (
     <section className="py-20 bg-primary">
@@ -74,27 +67,6 @@ const WorldMap = () => {
         <h2 className="text-3xl md:text-4xl font-bold text-white text-center mb-12">
           Global Impact Across 15 Countries
         </h2>
-        {!mapboxToken && (
-          <div className="mb-4">
-            <input
-              type="text"
-              placeholder="Enter your Mapbox token"
-              className="w-full p-2 border rounded text-black"
-              onChange={(e) => setMapboxToken(e.target.value)}
-            />
-            <p className="text-sm text-white mt-2">
-              Please enter your Mapbox token to view the map. Get one at{' '}
-              <a
-                href="https://www.mapbox.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline"
-              >
-                mapbox.com
-              </a>
-            </p>
-          </div>
-        )}
         <div className="relative w-full h-[60vh] rounded-xl overflow-hidden shadow-2xl">
           <div ref={mapContainer} className="absolute inset-0" />
         </div>
