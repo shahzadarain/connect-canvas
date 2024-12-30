@@ -75,7 +75,7 @@ const SubmitIdea = () => {
               </div>
               <div className="flex justify-center my-6">
                 <ReCAPTCHA
-                  sitekey="YOUR_RECAPTCHA_SITE_KEY"
+                  sitekey="6Ld1C6oqAAAAAHAjAXTjxszCgtl4qXhxQdSMa0gk"
                   onChange={(value) => setCaptchaValue(value)}
                 />
               </div>
