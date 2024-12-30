@@ -3,7 +3,8 @@ import React from 'react';
 const Hero = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-[#1A1F2C] via-[#2C3E50] to-[#1A1F2C] py-20">
-      <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80')] opacity-20 bg-cover bg-center" />
+      {/* Modern tech pattern background */}
+      <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7')] opacity-20 bg-cover bg-center bg-fixed" />
       <div className="absolute inset-0 bg-gradient-to-b from-[#1A1F2C]/80 via-[#1A1F2C]/70 to-[#1A1F2C]" />
       
       <div className="container mx-auto px-4 relative z-10">
