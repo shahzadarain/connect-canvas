@@ -35,11 +35,12 @@ const SubmitIdea = () => {
     setIsSubmitting(true);
     
     try {
-      console.log('Submitting idea to Supabase:', formData);
+      const { name, email, idea } = formData;
+      console.log('Submitting idea to Supabase:', { name, email, idea });
       
       const { error } = await supabase
         .from('ideas')
-        .insert([formData]);
+        .insert([{ name, email, idea }]);
 
       if (error) {
         console.error('Error submitting idea:', error);
