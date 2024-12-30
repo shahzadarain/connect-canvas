@@ -14,16 +14,16 @@ const books = [
     link: "https://dataintensive.net/"
   },
   {
-    title: "Clean Architecture",
-    author: "Robert C. Martin",
-    cover: "https://images.unsplash.com/photo-1556075798-4825dfaaf498",
-    link: "#"
+    title: "The Innovator's Dilemma",
+    author: "Clayton M. Christensen",
+    cover: "/lovable-uploads/f9897ed6-0eb1-46ac-a75c-71229f7179b1.png",
+    link: "https://www.amazon.com/Innovators-Dilemma-Technologies-Management-Innovation/dp/1633691780"
   },
   {
-    title: "AI Superpowers",
-    author: "Kai-Fu Lee",
-    cover: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485",
-    link: "#"
+    title: "Disciplined Dreaming",
+    author: "Josh Linkner",
+    cover: "/lovable-uploads/4c89cf12-c2f3-4952-afe6-1c742e2404d8.png",
+    link: "https://joshlinkner.com/books/"
   }
 ];
 
