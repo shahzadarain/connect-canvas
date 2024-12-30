@@ -14,7 +14,7 @@ interface IdeaSubmission {
 
 const SubmitIdea = () => {
   const { toast } = useToast();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<IdeaSubmission>({
     name: '',
     email: '',
     idea: ''
@@ -25,7 +25,7 @@ const SubmitIdea = () => {
     const { id, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [id.replace('idea', '')]: value
+      [id]: value
     }));
     console.log('Form data updated:', { [id]: value });
   };
@@ -68,7 +68,7 @@ const SubmitIdea = () => {
   };
 
   return (
-    <section className="py-20 bg-gradient-to-b from-background to-secondary/5">
+    <section id="submit" className="py-20 bg-gradient-to-b from-background to-secondary/5">
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-4xl md:text-5xl font-bold text-primary text-center mb-6">
