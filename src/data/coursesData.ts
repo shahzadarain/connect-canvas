@@ -4,6 +4,7 @@ export interface Course {
   instructor?: string;
   completed: string;
   description?: string;
+  featured?: boolean;
 }
 
 export const courses: { category: string; items: Course[] }[] = [
