@@ -80,7 +80,7 @@ const LearningAchievements = () => {
                               </div>
                               <Badge 
                                 variant="secondary"
-                                className="bg-primary/10 hover:bg-primary/20 transition-colors duration-200"
+                                className="bg-[#0EA5E9] text-white hover:bg-[#0EA5E9]/90 transition-colors duration-200"
                               >
                                 {course.completed}
                               </Badge>
