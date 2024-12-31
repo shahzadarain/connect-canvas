@@ -5,7 +5,7 @@ import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Card } from "./ui/card";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2 } from "lucide-react";
+import { Loader2, Sparkles } from "lucide-react";
 
 interface IdeaSubmission {
   name: string;
@@ -69,19 +69,26 @@ const SubmitIdea = () => {
   };
 
   return (
-    <section id="submit" className="py-20 bg-gradient-to-b from-background to-secondary/5">
-      <div className="container mx-auto px-4">
+    <section id="submit" className="py-24 bg-gradient-to-b from-[#F2FCE2] to-white relative overflow-hidden">
+      <div className="absolute inset-0 bg-grid-black/[0.02] -z-10" />
+      <div className="container mx-auto px-4 relative">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-bold text-primary text-center mb-6 animate-fade-in">
-            Submit Your Innovative Idea
-          </h2>
-          <p className="text-lg text-center text-muted-foreground mb-12 animate-fade-in">
-            Share your ideas for AI and data-driven solutions in the humanitarian sector
-          </p>
-          <Card className="p-8 shadow-lg backdrop-blur-sm bg-card/50 animate-fade-in">
-            <form onSubmit={handleSubmit} className="space-y-8">
+          <div className="text-center mb-12">
+            <div className="inline-block p-2 bg-[#E5DEFF] rounded-full mb-4">
+              <Sparkles className="w-6 h-6 text-[#8B5CF6]" />
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold text-[#1A1F2C] mb-4 tracking-tight">
+              Submit Your Innovative Idea
+            </h2>
+            <p className="text-lg text-[#403E43] md:text-xl max-w-2xl mx-auto">
+              Share your ideas for AI and data-driven solutions in the humanitarian sector
+            </p>
+          </div>
+          
+          <Card className="p-8 md:p-10 shadow-xl backdrop-blur-sm bg-white/95 rounded-2xl border border-[#E5DEFF]">
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
-                <label htmlFor="name" className="block text-lg font-medium text-primary">
+                <label htmlFor="name" className="block text-lg font-medium text-[#1A1F2C]">
                   Your Name
                 </label>
                 <Input
@@ -90,11 +97,12 @@ const SubmitIdea = () => {
                   onChange={handleChange}
                   required
                   placeholder="Enter your name"
-                  className="text-lg transition-all duration-300 focus:ring-2 focus:ring-accent/20"
+                  className="text-lg h-12 transition-all duration-300 border-[#E5DEFF] focus:border-[#8B5CF6] focus:ring-2 focus:ring-[#8B5CF6]/20"
                 />
               </div>
+              
               <div className="space-y-2">
-                <label htmlFor="email" className="block text-lg font-medium text-primary">
+                <label htmlFor="email" className="block text-lg font-medium text-[#1A1F2C]">
                   Email
                 </label>
                 <Input
@@ -104,11 +112,12 @@ const SubmitIdea = () => {
                   onChange={handleChange}
                   required
                   placeholder="your@email.com"
-                  className="text-lg transition-all duration-300 focus:ring-2 focus:ring-accent/20"
+                  className="text-lg h-12 transition-all duration-300 border-[#E5DEFF] focus:border-[#8B5CF6] focus:ring-2 focus:ring-[#8B5CF6]/20"
                 />
               </div>
+              
               <div className="space-y-2">
-                <label htmlFor="idea" className="block text-lg font-medium text-primary">
+                <label htmlFor="idea" className="block text-lg font-medium text-[#1A1F2C]">
                   Your Idea
                 </label>
                 <Textarea
@@ -118,22 +127,22 @@ const SubmitIdea = () => {
                   required
                   rows={6}
                   placeholder="Describe your idea for using AI and data in humanitarian projects..."
-                  className="text-lg resize-none transition-all duration-300 focus:ring-2 focus:ring-accent/20"
+                  className="text-lg resize-none transition-all duration-300 border-[#E5DEFF] focus:border-[#8B5CF6] focus:ring-2 focus:ring-[#8B5CF6]/20"
                 />
               </div>
+              
               <Button 
                 type="submit" 
-                className="w-full text-lg py-6 bg-gradient-to-r from-accent to-accent/90 hover:from-accent/90 hover:to-accent transition-all duration-300 transform hover:scale-[1.02]" 
-                size="lg"
+                className="w-full text-lg py-6 bg-gradient-to-r from-[#8B5CF6] to-[#9b87f5] hover:from-[#9b87f5] hover:to-[#8B5CF6] text-white transition-all duration-300 transform hover:scale-[1.02] shadow-lg hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed h-auto"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? (
                   <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                     Submitting...
                   </>
                 ) : (
-                  'Submit Idea'
+                  'Share Your Idea'
                 )}
               </Button>
             </form>
