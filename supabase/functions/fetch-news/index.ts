@@ -7,7 +7,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const PERPLEXITY_API_KEY = Deno.env.get('PERPLEXITY_API_KEY');
+const OPENAI_API_KEY = Deno.env.get('OPENAI_API_KEY');
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL');
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
 
@@ -21,8 +21,8 @@ serve(async (req) => {
     console.log('Starting fetch-news function execution...');
     
     // Validate environment variables
-    if (!PERPLEXITY_API_KEY) {
-      throw new Error('PERPLEXITY_API_KEY is not set in environment variables');
+    if (!OPENAI_API_KEY) {
+      throw new Error('OPENAI_API_KEY is not set in environment variables');
     }
 
     if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
@@ -60,17 +60,17 @@ serve(async (req) => {
       }
     }
 
-    console.log('Fetching fresh news from Perplexity API...');
+    console.log('Fetching fresh news from OpenAI API...');
     
-    // Fetch new articles using Perplexity
-    const perplexityResponse = await fetch('https://api.perplexity.ai/chat/completions', {
+    // Fetch new articles using OpenAI
+    const openaiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${PERPLEXITY_API_KEY}`,
+        'Authorization': `Bearer ${OPENAI_API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'llama-3.1-sonar-small-128k-online',
+        model: 'gpt-4o-mini',
         messages: [
           {
             role: 'system',
@@ -86,25 +86,25 @@ serve(async (req) => {
       }),
     });
 
-    if (!perplexityResponse.ok) {
-      const errorText = await perplexityResponse.text();
-      console.error('Perplexity API error response:', errorText);
-      throw new Error(`Perplexity API returned status ${perplexityResponse.status}: ${errorText}`);
+    if (!openaiResponse.ok) {
+      const errorText = await openaiResponse.text();
+      console.error('OpenAI API error response:', errorText);
+      throw new Error(`OpenAI API returned status ${openaiResponse.status}: ${errorText}`);
     }
 
-    const perplexityData = await perplexityResponse.json();
-    console.log('Received response from Perplexity API');
+    const openaiData = await openaiResponse.json();
+    console.log('Received response from OpenAI API');
 
-    if (!perplexityData.choices?.[0]?.message?.content) {
-      console.error('Invalid Perplexity API response format:', perplexityData);
-      throw new Error('Invalid response format from Perplexity API');
+    if (!openaiData.choices?.[0]?.message?.content) {
+      console.error('Invalid OpenAI API response format:', openaiData);
+      throw new Error('Invalid response format from OpenAI API');
     }
 
     let articles;
     try {
-      articles = JSON.parse(perplexityData.choices[0].message.content).articles;
+      articles = JSON.parse(openaiData.choices[0].message.content).articles;
     } catch (parseError) {
-      console.error('Failed to parse Perplexity API response:', perplexityData.choices[0].message.content);
+      console.error('Failed to parse OpenAI API response:', openaiData.choices[0].message.content);
       throw new Error('Failed to parse news articles from API response');
     }
 
