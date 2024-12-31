@@ -1,4 +1,5 @@
 import React from 'react';
+import { BookOpen } from 'lucide-react';
 
 const books = [
   {
@@ -29,17 +30,24 @@ const books = [
 
 const ReadingList = () => {
   return (
-    <section className="py-20 bg-gradient-to-b from-background to-gray-50 dark:to-gray-900">
+    <section id="reading" className="py-20 bg-gradient-to-b from-background via-gray-50 to-white dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl md:text-4xl font-bold text-primary text-center mb-12">
-          Current Reading List
-        </h2>
+        <div className="flex items-center justify-center gap-3 mb-12">
+          <BookOpen className="w-8 h-8 text-blue-500" />
+          <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
+            Current Reading List
+          </h2>
+        </div>
+        
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {books.map((book) => (
+          {books.map((book, index) => (
             <a
               key={book.title}
               href={book.link}
-              className="group relative bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 animate-fade-in"
+              style={{ animationDelay: `${index * 150}ms` }}
             >
               <div className="aspect-[3/4] overflow-hidden">
                 <img
@@ -47,12 +55,15 @@ const ReadingList = () => {
                   alt={book.title}
                   className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                    <h3 className="font-bold text-xl mb-2">{book.title}</h3>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="absolute bottom-0 left-0 right-0 p-6 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                    <h3 className="font-bold text-xl mb-2 text-white">{book.title}</h3>
                     <p className="text-gray-200 text-sm">{book.author}</p>
                   </div>
                 </div>
+              </div>
+              <div className="absolute top-4 right-4 bg-blue-500 text-white text-xs font-semibold px-3 py-1 rounded-full opacity-0 group-hover:opacity-100 transform -translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                Read More
               </div>
             </a>
           ))}
