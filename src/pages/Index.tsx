@@ -7,6 +7,7 @@ import SubmitIdea from "@/components/SubmitIdea";
 import Contact from "@/components/Contact";
 import ReadingList from "@/components/ReadingList";
 import LearningAchievements from "@/components/LearningAchievements";
+import NewsSection from "@/components/NewsSection";
 import Footer from "@/components/Footer";
 
 const Index = () => {
@@ -16,6 +17,7 @@ const Index = () => {
       <Hero />
       <Projects />
       <WorldMap />
+      <NewsSection />
       <LearningAchievements />
       <ReadingList />
       <SubmitIdea />
