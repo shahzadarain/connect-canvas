@@ -12,6 +12,13 @@ export const courses: { category: string; items: Course[] }[] = [
     category: "AI & Machine Learning",
     items: [
       {
+        title: "IBM Generative AI Engineering Professional Certificate",
+        platform: "Coursera",
+        completed: "May 2024",
+        description: "Comprehensive certification in generative AI engineering, including Python for data science and AI development",
+        featured: true
+      },
+      {
         title: "Building a Responsible AI Program",
         platform: "LinkedIn",
         instructor: "Katrina Ingram",
@@ -23,52 +30,14 @@ export const courses: { category: string; items: Course[] }[] = [
         platform: "LinkedIn",
         instructor: "Kesha Williams",
         completed: "Jul 2024",
-        description: "Techniques to fine-tune large language models"
+        description: "Advanced techniques for fine-tuning large language models"
       },
       {
         title: "RAG and Fine-Tuning Explained",
         platform: "LinkedIn",
         instructor: "Morten Rand-Hendriksen",
         completed: "Jul 2024",
-        description: "Understanding Retrieval-Augmented Generation and fine-tuning methods"
-      },
-      {
-        title: "IBM Generative AI Engineering Professional Certificate",
-        platform: "Coursera",
-        completed: "May 2024",
-        description: "Comprehensive training in generative AI engineering and applications"
-      }
-    ]
-  },
-  {
-    category: "Data Analytics & Visualization",
-    items: [
-      {
-        title: "Power BI Essential Training",
-        platform: "LinkedIn",
-        instructor: "Gini von Courter",
-        completed: "Various",
-        description: "Master Power BI fundamentals for data visualization"
-      },
-      {
-        title: "Statistics Foundations Series",
-        platform: "LinkedIn",
-        instructor: "Eddie Davila",
-        completed: "Various",
-        description: "Comprehensive statistics training"
-      },
-      {
-        title: "Advanced and Specialized Statistics with Stata",
-        platform: "LinkedIn",
-        instructor: "Franz Buscha",
-        completed: "Jan 2021",
-        description: "Advanced statistical analysis using Stata"
-      },
-      {
-        title: "Google Data Analytics Professional Certificate",
-        platform: "Coursera",
-        completed: "July 2023",
-        description: "Comprehensive data analytics training from Google"
+        description: "Deep dive into Retrieval-Augmented Generation and model optimization"
       }
     ]
   },
@@ -76,63 +45,98 @@ export const courses: { category: string; items: Course[] }[] = [
     category: "Cybersecurity & Privacy",
     items: [
       {
-        title: "GDPR Compliance: Essential Training",
-        platform: "LinkedIn",
-        instructor: "Mandy Huth",
-        completed: "Dec 2022",
-        description: "Understanding GDPR fundamentals"
+        title: "IBM Generative AI for Cybersecurity",
+        platform: "Coursera",
+        completed: "October 2024",
+        description: "Advanced applications of generative AI in cybersecurity operations",
+        featured: true
       },
       {
-        title: "Creating a Culture of Privacy",
-        platform: "LinkedIn",
-        instructor: "Kalinda Raina",
-        completed: "Dec 2022",
-        description: "Building privacy-focused organizational culture"
-      },
-      {
-        title: "CSSLP Certification Preparation Series",
+        title: "CSSLP Certification Series",
         platform: "LinkedIn",
         instructor: "Jerod Brennen",
         completed: "Dec 2021",
-        description: "Comprehensive secure software lifecycle training"
+        description: "Comprehensive secure software lifecycle professional certification preparation"
       },
       {
-        title: "IBM Generative AI for Cybersecurity Professionals",
-        platform: "Coursera",
-        completed: "October 2024",
-        description: "Application of generative AI in cybersecurity"
+        title: "Privacy by Design Series",
+        platform: "LinkedIn",
+        instructor: "Nishant Bhajaria",
+        completed: "Dec 2022",
+        description: "Implementation of privacy-first approaches in data management"
+      },
+      {
+        title: "GDPR & Privacy Culture",
+        platform: "LinkedIn",
+        instructor: "Multiple Experts",
+        completed: "Dec 2022",
+        description: "Comprehensive training in GDPR compliance and privacy culture development"
       }
     ]
   },
   {
-    category: "Professional Development",
+    category: "Data Analytics & Visualization",
+    items: [
+      {
+        title: "Google Data Analytics Professional Certificate",
+        platform: "Coursera",
+        completed: "July 2023",
+        description: "Comprehensive data analytics certification from Google",
+        featured: true
+      },
+      {
+        title: "Power BI Mastery Series",
+        platform: "LinkedIn",
+        instructor: "Gini von Courter",
+        completed: "Various",
+        description: "Advanced Power BI skills for data visualization and analysis"
+      },
+      {
+        title: "Statistics Foundations Series",
+        platform: "LinkedIn",
+        instructor: "Eddie Davila",
+        completed: "Various",
+        description: "Comprehensive statistics training from basics to advanced concepts"
+      },
+      {
+        title: "GIS, Mapping, and Spatial Analysis",
+        platform: "Coursera",
+        completed: "March 2023",
+        description: "Advanced geographical information systems and spatial analysis"
+      }
+    ]
+  },
+  {
+    category: "Leadership & Strategy",
     items: [
       {
         title: "Strategic Thinking",
         platform: "LinkedIn",
         instructor: "Dorie Clark",
         completed: "Nov 2023",
-        description: "Developing strategic decision-making skills"
+        description: "Advanced strategic decision-making and leadership",
+        featured: true
       },
       {
         title: "Project Management Skills for Leaders",
         platform: "LinkedIn",
         instructor: "Dana Brownlee",
         completed: "Dec 2022",
-        description: "Essential project management skills"
+        description: "Essential project management skills for leadership roles"
       },
       {
-        title: "Business Process Improvement",
+        title: "Creating a Culture of Change",
         platform: "LinkedIn",
-        instructor: "Eddie Davila",
-        completed: "Jun 2021",
-        description: "Process optimization techniques"
+        instructor: "Jerry Pico",
+        completed: "Aug 2020",
+        description: "Strategies for fostering organizational transformation"
       },
       {
-        title: "GIS, Mapping, and Spatial Analysis",
-        platform: "Coursera",
-        completed: "March 2023",
-        description: "Fundamentals of Geographic Information Systems"
+        title: "Strategic Negotiation",
+        platform: "LinkedIn",
+        instructor: "Mike Figliuolo",
+        completed: "Apr 2020",
+        description: "Advanced negotiation techniques for business leaders"
       }
     ]
   },
@@ -140,32 +144,33 @@ export const courses: { category: string; items: Course[] }[] = [
     category: "Cloud & Infrastructure",
     items: [
       {
-        title: "Cybersecurity with Cloud Computing",
-        platform: "LinkedIn",
-        instructor: "Malcolm Shore",
-        completed: "Dec 2021",
-        description: "Cloud security fundamentals"
-      },
-      {
-        title: "Azure Administration: Business Continuity",
+        title: "Azure Administration Series",
         platform: "LinkedIn",
         instructor: "Matt Hester",
         completed: "Feb 2020",
-        description: "Azure business continuity solutions"
+        description: "Comprehensive Azure cloud administration training",
+        featured: true
       },
       {
-        title: "Learning Amazon Web Services (AWS) for Developers",
+        title: "AWS for Developers",
         platform: "LinkedIn",
         instructor: "Bear Cahill",
         completed: "Feb 2020",
-        description: "AWS development fundamentals"
+        description: "Development fundamentals for Amazon Web Services"
       },
       {
-        title: "Learning the Elastic Stack",
+        title: "Elastic Stack Implementation",
         platform: "LinkedIn",
         instructor: "Emmanuel Henri",
         completed: "Feb 2020",
-        description: "ELK Stack implementation"
+        description: "ELK Stack deployment and management"
+      },
+      {
+        title: "Cloud Security Concepts",
+        platform: "LinkedIn",
+        instructor: "David Linthicum",
+        completed: "Dec 2021",
+        description: "Advanced cloud security and compliance"
       }
     ]
   }
