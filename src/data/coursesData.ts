@@ -9,13 +9,22 @@ export interface Course {
 
 export const courses: { category: string; items: Course[] }[] = [
   {
-    category: "AI & Machine Learning",
+    category: "Artificial Intelligence and Machine Learning",
     items: [
       {
         title: "IBM Generative AI Engineering Professional Certificate",
         platform: "Coursera",
+        instructor: "IBM Team",
         completed: "May 2024",
-        description: "Comprehensive certification in generative AI engineering, including Python for data science and AI development",
+        description: "Comprehensive certification covering Python for data science, AI development, and machine learning fundamentals",
+        featured: true
+      },
+      {
+        title: "IBM Generative AI for Cybersecurity Professionals",
+        platform: "Coursera",
+        instructor: "IBM Team",
+        completed: "October 2024",
+        description: "Advanced training in generative AI applications for cybersecurity, including prompt engineering",
         featured: true
       },
       {
@@ -42,21 +51,23 @@ export const courses: { category: string; items: Course[] }[] = [
     ]
   },
   {
-    category: "Cybersecurity & Privacy",
+    category: "Cybersecurity and Privacy",
     items: [
-      {
-        title: "IBM Generative AI for Cybersecurity",
-        platform: "Coursera",
-        completed: "October 2024",
-        description: "Advanced applications of generative AI in cybersecurity operations",
-        featured: true
-      },
       {
         title: "CSSLP Certification Series",
         platform: "LinkedIn",
         instructor: "Jerod Brennen",
         completed: "Dec 2021",
-        description: "Comprehensive secure software lifecycle professional certification preparation"
+        description: "Comprehensive secure software lifecycle professional certification",
+        featured: true
+      },
+      {
+        title: "CCSP Certification Series",
+        platform: "LinkedIn",
+        instructor: "Mike Chapple",
+        completed: "Dec 2021",
+        description: "Advanced cloud security professional certification preparation",
+        featured: true
       },
       {
         title: "Privacy by Design Series",
@@ -66,16 +77,30 @@ export const courses: { category: string; items: Course[] }[] = [
         description: "Implementation of privacy-first approaches in data management"
       },
       {
-        title: "GDPR & Privacy Culture",
+        title: "Creating a Culture of Privacy",
         platform: "LinkedIn",
-        instructor: "Multiple Experts",
+        instructor: "Kalinda Raina",
         completed: "Dec 2022",
-        description: "Comprehensive training in GDPR compliance and privacy culture development"
+        description: "Strategies for fostering privacy-centric organizational culture"
+      },
+      {
+        title: "Understanding Zero Trust",
+        platform: "LinkedIn",
+        instructor: "Malcolm Shore",
+        completed: "Dec 2021",
+        description: "Implementation of Zero Trust security architecture"
+      },
+      {
+        title: "Cloud Security Concepts",
+        platform: "LinkedIn",
+        instructor: "David Linthicum",
+        completed: "Dec 2021",
+        description: "Advanced cloud security and compliance strategies"
       }
     ]
   },
   {
-    category: "Data Analytics & Visualization",
+    category: "Data Analytics and Visualization",
     items: [
       {
         title: "Google Data Analytics Professional Certificate",
@@ -88,67 +113,42 @@ export const courses: { category: string; items: Course[] }[] = [
         title: "Power BI Mastery Series",
         platform: "LinkedIn",
         instructor: "Gini von Courter",
-        completed: "Various",
-        description: "Advanced Power BI skills for data visualization and analysis"
+        completed: "2021",
+        description: "Advanced Power BI skills for data visualization",
+        featured: true
       },
       {
         title: "Statistics Foundations Series",
         platform: "LinkedIn",
         instructor: "Eddie Davila",
-        completed: "Various",
-        description: "Comprehensive statistics training from basics to advanced concepts"
+        completed: "2021",
+        description: "Comprehensive statistics training from basics to advanced"
       },
       {
-        title: "GIS, Mapping, and Spatial Analysis",
-        platform: "Coursera",
-        completed: "March 2023",
-        description: "Advanced geographical information systems and spatial analysis"
+        title: "Data Ethics: Making Data-Driven Decisions",
+        platform: "LinkedIn",
+        instructor: "Doug Rose",
+        completed: "2022",
+        description: "Ethical frameworks for data-driven decision making"
+      },
+      {
+        title: "Advanced Statistics with Stata",
+        platform: "LinkedIn",
+        instructor: "Franz Buscha",
+        completed: "2021",
+        description: "Advanced statistical analysis using Stata"
       }
     ]
   },
   {
-    category: "Leadership & Strategy",
-    items: [
-      {
-        title: "Strategic Thinking",
-        platform: "LinkedIn",
-        instructor: "Dorie Clark",
-        completed: "Nov 2023",
-        description: "Advanced strategic decision-making and leadership",
-        featured: true
-      },
-      {
-        title: "Project Management Skills for Leaders",
-        platform: "LinkedIn",
-        instructor: "Dana Brownlee",
-        completed: "Dec 2022",
-        description: "Essential project management skills for leadership roles"
-      },
-      {
-        title: "Creating a Culture of Change",
-        platform: "LinkedIn",
-        instructor: "Jerry Pico",
-        completed: "Aug 2020",
-        description: "Strategies for fostering organizational transformation"
-      },
-      {
-        title: "Strategic Negotiation",
-        platform: "LinkedIn",
-        instructor: "Mike Figliuolo",
-        completed: "Apr 2020",
-        description: "Advanced negotiation techniques for business leaders"
-      }
-    ]
-  },
-  {
-    category: "Cloud & Infrastructure",
+    category: "Cloud Computing and IT Strategy",
     items: [
       {
         title: "Azure Administration Series",
         platform: "LinkedIn",
         instructor: "Matt Hester",
         completed: "Feb 2020",
-        description: "Comprehensive Azure cloud administration training",
+        description: "Comprehensive Azure cloud administration",
         featured: true
       },
       {
@@ -156,21 +156,89 @@ export const courses: { category: string; items: Course[] }[] = [
         platform: "LinkedIn",
         instructor: "Bear Cahill",
         completed: "Feb 2020",
-        description: "Development fundamentals for Amazon Web Services"
+        description: "Development fundamentals for AWS"
       },
       {
-        title: "Elastic Stack Implementation",
+        title: "Learning Hadoop",
         platform: "LinkedIn",
-        instructor: "Emmanuel Henri",
+        instructor: "Lynn Langit",
         completed: "Feb 2020",
-        description: "ELK Stack deployment and management"
+        description: "Big data processing with Hadoop"
       },
       {
-        title: "Cloud Security Concepts",
+        title: "Creating Your IT Strategy",
         platform: "LinkedIn",
-        instructor: "David Linthicum",
-        completed: "Dec 2021",
-        description: "Advanced cloud security and compliance"
+        instructor: "Peter High",
+        completed: "Feb 2020",
+        description: "Strategic IT planning and implementation"
+      }
+    ]
+  },
+  {
+    category: "Project Management and Leadership",
+    items: [
+      {
+        title: "Strategic Thinking",
+        platform: "LinkedIn",
+        instructor: "Dorie Clark",
+        completed: "Nov 2023",
+        description: "Advanced strategic decision-making",
+        featured: true
+      },
+      {
+        title: "Project Management Skills for Leaders",
+        platform: "LinkedIn",
+        instructor: "Dana Brownlee",
+        completed: "Dec 2022",
+        description: "Essential project management leadership skills"
+      },
+      {
+        title: "Business Process Improvement",
+        platform: "LinkedIn",
+        instructor: "Eddie Davila",
+        completed: "Jun 2021",
+        description: "Process optimization techniques"
+      },
+      {
+        title: "Change Management Foundations",
+        platform: "LinkedIn",
+        instructor: "Bob McGannon",
+        completed: "Feb 2020",
+        description: "Leading organizational change"
+      }
+    ]
+  },
+  {
+    category: "Business Analysis and Design",
+    items: [
+      {
+        title: "Business Analysis Foundations",
+        platform: "LinkedIn",
+        instructor: "Greta Blash",
+        completed: "Jan 2021",
+        description: "Core business analysis methodologies",
+        featured: true
+      },
+      {
+        title: "Design Thinking Approach",
+        platform: "LinkedIn",
+        instructor: "Big Think",
+        completed: "Aug 2022",
+        description: "Customer-centric design methodology"
+      },
+      {
+        title: "UX Foundations: Interaction Design",
+        platform: "LinkedIn",
+        instructor: "David Hogue",
+        completed: "Feb 2020",
+        description: "Principles of user interaction design"
+      },
+      {
+        title: "Business Process Modeling",
+        platform: "LinkedIn",
+        instructor: "Haydn Thomas",
+        completed: "Oct 2020",
+        description: "Process modeling and optimization"
       }
     ]
   }
