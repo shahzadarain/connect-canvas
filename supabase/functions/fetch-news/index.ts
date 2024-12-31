@@ -19,15 +19,28 @@ serve(async (req) => {
   try {
     console.log('Fetching news articles...');
     
+    if (!PERPLEXITY_API_KEY) {
+      throw new Error('PERPLEXITY_API_KEY is not set in environment variables');
+    }
+
+    if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
+      throw new Error('Supabase configuration is missing');
+    }
+    
     // Create Supabase client
-    const supabase = createClient(SUPABASE_URL!, SUPABASE_SERVICE_ROLE_KEY!);
+    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
     // Check for recent articles in the database
-    const { data: existingArticles } = await supabase
+    const { data: existingArticles, error: dbError } = await supabase
       .from('news_articles')
       .select('*')
       .order('published_at', { ascending: false })
       .limit(6);
+
+    if (dbError) {
+      console.error('Database error:', dbError);
+      throw new Error('Failed to fetch existing articles');
+    }
 
     // If we have recent articles (less than 1 hour old), return them
     if (existingArticles && existingArticles.length > 0) {
@@ -41,6 +54,7 @@ serve(async (req) => {
       }
     }
 
+    console.log('Fetching fresh news from Perplexity API...');
     // Fetch new articles using Perplexity
     const response = await fetch('https://api.perplexity.ai/chat/completions', {
       method: 'POST',
@@ -65,21 +79,32 @@ serve(async (req) => {
       }),
     });
 
+    if (!response.ok) {
+      console.error('Perplexity API error:', await response.text());
+      throw new Error(`Perplexity API returned status ${response.status}`);
+    }
+
     const data = await response.json();
+    console.log('Received response from Perplexity API');
+
+    if (!data.choices?.[0]?.message?.content) {
+      throw new Error('Invalid response format from Perplexity API');
+    }
+
     const articles = JSON.parse(data.choices[0].message.content).articles;
 
     // Store the new articles in the database
     console.log('Storing new articles in the database...');
-    const { error } = await supabase
+    const { error: insertError } = await supabase
       .from('news_articles')
       .insert(articles.map((article: any) => ({
         ...article,
         published_at: new Date().toISOString(),
       })));
 
-    if (error) {
-      console.error('Error storing articles:', error);
-      throw error;
+    if (insertError) {
+      console.error('Error storing articles:', insertError);
+      throw insertError;
     }
 
     return new Response(JSON.stringify({ articles }), {
@@ -87,7 +112,11 @@ serve(async (req) => {
     });
   } catch (error) {
     console.error('Error in fetch-news function:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(
+      JSON.stringify({ 
+        error: error.message,
+        details: error.stack
+      }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
