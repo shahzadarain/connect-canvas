@@ -39,12 +39,12 @@ const Navigation = () => {
 
   return (
     <nav className={cn(
-      'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
-      isScrolled ? 'bg-white/80 backdrop-blur-lg shadow-lg dark:bg-gray-900/80' : 'bg-transparent'
+      'fixed top-0 left-0 right-0 z-50 transition-all duration-500',
+      isScrolled ? 'bg-white/90 backdrop-blur-xl shadow-lg dark:bg-gray-900/90' : 'bg-transparent'
     )}>
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-6">
         <div className="flex items-center justify-between h-20">
-          <div className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+          <div className="text-2xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent hover:opacity-80 transition-opacity cursor-pointer">
             Shahzad ASGHAR
           </div>
           
@@ -59,7 +59,7 @@ const Navigation = () => {
               <button 
                 key={id}
                 onClick={() => scrollToSection(id)} 
-                className={`relative py-2 text-sm font-medium transition-colors ${
+                className={`relative py-2 text-sm font-medium transition-all duration-300 ${
                   activeSection === id 
                     ? 'text-accent' 
                     : 'text-primary/80 hover:text-accent dark:text-white/80 dark:hover:text-accent'
@@ -67,7 +67,7 @@ const Navigation = () => {
               >
                 {label}
                 <span 
-                  className={`absolute bottom-0 left-0 w-full h-0.5 bg-accent transform origin-left transition-transform duration-300 ${
+                  className={`absolute bottom-0 left-0 w-full h-0.5 bg-accent transform origin-left transition-transform duration-500 ${
                     activeSection === id ? 'scale-x-100' : 'scale-x-0'
                   }`} 
                 />
@@ -75,8 +75,7 @@ const Navigation = () => {
             ))}
           </div>
 
-          {/* Mobile Menu Button */}
-          <button className="md:hidden p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800">
+          <button className="md:hidden p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
             <svg
               className="w-6 h-6"
               fill="none"
