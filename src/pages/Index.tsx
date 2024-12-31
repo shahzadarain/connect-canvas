@@ -7,6 +7,7 @@ import SubmitIdea from "@/components/SubmitIdea";
 import Contact from "@/components/Contact";
 import ReadingList from "@/components/ReadingList";
 import LearningAchievements from "@/components/LearningAchievements";
+import Footer from "@/components/Footer";
 
 const Index = () => {
   return (
@@ -19,6 +20,7 @@ const Index = () => {
       <ReadingList />
       <SubmitIdea />
       <Contact />
+      <Footer />
     </div>
   );
 };
