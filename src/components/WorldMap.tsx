@@ -1,8 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import { addMarkersToMap } from './map/MapMarker';
+import { addMapEffects, addFlightPaths } from './map/MapEffects';
+import { type Location } from './map/types';
 
-const locations: [string, [number, number]][] = [
+const locations: Location[] = [
   ["Pakistan", [69.3451, 30.3753]],
   ["Bangladesh", [90.3563, 23.6850]],
   ["South Sudan", [31.3070, 6.8770]],
@@ -39,37 +42,23 @@ const WorldMap = () => {
         pitch: 45,
       });
 
-      // Add navigation controls
       const nav = new mapboxgl.NavigationControl({
         visualizePitch: true,
       });
       map.current.addControl(nav, 'top-right');
 
-      // Enhanced atmosphere and fog effects
       map.current.on('style.load', () => {
-        // Add atmosphere
-        map.current?.setFog({
-          'range': [0.8, 8],
-          'color': 'rgb(186, 210, 235)',
-          'high-color': 'rgb(36, 92, 223)',
-          'horizon-blend': 0.4,
-          'space-color': 'rgb(11, 11, 25)',
-          'star-intensity': 0.8
-        });
-
-        // Add 3D terrain
-        map.current?.setTerrain({
-          'source': 'mapbox-dem',
-          'exaggeration': 1.5
-        });
+        if (!map.current) return;
+        
+        addMapEffects(map.current);
 
         // Add country highlight layer
-        map.current?.addSource('countries', {
+        map.current.addSource('countries', {
           type: 'vector',
           url: 'mapbox://mapbox.country-boundaries-v1'
         });
 
-        map.current?.addLayer({
+        map.current.addLayer({
           'id': 'country-fills',
           'type': 'fill',
           'source': 'countries',
@@ -80,7 +69,7 @@ const WorldMap = () => {
           }
         });
 
-        map.current?.addLayer({
+        map.current.addLayer({
           'id': 'country-fills-hover',
           'type': 'fill',
           'source': 'countries',
@@ -92,41 +81,7 @@ const WorldMap = () => {
           'filter': ['==', ['get', 'name_en'], '']
         });
 
-        // Add flight paths
-        locations.forEach((_, i) => {
-          if (i < locations.length - 1) {
-            const from = locations[i][1];
-            const to = locations[i + 1][1];
-            
-            const route = {
-              'type': 'Feature',
-              'geometry': {
-                'type': 'LineString',
-                'coordinates': [from, to]
-              }
-            };
-
-            map.current?.addSource(`route-${i}`, {
-              'type': 'geojson',
-              'data': {
-                'type': 'FeatureCollection',
-                'features': [route]
-              }
-            });
-
-            map.current?.addLayer({
-              'id': `route-${i}`,
-              'source': `route-${i}`,
-              'type': 'line',
-              'paint': {
-                'line-color': '#8B5CF6',
-                'line-width': 2,
-                'line-opacity': 0.6,
-                'line-dasharray': [0, 4, 3]
-              }
-            });
-          }
-        });
+        addFlightPaths(map.current, locations);
       });
 
       // Add hover effect for countries
@@ -144,47 +99,7 @@ const WorldMap = () => {
         map.current?.setFilter('country-fills-hover', ['==', ['get', 'name_en'], '']);
       });
 
-      // Custom marker creation
-      const createCustomMarker = (coordinates: [number, number]) => {
-        const el = document.createElement('div');
-        el.className = 'custom-marker';
-        el.innerHTML = `
-          <div class="w-4 h-4 bg-[#8B5CF6] rounded-full animate-pulse shadow-lg shadow-purple-500/50 
-                      ring-4 ring-purple-400/30 hover:ring-purple-400/50 transition-all duration-300">
-          </div>
-        `;
-        return new mapboxgl.Marker(el);
-      };
-
-      // Add markers and popups
-      locations.forEach(([name, coordinates]) => {
-        const popup = new mapboxgl.Popup({
-          closeButton: false,
-          closeOnClick: false,
-          className: 'custom-popup',
-          offset: [0, -10]
-        }).setHTML(`
-          <div class="bg-[#1A1F2C]/90 backdrop-blur-md px-4 py-2.5 rounded-lg shadow-xl border border-purple-500/20
-                      transform transition-all duration-300 hover:scale-105">
-            <h3 class="text-sm font-bold text-white">${name}</h3>
-          </div>
-        `);
-
-        const marker = createCustomMarker(coordinates)
-          .setLngLat(coordinates)
-          .setPopup(popup)
-          .addTo(map.current!);
-
-        const markerEl = marker.getElement();
-        markerEl.addEventListener('mouseenter', () => {
-          popup.addTo(map.current!);
-          markerEl.classList.add('scale-125');
-        });
-        markerEl.addEventListener('mouseleave', () => {
-          popup.remove();
-          markerEl.classList.remove('scale-125');
-        });
-      });
+      addMarkersToMap(map.current, locations);
 
       // Globe rotation animation
       const secondsPerRevolution = 240;
