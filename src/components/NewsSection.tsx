@@ -8,10 +8,11 @@ const NewsSection = () => {
     queryKey: ["news"],
     queryFn: async () => {
       const { data } = await supabase.functions.invoke("fetch-news");
-      console.log("Fetched news data:", data); // Debug log
+      console.log("Fetched news data:", data);
       return data;
     },
-    refetchInterval: 1000 * 60 * 60, // Refetch every hour
+    refetchInterval: 1000 * 60 * 5, // Refetch every 5 minutes
+    staleTime: 1000 * 60 * 4, // Consider data stale after 4 minutes
   });
 
   if (error) {

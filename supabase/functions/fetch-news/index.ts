@@ -26,12 +26,12 @@ serve(async (req) => {
       throw new Error('OPENAI_API_KEY is required')
     }
 
-    // Check for recent articles in the database
-    const thirtyMinutesAgo = new Date(Date.now() - 30 * 60 * 1000)
+    // Check for recent articles in the database (within last 5 minutes)
+    const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000)
     const { data: existingArticles } = await supabaseClient
       .from('news_articles')
       .select('*')
-      .gt('created_at', thirtyMinutesAgo.toISOString())
+      .gt('created_at', fiveMinutesAgo.toISOString())
       .order('created_at', { ascending: false })
 
     if (existingArticles && existingArticles.length >= 6) {
@@ -53,27 +53,34 @@ serve(async (req) => {
     // Generate new articles using OpenAI
     console.log('Generating new articles using OpenAI')
     const completion = await openai.createChatCompletion({
-      model: 'gpt-3.5-turbo',
+      model: 'gpt-4o-mini',
       messages: [
         {
           role: 'system',
-          content: `You are a technology news curator. Generate 6 realistic and current news articles about technology and AI advancements. Each article should:
-          - Have a clear, concise title
-          - Include a detailed description (2-3 sentences)
+          content: `You are a technology news curator. Generate 6 realistic and current news articles about the very latest technology and AI advancements happening right now. Each article should:
+          - Have a clear, concise title that reflects current events
+          - Include a detailed description (2-3 sentences) about cutting-edge developments
           - Be categorized as either "tech" or "ai"
-          - Focus on real technological trends and developments
+          - Focus on real, current technological trends and developments from the past week
+          - Be specific about companies, products, and technologies
           Return the response in JSON format with an array of articles containing title, description, and category fields.`
         },
         {
           role: 'user',
-          content: 'Generate 6 current technology and AI news articles. Make them sound like real news articles with accurate technical details and industry trends.'
+          content: 'Generate 6 current technology and AI news articles focusing on the very latest developments from this week. Make them sound like real news articles with accurate technical details and current industry trends.'
         }
       ],
-      temperature: 0.6,
+      temperature: 0.7,
       max_tokens: 1000,
     })
 
     const generatedArticles = JSON.parse(completion.data.choices[0].message.content)
+
+    // Delete old articles before inserting new ones
+    await supabaseClient
+      .from('news_articles')
+      .delete()
+      .lt('created_at', fiveMinutesAgo.toISOString())
 
     // Store the new articles in the database
     const { data: insertedArticles, error: insertError } = await supabaseClient
