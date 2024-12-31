@@ -35,18 +35,50 @@ const WorldMap = () => {
         style: 'mapbox://styles/mapbox/dark-v11',
         center: [0, 20],
         zoom: 1.5,
+        projection: 'globe',
+      });
+
+      // Add navigation controls
+      map.current.addControl(
+        new mapboxgl.NavigationControl({
+          visualizePitch: true,
+        }),
+        'top-right'
+      );
+
+      // Add atmosphere and fog effects
+      map.current.on('style.load', () => {
+        map.current?.setFog({
+          color: 'rgb(186, 210, 235)',
+          'high-color': 'rgb(36, 92, 223)',
+          'horizon-blend': 0.02,
+          'space-color': 'rgb(11, 11, 25)',
+          'star-intensity': 0.6
+        });
       });
 
       locations.forEach(([name, coordinates]) => {
-        new mapboxgl.Marker({
+        const popup = new mapboxgl.Popup({
+          closeButton: false,
+          closeOnClick: false,
+          className: 'custom-popup'
+        }).setHTML(`
+          <div class="bg-primary/90 backdrop-blur-sm px-3 py-2 rounded-lg shadow-lg">
+            <h3 class="text-sm font-bold text-white">${name}</h3>
+          </div>
+        `);
+
+        const marker = new mapboxgl.Marker({
           color: "#10B981",
+          scale: 0.7
         })
           .setLngLat(coordinates)
-          .setPopup(
-            new mapboxgl.Popup({ offset: 25 })
-              .setHTML(`<h3 class="text-sm font-bold">${name}</h3>`)
-          )
+          .setPopup(popup)
           .addTo(map.current!);
+
+        // Show popup on hover
+        marker.getElement().addEventListener('mouseenter', () => popup.addTo(map.current!));
+        marker.getElement().addEventListener('mouseleave', () => popup.remove());
       });
 
       console.log('Map initialized successfully');
@@ -62,13 +94,15 @@ const WorldMap = () => {
   }, []);
 
   return (
-    <section className="py-20 bg-primary">
-      <div className="container mx-auto px-4">
-        <h2 className="text-3xl md:text-4xl font-bold text-white text-center mb-12">
+    <section id="impact" className="py-20 bg-primary relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-b from-primary/50 via-transparent to-primary pointer-events-none" />
+      <div className="container mx-auto px-4 relative">
+        <h2 className="text-3xl md:text-4xl font-bold text-white text-center mb-12 animate-fade-in">
           Global Impact Across 15 Countries
         </h2>
-        <div className="relative w-full h-[60vh] rounded-xl overflow-hidden shadow-2xl">
+        <div className="relative w-full h-[70vh] rounded-xl overflow-hidden shadow-2xl animate-fade-in">
           <div ref={mapContainer} className="absolute inset-0" />
+          <div className="absolute inset-0 pointer-events-none rounded-xl ring-1 ring-white/10" />
         </div>
       </div>
     </section>

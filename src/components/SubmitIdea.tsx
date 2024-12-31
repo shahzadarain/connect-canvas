@@ -5,6 +5,7 @@ import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Card } from "./ui/card";
 import { supabase } from "@/integrations/supabase/client";
+import { Loader2 } from "lucide-react";
 
 interface IdeaSubmission {
   name: string;
@@ -49,12 +50,11 @@ const SubmitIdea = () => {
 
       console.log('Idea submitted successfully');
       
-      // Reset form
       setFormData({ name: '', email: '', idea: '' });
       
       toast({
         title: "Success!",
-        description: "Thank you for sharing your idea. It has been saved successfully.",
+        description: "Thank you for sharing your idea. We'll review it soon!",
       });
     } catch (error) {
       console.error('Error in submission:', error);
@@ -72,16 +72,16 @@ const SubmitIdea = () => {
     <section id="submit" className="py-20 bg-gradient-to-b from-background to-secondary/5">
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-bold text-primary text-center mb-6">
+          <h2 className="text-4xl md:text-5xl font-bold text-primary text-center mb-6 animate-fade-in">
             Submit Your Innovative Idea
           </h2>
-          <p className="text-lg text-center text-muted-foreground mb-12">
+          <p className="text-lg text-center text-muted-foreground mb-12 animate-fade-in">
             Share your ideas for AI and data-driven solutions in the humanitarian sector
           </p>
-          <Card className="p-8 shadow-lg backdrop-blur-sm bg-card/50">
+          <Card className="p-8 shadow-lg backdrop-blur-sm bg-card/50 animate-fade-in">
             <form onSubmit={handleSubmit} className="space-y-8">
-              <div>
-                <label htmlFor="name" className="block text-lg font-medium text-primary mb-2">
+              <div className="space-y-2">
+                <label htmlFor="name" className="block text-lg font-medium text-primary">
                   Your Name
                 </label>
                 <Input
@@ -90,11 +90,11 @@ const SubmitIdea = () => {
                   onChange={handleChange}
                   required
                   placeholder="Enter your name"
-                  className="text-lg"
+                  className="text-lg transition-all duration-300 focus:ring-2 focus:ring-accent/20"
                 />
               </div>
-              <div>
-                <label htmlFor="email" className="block text-lg font-medium text-primary mb-2">
+              <div className="space-y-2">
+                <label htmlFor="email" className="block text-lg font-medium text-primary">
                   Email
                 </label>
                 <Input
@@ -104,11 +104,11 @@ const SubmitIdea = () => {
                   onChange={handleChange}
                   required
                   placeholder="your@email.com"
-                  className="text-lg"
+                  className="text-lg transition-all duration-300 focus:ring-2 focus:ring-accent/20"
                 />
               </div>
-              <div>
-                <label htmlFor="idea" className="block text-lg font-medium text-primary mb-2">
+              <div className="space-y-2">
+                <label htmlFor="idea" className="block text-lg font-medium text-primary">
                   Your Idea
                 </label>
                 <Textarea
@@ -118,16 +118,23 @@ const SubmitIdea = () => {
                   required
                   rows={6}
                   placeholder="Describe your idea for using AI and data in humanitarian projects..."
-                  className="text-lg resize-none"
+                  className="text-lg resize-none transition-all duration-300 focus:ring-2 focus:ring-accent/20"
                 />
               </div>
               <Button 
                 type="submit" 
-                className="w-full text-lg py-6" 
+                className="w-full text-lg py-6 bg-gradient-to-r from-accent to-accent/90 hover:from-accent/90 hover:to-accent transition-all duration-300 transform hover:scale-[1.02]" 
                 size="lg"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? 'Submitting...' : 'Submit Idea'}
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Submitting...
+                  </>
+                ) : (
+                  'Submit Idea'
+                )}
               </Button>
             </form>
           </Card>
