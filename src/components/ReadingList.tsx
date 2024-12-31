@@ -30,7 +30,8 @@ const books = [
 
 const ReadingList = () => {
   return (
-    <section id="reading" className="py-20 bg-gradient-to-b from-background via-gray-50 to-white dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+    <section id="reading" className="py-24 bg-gradient-to-b from-background via-background/80 to-[#F2FCE2] relative overflow-hidden">
+      <div className="absolute inset-0 bg-grid-pattern opacity-5" />
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-center gap-3 mb-12">
           <BookOpen className="w-8 h-8 text-blue-500" />

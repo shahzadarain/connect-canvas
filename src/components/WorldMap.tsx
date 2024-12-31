@@ -95,7 +95,7 @@ const WorldMap = () => {
   }, []);
 
   return (
-    <section id="impact" className="py-24 bg-gradient-to-b from-primary via-primary to-primary/90 relative overflow-hidden">
+    <section id="impact" className="py-24 bg-gradient-to-b from-[#2C3E50] via-primary to-primary/90 relative overflow-hidden">
       <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
       <div className="container mx-auto px-4 relative">
         <div className="max-w-3xl mx-auto text-center mb-16 animate-fade-in">

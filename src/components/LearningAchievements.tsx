@@ -12,11 +12,8 @@ import { courses } from "@/data/coursesData";
 
 const LearningAchievements = () => {
   return (
-    <section className="py-20 relative overflow-hidden">
-      {/* Background with gradient and subtle pattern */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-background/80 to-background opacity-90" />
+    <section className="py-24 relative overflow-hidden bg-gradient-to-b from-primary/90 via-background to-background">
       <div className="absolute inset-0 bg-grid-pattern opacity-5" />
-      
       <div className="container mx-auto px-4 relative">
         <div className="text-center mb-12 animate-fade-in">
           <GraduationCap className="w-12 h-12 mx-auto mb-4 text-primary opacity-80" />
