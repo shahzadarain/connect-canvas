@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
 const Navigation = () => {
@@ -38,62 +37,41 @@ const Navigation = () => {
     }
   };
 
-  const navItems = [
-    ['projects', 'Projects'],
-    ['impact', 'Global Impact'],
-    ['learning', 'Learning Journey'],
-    ['reading', 'Reading List'],
-    ['submit', 'Submit Idea']
-  ];
-
   return (
-    <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
-        isScrolled ? 'bg-white/80 backdrop-blur-lg shadow-lg dark:bg-gray-900/80' : 'bg-transparent'
-      )}
-    >
+    <nav className={cn(
+      'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
+      isScrolled ? 'bg-white/80 backdrop-blur-lg shadow-lg dark:bg-gray-900/80' : 'bg-transparent'
+    )}>
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-2xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent"
-          >
+          <div className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
             Shahzad ASGHAR
-          </motion.div>
+          </div>
           
           <div className="hidden md:flex gap-8">
-            {navItems.map(([id, label]) => (
-              <motion.button
+            {[
+              ['projects', 'Projects'],
+              ['impact', 'Global Impact'],
+              ['learning', 'Learning Journey'],
+              ['reading', 'Reading List'],
+              ['submit', 'Submit Idea']
+            ].map(([id, label]) => (
+              <button 
                 key={id}
-                onClick={() => scrollToSection(id)}
-                className={cn(
-                  'relative py-2 px-3 text-sm font-medium transition-all duration-300 rounded-md',
-                  activeSection === id
-                    ? 'text-accent'
+                onClick={() => scrollToSection(id)} 
+                className={`relative py-2 text-sm font-medium transition-colors ${
+                  activeSection === id 
+                    ? 'text-accent' 
                     : 'text-primary/80 hover:text-accent dark:text-white/80 dark:hover:text-accent'
-                )}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                }`}
               >
                 {label}
-                <motion.span
-                  className={cn(
-                    'absolute bottom-0 left-0 w-full h-0.5 bg-accent rounded-full',
-                    activeSection === id ? 'opacity-100' : 'opacity-0'
-                  )}
-                  initial={false}
-                  animate={{
-                    scaleX: activeSection === id ? 1 : 0,
-                    opacity: activeSection === id ? 1 : 0
-                  }}
-                  transition={{ duration: 0.3 }}
+                <span 
+                  className={`absolute bottom-0 left-0 w-full h-0.5 bg-accent transform origin-left transition-transform duration-300 ${
+                    activeSection === id ? 'scale-x-100' : 'scale-x-0'
+                  }`} 
                 />
-              </motion.button>
+              </button>
             ))}
           </div>
 
@@ -116,7 +94,7 @@ const Navigation = () => {
           </button>
         </div>
       </div>
-    </motion.nav>
+    </nav>
   );
 };
 
