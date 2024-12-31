@@ -28,7 +28,7 @@ const Contact = () => {
             
             <Card className="p-6 bg-white/5 backdrop-blur-sm border-white/10 hover:bg-white/10 transition-all duration-300 transform hover:scale-105">
               <a
-                href="mailto:contact@example.com"
+                href="mailto:shahzad.cdcu+site@gmail.com"
                 className="flex items-center justify-between gap-3 text-white hover:text-accent transition-colors group"
               >
                 <div className="flex items-center gap-3">
