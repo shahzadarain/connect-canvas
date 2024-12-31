@@ -12,13 +12,15 @@ const SUPABASE_URL = Deno.env.get('SUPABASE_URL');
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
 
 serve(async (req) => {
+  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    console.log('Fetching news articles...');
+    console.log('Starting fetch-news function execution...');
     
+    // Validate environment variables
     if (!PERPLEXITY_API_KEY) {
       throw new Error('PERPLEXITY_API_KEY is not set in environment variables');
     }
@@ -26,11 +28,14 @@ serve(async (req) => {
     if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
       throw new Error('Supabase configuration is missing');
     }
+
+    console.log('Environment variables validated successfully');
     
     // Create Supabase client
     const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
     // Check for recent articles in the database
+    console.log('Checking for recent articles in database...');
     const { data: existingArticles, error: dbError } = await supabase
       .from('news_articles')
       .select('*')
@@ -39,13 +44,14 @@ serve(async (req) => {
 
     if (dbError) {
       console.error('Database error:', dbError);
-      throw new Error('Failed to fetch existing articles');
+      throw new Error(`Failed to fetch existing articles: ${dbError.message}`);
     }
 
     // If we have recent articles (less than 1 hour old), return them
     if (existingArticles && existingArticles.length > 0) {
       const mostRecentArticle = existingArticles[0];
       const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
+      
       if (new Date(mostRecentArticle.published_at) > oneHourAgo) {
         console.log('Returning cached articles');
         return new Response(JSON.stringify({ articles: existingArticles }), {
@@ -55,8 +61,9 @@ serve(async (req) => {
     }
 
     console.log('Fetching fresh news from Perplexity API...');
+    
     // Fetch new articles using Perplexity
-    const response = await fetch('https://api.perplexity.ai/chat/completions', {
+    const perplexityResponse = await fetch('https://api.perplexity.ai/chat/completions', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${PERPLEXITY_API_KEY}`,
@@ -79,19 +86,27 @@ serve(async (req) => {
       }),
     });
 
-    if (!response.ok) {
-      console.error('Perplexity API error:', await response.text());
-      throw new Error(`Perplexity API returned status ${response.status}`);
+    if (!perplexityResponse.ok) {
+      const errorText = await perplexityResponse.text();
+      console.error('Perplexity API error response:', errorText);
+      throw new Error(`Perplexity API returned status ${perplexityResponse.status}: ${errorText}`);
     }
 
-    const data = await response.json();
+    const perplexityData = await perplexityResponse.json();
     console.log('Received response from Perplexity API');
 
-    if (!data.choices?.[0]?.message?.content) {
+    if (!perplexityData.choices?.[0]?.message?.content) {
+      console.error('Invalid Perplexity API response format:', perplexityData);
       throw new Error('Invalid response format from Perplexity API');
     }
 
-    const articles = JSON.parse(data.choices[0].message.content).articles;
+    let articles;
+    try {
+      articles = JSON.parse(perplexityData.choices[0].message.content).articles;
+    } catch (parseError) {
+      console.error('Failed to parse Perplexity API response:', perplexityData.choices[0].message.content);
+      throw new Error('Failed to parse news articles from API response');
+    }
 
     // Store the new articles in the database
     console.log('Storing new articles in the database...');
@@ -104,9 +119,10 @@ serve(async (req) => {
 
     if (insertError) {
       console.error('Error storing articles:', insertError);
-      throw insertError;
+      throw new Error(`Failed to store articles: ${insertError.message}`);
     }
 
+    console.log('Successfully stored and returning new articles');
     return new Response(JSON.stringify({ articles }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
@@ -115,7 +131,8 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({ 
         error: error.message,
-        details: error.stack
+        details: error.stack,
+        timestamp: new Date().toISOString()
       }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
