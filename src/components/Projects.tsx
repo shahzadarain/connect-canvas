@@ -130,6 +130,25 @@ const projectCategories = [
   }
 ];
 
+const getTagColor = (tag: string) => {
+  // Create a consistent color mapping based on the first character of the tag
+  const colors = {
+    'A': 'bg-[#8B5CF6] hover:bg-[#7C3AED]', // Vivid Purple
+    'B': 'bg-[#D946EF] hover:bg-[#C026D3]', // Magenta Pink
+    'C': 'bg-[#F97316] hover:bg-[#EA580C]', // Bright Orange
+    'D': 'bg-[#0EA5E9] hover:bg-[#0284C7]', // Ocean Blue
+    'R': 'bg-[#EC4899] hover:bg-[#DB2777]', // Pink
+    'T': 'bg-[#14B8A6] hover:bg-[#0D9488]', // Teal
+    'H': 'bg-[#6366F1] hover:bg-[#4F46E5]', // Indigo
+    'S': 'bg-[#EAB308] hover:bg-[#CA8A04]', // Yellow
+    'O': 'bg-[#22C55E] hover:bg-[#16A34A]', // Green
+    'M': 'bg-[#F43F5E] hover:bg-[#E11D48]', // Red
+  };
+  
+  const firstChar = tag.charAt(0).toUpperCase();
+  return colors[firstChar] || 'bg-[#6366F1] hover:bg-[#4F46E5]'; // Default to indigo if no match
+};
+
 const Projects = () => {
   return (
     <section className="py-24 bg-gradient-to-b from-background to-background/80">
@@ -169,7 +188,7 @@ const Projects = () => {
                       {item.tags.map((tag) => (
                         <span
                           key={tag}
-                          className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-secondary/30 text-secondary-foreground hover:bg-secondary/40 transition-colors duration-300"
+                          className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium text-white transition-colors duration-300 ${getTagColor(tag)}`}
                         >
                           #{tag}
                         </span>
