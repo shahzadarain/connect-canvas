@@ -74,15 +74,14 @@ serve(async (req) => {
         messages: [
           {
             role: 'system',
-            content: 'You are a news curator specialized in technology and AI. Return only the latest news in a structured format.'
+            content: 'You are a news curator specialized in technology and AI. Generate 6 recent news articles about technology and AI advancements. Make them sound realistic and current.'
           },
           {
             role: 'user',
-            content: 'What are the latest technology and AI news? Return the response in this exact JSON format: { "articles": [{ "title": "", "description": "", "url": "", "category": "tech/ai" }] }. Include 6 articles maximum.'
+            content: 'Generate 6 recent technology and AI news articles. For each article include a title, description, and category (either "tech" or "ai"). Make them sound like real news articles.'
           }
         ],
-        temperature: 0.2,
-        max_tokens: 1000,
+        temperature: 0.7,
       }),
     });
 
