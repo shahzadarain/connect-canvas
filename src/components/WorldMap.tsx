@@ -1,26 +1,24 @@
 import React, { useEffect, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { addMarkersToMap } from './map/MapMarker';
-import { addMapEffects, addFlightPaths } from './map/MapEffects';
 import { type Location } from './map/types';
 
 const locations: Location[] = [
-  ["Pakistan", [69.3451, 30.3753]],
-  ["Bangladesh", [90.3563, 23.6850]],
-  ["South Sudan", [31.3070, 6.8770]],
-  ["Sudan", [30.2176, 12.8628]],
-  ["Uganda", [32.2903, 1.3733]],
-  ["Switzerland", [8.2275, 46.8182]],
-  ["Malawi", [34.3015, -13.2543]],
-  ["Greece", [21.8243, 39.0742]],
-  ["Kenya", [37.9062, -0.0236]],
-  ["Ethiopia", [40.4897, 9.1450]],
-  ["Philippines", [121.7740, 12.8797]],
-  ["Jordan", [36.2384, 30.5852]],
-  ["Syria", [38.9968, 34.8021]],
-  ["Tanzania", [34.8888, -6.3690]],
-  ["Rwanda", [29.8739, -1.9403]],
+  ["Pakistan", [69.3451, 30.3753], "Digital Transformation Lead"],
+  ["Bangladesh", [90.3563, 23.6850], "Technology Consultant"],
+  ["South Sudan", [31.3070, 6.8770], "IT Solutions Architect"],
+  ["Sudan", [30.2176, 12.8628], "Digital Innovation Lead"],
+  ["Uganda", [32.2903, 1.3733], "Technology Advisor"],
+  ["Switzerland", [8.2275, 46.8182], "Senior Technology Consultant"],
+  ["Malawi", [34.3015, -13.2543], "Digital Solutions Lead"],
+  ["Greece", [21.8243, 39.0742], "Technology Operations Manager"],
+  ["Kenya", [37.9062, -0.0236], "Digital Transformation Specialist"],
+  ["Ethiopia", [40.4897, 9.1450], "IT Project Lead"],
+  ["Philippines", [121.7740, 12.8797], "Technology Consultant"],
+  ["Jordan", [36.2384, 30.5852], "Head of Digital Solutions"],
+  ["Syria", [38.9968, 34.8021], "Digital Operations Lead"],
+  ["Tanzania", [34.8888, -6.3690], "Technology Solutions Architect"],
+  ["Rwanda", [29.8739, -1.9403], "Digital Innovation Specialist"],
 ];
 
 const WorldMap = () => {
@@ -35,11 +33,10 @@ const WorldMap = () => {
       
       map.current = new mapboxgl.Map({
         container: mapContainer.current,
-        style: 'mapbox://styles/mapbox/dark-v11',
+        style: 'mapbox://styles/mapbox/light-v11',
         center: [0, 20],
-        zoom: 1.5,
-        projection: 'globe',
-        pitch: 45,
+        zoom: 1.8,
+        projection: 'mercator',
       });
 
       const nav = new mapboxgl.NavigationControl({
@@ -47,84 +44,45 @@ const WorldMap = () => {
       });
       map.current.addControl(nav, 'top-right');
 
-      map.current.on('style.load', () => {
-        if (!map.current) return;
-        
-        addMapEffects(map.current);
+      // Add markers for each location
+      locations.forEach(([name, coordinates, role]) => {
+        // Create custom marker element
+        const el = document.createElement('div');
+        el.className = 'custom-marker';
+        el.innerHTML = `
+          <div class="w-4 h-4 bg-primary rounded-full animate-pulse 
+                      shadow-lg shadow-primary/50 ring-4 ring-primary/30 
+                      hover:ring-primary/50 transition-all duration-300">
+          </div>
+        `;
 
-        // Add country highlight layer
-        map.current.addSource('countries', {
-          type: 'vector',
-          url: 'mapbox://mapbox.country-boundaries-v1'
-        });
+        // Create popup
+        const popup = new mapboxgl.Popup({
+          closeButton: false,
+          closeOnClick: false,
+          className: 'custom-popup',
+          offset: [0, -10]
+        }).setHTML(`
+          <div class="bg-card/90 backdrop-blur-md px-4 py-2.5 rounded-lg shadow-xl 
+                      border border-primary/20 transform transition-all duration-300 
+                      hover:scale-105">
+            <h3 class="text-sm font-bold text-primary">${name}</h3>
+            <p class="text-xs text-primary/80 mt-1">${role}</p>
+          </div>
+        `);
 
-        map.current.addLayer({
-          'id': 'country-fills',
-          'type': 'fill',
-          'source': 'countries',
-          'source-layer': 'country_boundaries',
-          'paint': {
-            'fill-color': 'transparent',
-            'fill-opacity': 0.5
-          }
-        });
+        // Add marker to map
+        new mapboxgl.Marker(el)
+          .setLngLat(coordinates as [number, number])
+          .setPopup(popup)
+          .addTo(map.current!);
 
-        map.current.addLayer({
-          'id': 'country-fills-hover',
-          'type': 'fill',
-          'source': 'countries',
-          'source-layer': 'country_boundaries',
-          'paint': {
-            'fill-color': '#8B5CF6',
-            'fill-opacity': 0.3
-          },
-          'filter': ['==', ['get', 'name_en'], '']
-        });
-
-        addFlightPaths(map.current, locations);
+        // Show popup on hover
+        el.addEventListener('mouseenter', () => popup.addTo(map.current!));
+        el.addEventListener('mouseleave', () => popup.remove());
       });
 
-      // Add hover effect for countries
-      map.current.on('mousemove', 'country-fills', (e) => {
-        if (e.features && e.features[0].properties) {
-          map.current?.setFilter('country-fills-hover', [
-            '==',
-            ['get', 'name_en'],
-            e.features[0].properties.name_en
-          ]);
-        }
-      });
-
-      map.current.on('mouseleave', 'country-fills', () => {
-        map.current?.setFilter('country-fills-hover', ['==', ['get', 'name_en'], '']);
-      });
-
-      addMarkersToMap(map.current, locations);
-
-      // Globe rotation animation
-      const secondsPerRevolution = 240;
-      let lastTime = 0;
-      const animate = (time: number) => {
-        if (lastTime === 0) {
-          lastTime = time;
-          requestAnimationFrame(animate);
-          return;
-        }
-
-        const delta = (time - lastTime) / 1000;
-        lastTime = time;
-
-        if (map.current) {
-          const center = map.current.getCenter();
-          center.lng -= 40 * delta / secondsPerRevolution;
-          map.current.setCenter(center);
-        }
-        requestAnimationFrame(animate);
-      };
-
-      requestAnimationFrame(animate);
-
-      console.log('Map initialized with enhanced features');
+      console.log('Map initialized with location markers');
     } catch (error) {
       console.error('Error initializing map:', error);
     }
@@ -142,13 +100,13 @@ const WorldMap = () => {
       <div className="container mx-auto px-4 relative">
         <div className="max-w-3xl mx-auto text-center mb-16 animate-fade-in">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
-            Global Impact Across 15 Countries
+            Global Work Experience
           </h2>
           <p className="text-lg text-gray-300">
-            Transforming communities and creating lasting change around the world
+            Contributing to digital transformation across diverse regions
           </p>
         </div>
-        <div className="relative w-full h-[80vh] rounded-2xl overflow-hidden shadow-2xl animate-fade-in">
+        <div className="relative w-full h-[70vh] rounded-2xl overflow-hidden shadow-2xl animate-fade-in">
           <div ref={mapContainer} className="absolute inset-0" />
           <div className="absolute inset-0 pointer-events-none rounded-2xl ring-1 ring-white/10" />
         </div>

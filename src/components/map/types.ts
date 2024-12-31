@@ -1,8 +1,4 @@
-import { type Feature, type Geometry } from 'geojson';
-
-export type Location = [string, [number, number]];
-
-export type RouteFeature = Feature<Geometry, { [name: string]: any }>;
+export type Location = [string, [number, number], string];
 
 export type MapConfig = {
   container: HTMLDivElement;
@@ -10,5 +6,4 @@ export type MapConfig = {
   center: [number, number];
   zoom: number;
   projection: string;
-  pitch: number;
 };
