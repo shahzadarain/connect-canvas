@@ -8,6 +8,7 @@ const NewsSection = () => {
     queryKey: ["news"],
     queryFn: async () => {
       const { data } = await supabase.functions.invoke("fetch-news");
+      console.log("Fetched news data:", data); // Debug log
       return data;
     },
     refetchInterval: 1000 * 60 * 60, // Refetch every hour
@@ -64,16 +65,14 @@ const NewsSection = () => {
                   <CardDescription className="line-clamp-3">
                     {article.description}
                   </CardDescription>
-                  {article.url && (
-                    <a
-                      href={article.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center text-sm text-blue-500 hover:text-blue-700 mt-4"
-                    >
-                      Read more →
-                    </a>
-                  )}
+                  <a
+                    href={`https://www.google.com/search?q=${encodeURIComponent(article.title)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center text-sm text-blue-500 hover:text-blue-700 mt-4"
+                  >
+                    Read more →
+                  </a>
                 </CardContent>
               </Card>
             ))
