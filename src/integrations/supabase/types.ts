@@ -11,21 +11,27 @@ export type Database = {
     Tables: {
       ideas: {
         Row: {
+          approval_status: string | null
           created_at: string
+          display_order: number | null
           email: string | null
           id: number
           idea: string | null
           name: string | null
         }
         Insert: {
+          approval_status?: string | null
           created_at?: string
+          display_order?: number | null
           email?: string | null
           id?: number
           idea?: string | null
           name?: string | null
         }
         Update: {
+          approval_status?: string | null
           created_at?: string
+          display_order?: number | null
           email?: string | null
           id?: number
           idea?: string | null

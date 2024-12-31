@@ -4,6 +4,7 @@ import Hero from "@/components/Hero";
 import Projects from "@/components/Projects";
 import WorldMap from "@/components/WorldMap";
 import SubmitIdea from "@/components/SubmitIdea";
+import ApprovedIdeas from "@/components/ApprovedIdeas";
 import Contact from "@/components/Contact";
 import Newsletter from "@/components/Newsletter";
 import LearningAchievements from "@/components/LearningAchievements";
@@ -17,6 +18,7 @@ const Index = () => {
       <Projects />
       <WorldMap />
       <LearningAchievements />
+      <ApprovedIdeas />
       <SubmitIdea />
       <Newsletter />
       <Contact />
