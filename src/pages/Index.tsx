@@ -5,7 +5,7 @@ import Projects from "@/components/Projects";
 import WorldMap from "@/components/WorldMap";
 import SubmitIdea from "@/components/SubmitIdea";
 import Contact from "@/components/Contact";
-import ReadingList from "@/components/ReadingList";
+import Newsletter from "@/components/Newsletter";
 import LearningAchievements from "@/components/LearningAchievements";
 import Footer from "@/components/Footer";
 
@@ -17,8 +17,8 @@ const Index = () => {
       <Projects />
       <WorldMap />
       <LearningAchievements />
-      <ReadingList />
       <SubmitIdea />
+      <Newsletter />
       <Contact />
       <Footer />
     </div>
