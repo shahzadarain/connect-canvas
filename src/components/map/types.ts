@@ -7,3 +7,13 @@ export type MapConfig = {
   zoom: number;
   projection: string;
 };
+
+// Add the missing RouteFeature type
+export type RouteFeature = {
+  type: 'Feature';
+  properties: Record<string, unknown>;
+  geometry: {
+    type: 'LineString';
+    coordinates: [number, number][];
+  };
+};
