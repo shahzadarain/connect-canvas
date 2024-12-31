@@ -36,10 +36,10 @@ const WorldMap = () => {
         center: [0, 20],
         zoom: 1.5,
         projection: 'globe',
-        pitch: 45, // Added pitch for more dimension
+        pitch: 45,
       });
 
-      // Add navigation controls with custom styling
+      // Add navigation controls
       const nav = new mapboxgl.NavigationControl({
         visualizePitch: true,
       });
@@ -47,6 +47,7 @@ const WorldMap = () => {
 
       // Enhanced atmosphere and fog effects
       map.current.on('style.load', () => {
+        // Add atmosphere
         map.current?.setFog({
           'range': [0.8, 8],
           'color': 'rgb(186, 210, 235)',
@@ -61,9 +62,89 @@ const WorldMap = () => {
           'source': 'mapbox-dem',
           'exaggeration': 1.5
         });
+
+        // Add country highlight layer
+        map.current?.addSource('countries', {
+          type: 'vector',
+          url: 'mapbox://mapbox.country-boundaries-v1'
+        });
+
+        map.current?.addLayer({
+          'id': 'country-fills',
+          'type': 'fill',
+          'source': 'countries',
+          'source-layer': 'country_boundaries',
+          'paint': {
+            'fill-color': 'transparent',
+            'fill-opacity': 0.5
+          }
+        });
+
+        map.current?.addLayer({
+          'id': 'country-fills-hover',
+          'type': 'fill',
+          'source': 'countries',
+          'source-layer': 'country_boundaries',
+          'paint': {
+            'fill-color': '#8B5CF6',
+            'fill-opacity': 0.3
+          },
+          'filter': ['==', ['get', 'name_en'], '']
+        });
+
+        // Add flight paths
+        locations.forEach((_, i) => {
+          if (i < locations.length - 1) {
+            const from = locations[i][1];
+            const to = locations[i + 1][1];
+            
+            const route = {
+              'type': 'Feature',
+              'geometry': {
+                'type': 'LineString',
+                'coordinates': [from, to]
+              }
+            };
+
+            map.current?.addSource(`route-${i}`, {
+              'type': 'geojson',
+              'data': {
+                'type': 'FeatureCollection',
+                'features': [route]
+              }
+            });
+
+            map.current?.addLayer({
+              'id': `route-${i}`,
+              'source': `route-${i}`,
+              'type': 'line',
+              'paint': {
+                'line-color': '#8B5CF6',
+                'line-width': 2,
+                'line-opacity': 0.6,
+                'line-dasharray': [0, 4, 3]
+              }
+            });
+          }
+        });
       });
 
-      // Custom marker creation function
+      // Add hover effect for countries
+      map.current.on('mousemove', 'country-fills', (e) => {
+        if (e.features && e.features[0].properties) {
+          map.current?.setFilter('country-fills-hover', [
+            '==',
+            ['get', 'name_en'],
+            e.features[0].properties.name_en
+          ]);
+        }
+      });
+
+      map.current.on('mouseleave', 'country-fills', () => {
+        map.current?.setFilter('country-fills-hover', ['==', ['get', 'name_en'], '']);
+      });
+
+      // Custom marker creation
       const createCustomMarker = (coordinates: [number, number]) => {
         const el = document.createElement('div');
         el.className = 'custom-marker';
@@ -75,6 +156,7 @@ const WorldMap = () => {
         return new mapboxgl.Marker(el);
       };
 
+      // Add markers and popups
       locations.forEach(([name, coordinates]) => {
         const popup = new mapboxgl.Popup({
           closeButton: false,
@@ -93,7 +175,6 @@ const WorldMap = () => {
           .setPopup(popup)
           .addTo(map.current!);
 
-        // Enhanced popup interaction
         const markerEl = marker.getElement();
         markerEl.addEventListener('mouseenter', () => {
           popup.addTo(map.current!);
@@ -105,7 +186,7 @@ const WorldMap = () => {
         });
       });
 
-      // Add rotation animation
+      // Globe rotation animation
       const secondsPerRevolution = 240;
       let lastTime = 0;
       const animate = (time: number) => {
@@ -128,7 +209,7 @@ const WorldMap = () => {
 
       requestAnimationFrame(animate);
 
-      console.log('Map initialized successfully with enhanced features');
+      console.log('Map initialized with enhanced features');
     } catch (error) {
       console.error('Error initializing map:', error);
     }
