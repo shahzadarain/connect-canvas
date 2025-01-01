@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
@@ -110,16 +110,23 @@ const AIHumanitarian = () => {
               </p>
             </section>
 
-            {/* Call to Action */}
-            <div className="bg-gradient-to-r from-secondary/10 to-accent/10 rounded-lg p-8 shadow-lg text-center">
-              <h3 className="text-2xl font-serif font-bold mb-4">Join the Movement</h3>
-              <p className="text-lg mb-6">
-                Together, we can harness the power of AI to build a more equitable and compassionate world.
-              </p>
+          {/* Call to Action */}
+          <div className="bg-gradient-to-r from-secondary/10 to-accent/10 rounded-lg p-8 shadow-lg text-center">
+            <h3 className="text-2xl font-serif font-bold mb-4">Join the Movement</h3>
+            <p className="text-lg mb-6">
+              Together, we can harness the power of AI to build a more equitable and compassionate world.
+            </p>
+            <a 
+              href="https://www.linkedin.com/in/shahzad-asghar" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-flex items-center"
+            >
               <Button className="bg-primary hover:bg-primary/90 text-white">
                 Learn More
+                <ExternalLink className="w-4 h-4 ml-2" />
               </Button>
-            </div>
+            </a>
           </div>
         </article>
       </main>
