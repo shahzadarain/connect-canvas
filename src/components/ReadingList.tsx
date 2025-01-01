@@ -6,24 +6,28 @@ const books = [
     title: "Humor, Seriously",
     author: "Jennifer Aaker & Naomi Bagdonas",
     cover: "/lovable-uploads/bdd53de1-ec83-441e-aece-00a17a8ed612.png",
+    alt: "Book cover of Humor, Seriously by Jennifer Aaker & Naomi Bagdonas",
     link: "https://www.humorseriously.com/"
   },
   {
     title: "Designing Data-Intensive Applications",
     author: "Martin Kleppmann",
     cover: "/lovable-uploads/2cbb00e0-5635-4e8e-8ff7-35464601d395.png",
+    alt: "Book cover of Designing Data-Intensive Applications by Martin Kleppmann",
     link: "https://dataintensive.net/"
   },
   {
     title: "The Innovator's Dilemma",
     author: "Clayton M. Christensen",
     cover: "/lovable-uploads/f9897ed6-0eb1-46ac-a75c-71229f7179b1.png",
+    alt: "Book cover of The Innovator's Dilemma by Clayton M. Christensen",
     link: "https://www.amazon.com/Innovators-Dilemma-Technologies-Management-Innovation/dp/1633691780"
   },
   {
     title: "Disciplined Dreaming",
     author: "Josh Linkner",
     cover: "/lovable-uploads/4c89cf12-c2f3-4952-afe6-1c742e2404d8.png",
+    alt: "Book cover of Disciplined Dreaming by Josh Linkner",
     link: "https://joshlinkner.com/books/"
   }
 ];
@@ -53,7 +57,7 @@ const ReadingList = () => {
               <div className="aspect-[3/4] overflow-hidden">
                 <img
                   src={book.cover}
-                  alt={book.title}
+                  alt={book.alt}
                   className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">

@@ -7,6 +7,7 @@ const certificates = [
     issuer: "Amazon Web Services",
     date: "2023",
     image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158",
+    alt: "AWS Solutions Architect Certification Badge",
     link: "#"
   },
   {
@@ -14,6 +15,7 @@ const certificates = [
     issuer: "Google Cloud",
     date: "2023",
     image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d",
+    alt: "Google Cloud Professional Certification Badge",
     link: "#"
   },
   {
@@ -21,6 +23,7 @@ const certificates = [
     issuer: "Microsoft",
     date: "2023",
     image: "https://images.unsplash.com/photo-1434494878577-86c23bcb06b9",
+    alt: "Microsoft Azure DevOps Engineer Certification Badge",
     link: "#"
   },
   {
@@ -28,6 +31,7 @@ const certificates = [
     issuer: "EC-Council",
     date: "2023",
     image: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952",
+    alt: "EC-Council Certified Ethical Hacker Certification Badge",
     link: "#"
   },
 ];
@@ -53,7 +57,7 @@ const Certificates = () => {
                   <div className="aspect-video mb-4 overflow-hidden rounded-lg">
                     <img
                       src={cert.image}
-                      alt={cert.title}
+                      alt={cert.alt}
                       className="w-full h-full object-cover"
                     />
                   </div>
