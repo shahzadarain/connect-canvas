@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemap location
-Sitemap: https://lovable.dev/projects/34a8dd63-2b47-49d5-b107-3ac483eb6915/sitemap.xml
+Sitemap: https://shahzadasghar.com/sitemap.xml
 
 # Crawl-delay to be nice to search engines
 Crawl-delay: 10
