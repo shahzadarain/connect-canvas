@@ -117,7 +117,7 @@ const AIHumanitarian = () => {
                 Together, we can harness the power of AI to build a more equitable and compassionate world.
               </p>
               <a 
-                href="https://www.linkedin.com/in/shahzad-asghar" 
+                href="https://www.linkedin.com/in/shahzadasghar1/" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="inline-flex items-center"
