@@ -89,6 +89,12 @@ const Navigation = () => {
               >
                 AI Humanitarian
               </Link>
+              <Link 
+                to="/ai-humanitarian-training"
+                className="relative py-2 text-sm font-medium transition-all duration-300 text-primary/80 hover:text-accent dark:text-white/80 dark:hover:text-accent"
+              >
+                AI Training
+              </Link>
             </div>
           </div>
 
