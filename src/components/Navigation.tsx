@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 
 const Navigation = () => {
@@ -46,9 +47,9 @@ const Navigation = () => {
     )}>
       <div className="container mx-auto px-6">
         <div className="flex items-center justify-between h-20">
-          <div className="text-2xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent hover:opacity-80 transition-opacity duration-300 cursor-pointer">
+          <Link to="/" className="text-2xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent hover:opacity-80 transition-opacity duration-300">
             Shahzad ASGHAR
-          </div>
+          </Link>
           
           <div className={cn(
             "fixed md:relative top-20 md:top-0 left-0 md:left-auto w-full md:w-auto h-screen md:h-auto bg-white/95 dark:bg-gray-900/95 md:bg-transparent backdrop-blur-xl md:backdrop-blur-none transition-transform duration-300 ease-in-out transform md:transform-none",
@@ -82,6 +83,12 @@ const Navigation = () => {
                   />
                 </button>
               ))}
+              <Link 
+                to="/ai-humanitarian-solutions"
+                className="relative py-2 text-sm font-medium transition-all duration-300 text-primary/80 hover:text-accent dark:text-white/80 dark:hover:text-accent"
+              >
+                AI Humanitarian
+              </Link>
             </div>
           </div>
 
