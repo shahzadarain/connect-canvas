@@ -7,7 +7,7 @@ const AIHumanitarian = () => {
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
         <Link to="/">
-          <Button variant="ghost" className="mb-8">
+          <Button variant="ghost" className="mb-8" aria-label="Back to Home">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Home
           </Button>
@@ -112,7 +112,7 @@ const AIHumanitarian = () => {
             with compassion and empathy, we can create a future where no one is left behind.
           </p>
 
-          <div className="mt-12 p-6 bg-primary/5 rounded-lg">
+          <div className="mt-12 p-6 bg-primary/5 rounded-lg" role="complementary">
             <h3 className="text-xl font-semibold mb-4">Join the Movement</h3>
             <p className="mb-0">
               Together, we can harness the power of AI to build a more equitable and compassionate world.
