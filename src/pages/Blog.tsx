@@ -1,7 +1,7 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
@@ -35,13 +35,15 @@ const Blog = () => {
         <meta name="description" content="Read about AI, technology, and global development from my experiences and insights." />
       </Helmet>
       <Navigation />
-      <main className="min-h-screen pt-20">
-        <div className="container mx-auto px-4 py-8">
-          <h1 className="text-4xl font-bold mb-8">Blog</h1>
+      <main className="min-h-screen pt-20 bg-white dark:bg-gray-900">
+        <div className="container mx-auto px-4 py-12">
+          <h1 className="text-5xl font-bold mb-12 text-center text-gray-900 dark:text-white">
+            Blog
+          </h1>
           {isLoading ? (
-            <div className="space-y-6">
+            <div className="space-y-8 max-w-4xl mx-auto">
               {[1, 2, 3].map((i) => (
-                <Card key={i} className="mb-6">
+                <Card key={i} className="mb-8 border-none shadow-lg hover:shadow-xl transition-shadow">
                   <CardHeader>
                     <Skeleton className="h-8 w-3/4" />
                   </CardHeader>
@@ -53,24 +55,26 @@ const Blog = () => {
               ))}
             </div>
           ) : posts && posts.length > 0 ? (
-            <div className="space-y-6">
+            <div className="space-y-8 max-w-4xl mx-auto">
               {posts.map((post) => (
-                <Card key={post.id} className="mb-6 hover:shadow-lg transition-shadow">
-                  <Link to={`/blog/${post.slug}`}>
-                    <CardHeader>
-                      <CardTitle className="text-2xl">{post.title}</CardTitle>
-                      <p className="text-sm text-muted-foreground">
+                <Link to={`/blog/${post.slug}`} key={post.id}>
+                  <Card className="mb-8 border-none shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 bg-white dark:bg-gray-800">
+                    <CardContent className="p-8">
+                      <h2 className="text-3xl font-bold mb-4 text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                        {post.title}
+                      </h2>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
                         {format(new Date(post.published_at), 'MMMM d, yyyy')} • {post.author}
                       </p>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-muted-foreground">{post.excerpt}</p>
+                      <p className="text-gray-700 dark:text-gray-300 mb-6 line-clamp-3">
+                        {post.excerpt}
+                      </p>
                       {post.tags && (
-                        <div className="flex flex-wrap gap-2 mt-4">
+                        <div className="flex flex-wrap gap-2">
                           {post.tags.map((tag) => (
                             <span
                               key={tag}
-                              className="bg-primary/10 text-primary px-2 py-1 rounded-full text-sm"
+                              className="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-3 py-1 rounded-full text-sm"
                             >
                               {tag}
                             </span>
@@ -78,12 +82,14 @@ const Blog = () => {
                         </div>
                       )}
                     </CardContent>
-                  </Link>
-                </Card>
+                  </Card>
+                </Link>
               ))}
             </div>
           ) : (
-            <p className="text-muted-foreground">No blog posts found.</p>
+            <p className="text-center text-gray-600 dark:text-gray-400">
+              No blog posts found.
+            </p>
           )}
         </div>
       </main>
