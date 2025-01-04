@@ -72,8 +72,15 @@ const ReadingList = () => {
   };
 
   const getCoverImage = (resource: Resource) => {
-    // For now, return a placeholder. Later we can add cover images to the database
-    return "/placeholder.svg";
+    // Map resource types to specific images
+    const imageMap: { [key: string]: string } = {
+      'pdf': 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b',
+      'audio': 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e',
+      'external_link': 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6',
+      'book': 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d'
+    };
+
+    return imageMap[resource.type.toLowerCase()] || 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5';
   };
 
   if (loading) {
@@ -85,7 +92,7 @@ const ReadingList = () => {
   }
 
   return (
-    <section id="reading" className="py-24 bg-gradient-to-b from-background via-background/80 to-[#F2FCE2] relative overflow-hidden">
+    <section className="py-24 bg-gradient-to-b from-background via-background/80 to-background relative overflow-hidden">
       <div className="absolute inset-0 bg-grid-pattern opacity-5" />
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-center gap-3 mb-12">
@@ -100,7 +107,7 @@ const ReadingList = () => {
             No resources available at the moment.
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {resources.map((resource) => (
               <a
                 key={resource.id}
@@ -117,9 +124,12 @@ const ReadingList = () => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <div className="absolute bottom-0 left-0 right-0 p-6 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                      <h3 className="font-bold text-xl mb-2 text-white">{resource.title}</h3>
+                      <h3 className="font-bold text-xl mb-2 text-white line-clamp-2">{resource.title}</h3>
                       {resource.author && (
-                        <p className="text-gray-200 text-sm">{resource.author}</p>
+                        <p className="text-gray-200 text-sm mb-2">{resource.author}</p>
+                      )}
+                      {resource.description && (
+                        <p className="text-gray-300 text-sm line-clamp-3">{resource.description}</p>
                       )}
                     </div>
                   </div>
