@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { initializeResources } from "@/utils/resourceUtils";
 import Index from "./pages/Index";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
@@ -17,6 +18,13 @@ const queryClient = new QueryClient();
 
 const App = () => {
   useEffect(() => {
+    const initialize = async () => {
+      await Promise.all([
+        initializeResources(),
+        initializeBlog()
+      ]);
+    };
+
     const initializeBlog = async () => {
       console.log("Checking if we need to create blog posts...");
       
@@ -33,7 +41,43 @@ const App = () => {
           const firstPost = {
             title: "How AI is Transforming Global Development: Insights from My UN Experience",
             slug: "ai-transforming-global-development-un-experience",
-            content: `// ... keep existing code (first blog post content)`,
+            content: `Artificial intelligence (AI) is not just a buzzword—it is fundamentally reshaping how humanitarian organizations address pressing global challenges. By streamlining processes, predicting needs, and optimizing resource allocation, AI is becoming an indispensable tool in the quest for more effective humanitarian responses. Below, we explore specific AI tools and initiatives that are making a difference globally and highlight groundbreaking projects implemented in Jordan under the Data Analysis Group (DAG).
+
+Global AI Initiatives in Humanitarian Work
+1. Signpost by International Rescue Committee (IRC):
+This AI-powered platform provides real-time, multilingual information to displaced populations. By using AI chatbots and mobile apps, Signpost has helped millions of people navigate crises more effectively.
+
+2. Ulangizi AI Chatbot in Malawi:
+Designed for rural farmers, this AI chatbot offers agricultural advice in local languages. It's an example of how AI can empower underserved communities with localized solutions.
+
+3. Tarjimly Translation Services:
+This app, supported by Google, connects refugees with volunteer interpreters. AI integration enhances translation accuracy, especially for lesser-known languages, bridging communication gaps during critical resettlement processes.
+
+4. AI for Disaster Response:
+AI systems analyze satellite imagery, predict disaster-prone areas, and allocate resources more efficiently, enabling faster responses to natural calamities.
+
+AI Projects in Jordan: A Focus on Refugees and Humanitarian Support
+As Head of the Data Analysis Group (DAG), my team and I have led several initiatives that leverage AI to improve the lives of refugees and optimize humanitarian efforts:
+
+1. Predictive Analytics for Refugee Movements:
+Using machine learning models, we developed systems to analyze trends and predict refugee movements across Jordan. This helped humanitarian agencies preemptively allocate resources to high-need areas, ensuring timely and efficient support.
+
+2. AI-Driven Feedback System for Refugees:
+Our team built an AI-powered interactive voice response (IVR) system integrated with a chatbot to collect, transcribe, and categorize feedback from refugees. This system allowed refugees to share their concerns and needs in real time, while providing actionable insights to stakeholders.
+
+4. Skill Mapping Using AI:
+We leveraged AI to integrate and analyze skill data for refugees across Jordan. This enabled better matching of refugees' capabilities with employment opportunities, fostering self-reliance and economic inclusion.
+
+5. Heatmaps for Vulnerability Analysis:
+Using AI-powered geographic information systems (GIS), we created dynamic heatmaps to identify areas of high vulnerability among refugees. This facilitated targeted interventions and enhanced the efficiency of aid distribution.
+
+6. Enhanced Needs Assessments with AI:
+To streamline data collection for needs assessments, we integrated AI algorithms that categorized responses and identified trends. This enabled quicker, more reliable assessments to inform program planning.
+
+Ethical Considerations and the Path Forward
+While AI offers transformative potential, its implementation must be accompanied by ethical vigilance. Ensuring data privacy, addressing algorithmic biases, and involving affected communities in the design process are vital steps toward equitable use of AI in humanitarian efforts.
+
+AI is not just shaping the future of humanitarian work—it is redefining what is possible. Through innovation and collaboration, we can ensure these technologies continue to serve as tools for hope and resilience.`,
             excerpt: "Explore how artificial intelligence is revolutionizing global development through UN initiatives, from poverty alleviation to healthcare and climate change mitigation.",
             author: "Shahzad ASGHAR",
             tags: ["AI", "United Nations", "Global Development", "Healthcare", "Climate Change", "Poverty Alleviation"],
@@ -59,7 +103,43 @@ const App = () => {
           const secondPost = {
             title: "The Role of Artificial Intelligence in Achieving the UN Sustainable Development Goals (SDGs)",
             slug: "ai-role-in-un-sustainable-development-goals",
-            content: `// ... keep existing code (second blog post content)`,
+            content: `Artificial intelligence (AI) is not just a buzzword—it is fundamentally reshaping how humanitarian organizations address pressing global challenges. By streamlining processes, predicting needs, and optimizing resource allocation, AI is becoming an indispensable tool in the quest for more effective humanitarian responses. Below, we explore specific AI tools and initiatives that are making a difference globally and highlight groundbreaking projects implemented in Jordan under the Data Analysis Group (DAG).
+
+Global AI Initiatives in Humanitarian Work
+1. Signpost by International Rescue Committee (IRC):
+This AI-powered platform provides real-time, multilingual information to displaced populations. By using AI chatbots and mobile apps, Signpost has helped millions of people navigate crises more effectively.
+
+2. Ulangizi AI Chatbot in Malawi:
+Designed for rural farmers, this AI chatbot offers agricultural advice in local languages. It's an example of how AI can empower underserved communities with localized solutions.
+
+3. Tarjimly Translation Services:
+This app, supported by Google, connects refugees with volunteer interpreters. AI integration enhances translation accuracy, especially for lesser-known languages, bridging communication gaps during critical resettlement processes.
+
+4. AI for Disaster Response:
+AI systems analyze satellite imagery, predict disaster-prone areas, and allocate resources more efficiently, enabling faster responses to natural calamities.
+
+AI Projects in Jordan: A Focus on Refugees and Humanitarian Support
+As Head of the Data Analysis Group (DAG), my team and I have led several initiatives that leverage AI to improve the lives of refugees and optimize humanitarian efforts:
+
+1. Predictive Analytics for Refugee Movements:
+Using machine learning models, we developed systems to analyze trends and predict refugee movements across Jordan. This helped humanitarian agencies preemptively allocate resources to high-need areas, ensuring timely and efficient support.
+
+2. AI-Driven Feedback System for Refugees:
+Our team built an AI-powered interactive voice response (IVR) system integrated with a chatbot to collect, transcribe, and categorize feedback from refugees. This system allowed refugees to share their concerns and needs in real time, while providing actionable insights to stakeholders.
+
+4. Skill Mapping Using AI:
+We leveraged AI to integrate and analyze skill data for refugees across Jordan. This enabled better matching of refugees' capabilities with employment opportunities, fostering self-reliance and economic inclusion.
+
+5. Heatmaps for Vulnerability Analysis:
+Using AI-powered geographic information systems (GIS), we created dynamic heatmaps to identify areas of high vulnerability among refugees. This facilitated targeted interventions and enhanced the efficiency of aid distribution.
+
+6. Enhanced Needs Assessments with AI:
+To streamline data collection for needs assessments, we integrated AI algorithms that categorized responses and identified trends. This enabled quicker, more reliable assessments to inform program planning.
+
+Ethical Considerations and the Path Forward
+While AI offers transformative potential, its implementation must be accompanied by ethical vigilance. Ensuring data privacy, addressing algorithmic biases, and involving affected communities in the design process are vital steps toward equitable use of AI in humanitarian efforts.
+
+AI is not just shaping the future of humanitarian work—it is redefining what is possible. Through innovation and collaboration, we can ensure these technologies continue to serve as tools for hope and resilience.`,
             excerpt: "Discover how artificial intelligence is accelerating progress towards the UN Sustainable Development Goals, from fighting hunger to climate action.",
             author: "Shahzad ASGHAR",
             tags: ["AI", "SDGs", "Sustainable Development", "United Nations", "Innovation", "Climate Action", "Education"],
@@ -85,7 +165,43 @@ const App = () => {
           const thirdPost = {
             title: "Ethical AI: Lessons Learned from Working with the United Nations",
             slug: "ethical-ai-lessons-learned-from-un",
-            content: `// ... keep existing code (third blog post content)`,
+            content: `Artificial intelligence (AI) is not just a buzzword—it is fundamentally reshaping how humanitarian organizations address pressing global challenges. By streamlining processes, predicting needs, and optimizing resource allocation, AI is becoming an indispensable tool in the quest for more effective humanitarian responses. Below, we explore specific AI tools and initiatives that are making a difference globally and highlight groundbreaking projects implemented in Jordan under the Data Analysis Group (DAG).
+
+Global AI Initiatives in Humanitarian Work
+1. Signpost by International Rescue Committee (IRC):
+This AI-powered platform provides real-time, multilingual information to displaced populations. By using AI chatbots and mobile apps, Signpost has helped millions of people navigate crises more effectively.
+
+2. Ulangizi AI Chatbot in Malawi:
+Designed for rural farmers, this AI chatbot offers agricultural advice in local languages. It's an example of how AI can empower underserved communities with localized solutions.
+
+3. Tarjimly Translation Services:
+This app, supported by Google, connects refugees with volunteer interpreters. AI integration enhances translation accuracy, especially for lesser-known languages, bridging communication gaps during critical resettlement processes.
+
+4. AI for Disaster Response:
+AI systems analyze satellite imagery, predict disaster-prone areas, and allocate resources more efficiently, enabling faster responses to natural calamities.
+
+AI Projects in Jordan: A Focus on Refugees and Humanitarian Support
+As Head of the Data Analysis Group (DAG), my team and I have led several initiatives that leverage AI to improve the lives of refugees and optimize humanitarian efforts:
+
+1. Predictive Analytics for Refugee Movements:
+Using machine learning models, we developed systems to analyze trends and predict refugee movements across Jordan. This helped humanitarian agencies preemptively allocate resources to high-need areas, ensuring timely and efficient support.
+
+2. AI-Driven Feedback System for Refugees:
+Our team built an AI-powered interactive voice response (IVR) system integrated with a chatbot to collect, transcribe, and categorize feedback from refugees. This system allowed refugees to share their concerns and needs in real time, while providing actionable insights to stakeholders.
+
+4. Skill Mapping Using AI:
+We leveraged AI to integrate and analyze skill data for refugees across Jordan. This enabled better matching of refugees' capabilities with employment opportunities, fostering self-reliance and economic inclusion.
+
+5. Heatmaps for Vulnerability Analysis:
+Using AI-powered geographic information systems (GIS), we created dynamic heatmaps to identify areas of high vulnerability among refugees. This facilitated targeted interventions and enhanced the efficiency of aid distribution.
+
+6. Enhanced Needs Assessments with AI:
+To streamline data collection for needs assessments, we integrated AI algorithms that categorized responses and identified trends. This enabled quicker, more reliable assessments to inform program planning.
+
+Ethical Considerations and the Path Forward
+While AI offers transformative potential, its implementation must be accompanied by ethical vigilance. Ensuring data privacy, addressing algorithmic biases, and involving affected communities in the design process are vital steps toward equitable use of AI in humanitarian efforts.
+
+AI is not just shaping the future of humanitarian work—it is redefining what is possible. Through innovation and collaboration, we can ensure these technologies continue to serve as tools for hope and resilience.`,
             excerpt: "Explore the ethical challenges and solutions in implementing AI within global organizations, drawing from United Nations experience.",
             author: "Shahzad ASGHAR",
             tags: ["AI Ethics", "United Nations", "Data Privacy", "Digital Divide", "Bias in AI", "Ethical Technology"],
@@ -165,7 +281,7 @@ AI is not just shaping the future of humanitarian work—it is redefining what i
       }
     };
 
-    initializeBlog();
+    initialize();
   }, []);
 
   return (
