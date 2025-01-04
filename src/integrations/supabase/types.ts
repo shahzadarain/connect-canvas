@@ -9,6 +9,45 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      ai_tools: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          description: string | null
+          id: number
+          image_url: string | null
+          name: string
+          pricing_type: string | null
+          tags: string[] | null
+          updated_at: string | null
+          url: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: never
+          image_url?: string | null
+          name: string
+          pricing_type?: string | null
+          tags?: string[] | null
+          updated_at?: string | null
+          url?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: never
+          image_url?: string | null
+          name?: string
+          pricing_type?: string | null
+          tags?: string[] | null
+          updated_at?: string | null
+          url?: string | null
+        }
+        Relationships: []
+      }
       blog_posts: {
         Row: {
           author: string
