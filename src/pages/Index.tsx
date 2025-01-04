@@ -11,14 +11,12 @@ import SubmitIdea from "@/components/SubmitIdea";
 import Newsletter from "@/components/Newsletter";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
-import GettingStarted from "@/components/GettingStarted";
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
       <Hero />
-      <GettingStarted />
       <QuickLinks />
       <ImpactMetrics />
       <Projects />
