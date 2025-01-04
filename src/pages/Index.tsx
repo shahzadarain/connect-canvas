@@ -1,7 +1,6 @@
 import React from "react";
 import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
-import QuickLinks from "@/components/QuickLinks";
 import ImpactMetrics from "@/components/ImpactMetrics";
 import Projects from "@/components/Projects";
 import WorldMap from "@/components/WorldMap";
@@ -17,7 +16,6 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Navigation />
       <Hero />
-      <QuickLinks />
       <ImpactMetrics />
       <Projects />
       <WorldMap />
