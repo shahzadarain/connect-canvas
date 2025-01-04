@@ -7,6 +7,8 @@ import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { initializeResources, addAllResources } from "@/utils/resourceUtils";
 import { initializeBlogPosts } from "@/utils/blogUtils";
+import { createBrowserSupabaseClient } from '@supabase/auth-helpers-shared';
+import { SessionContextProvider } from '@supabase/auth-helpers-react';
 import Index from "./pages/Index";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
@@ -14,6 +16,8 @@ import Reading from "./pages/Reading";
 import AIHumanitarian from "./pages/AIHumanitarian";
 import AIHumanitarianTraining from "./pages/AIHumanitarianTraining";
 import NotFound from "./pages/NotFound";
+import Login from "./pages/Login";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
 
@@ -31,23 +35,30 @@ const App = () => {
   }, []);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/:slug" element={<BlogPost />} />
-            <Route path="/reading" element={<Reading />} />
-            <Route path="/ai-humanitarian-solutions" element={<AIHumanitarian />} />
-            <Route path="/ai-humanitarian-training" element={<AIHumanitarianTraining />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
-    </QueryClientProvider>
+    <SessionContextProvider supabaseClient={supabase}>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:slug" element={<BlogPost />} />
+              <Route path="/reading" element={
+                <ProtectedRoute>
+                  <Reading />
+                </ProtectedRoute>
+              } />
+              <Route path="/ai-humanitarian-solutions" element={<AIHumanitarian />} />
+              <Route path="/ai-humanitarian-training" element={<AIHumanitarianTraining />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </SessionContextProvider>
   );
 };
 
