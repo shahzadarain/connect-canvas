@@ -85,45 +85,7 @@ const App = () => {
           const thirdPost = {
             title: "Ethical AI: Lessons Learned from Working with the United Nations",
             slug: "ethical-ai-lessons-learned-from-un",
-            content: `Artificial Intelligence (AI) has become a transformative force in addressing global challenges, from climate change to healthcare. However, as its adoption grows, so do the ethical concerns surrounding its use. Working with global organizations like the United Nations (UN) has provided valuable insights into these challenges and how they can be addressed. Here's what we've learned about ethical AI and its role in creating a fairer, more sustainable world.  
-
-### **The Ethical Challenges of AI in Global Organizations**  
-
-1. **Bias and Fairness**  
-AI systems are only as good as the data they're trained on. If the data reflects historical biases or lacks diversity, the AI can perpetuate or even amplify these biases. For example, an AI used in hiring processes might favor certain demographics over others, leading to unfair outcomes. In global organizations like the UN, where inclusivity is a core value, biased AI can undermine efforts to promote equality.  
-
-2. **Transparency and Accountability**  
-Many AI systems operate as "black boxes," meaning their decision-making processes are not easily understood. This lack of transparency can erode trust, especially when AI is used in critical areas like disaster response or resource allocation. Without clear accountability, it's difficult to address errors or unintended consequences.  
-
-3. **Privacy and Data Security**  
-AI relies on vast amounts of data, often including sensitive personal information. In global organizations, where data is collected from diverse populations, ensuring privacy and security is paramount. Mismanagement of data can lead to breaches, misuse, or exploitation, particularly in vulnerable communities.  
-
-4. **Digital Divide**  
-While AI has the potential to drive progress, its benefits are not evenly distributed. Many developing countries lack the infrastructure, expertise, or resources to fully leverage AI. This digital divide can exacerbate existing inequalities, leaving some populations further behind.  
-
-### **How These Challenges Can Be Addressed**  
-
-1. **Promoting Inclusive and Diverse Data**  
-To combat bias, AI systems must be trained on diverse and representative datasets. Global organizations like the UN can lead by example, ensuring that data collection processes are inclusive and that marginalized voices are heard. Regular audits of AI systems can also help identify and correct biases.  
-
-2. **Ensuring Transparency and Explainability**  
-AI developers must prioritize creating systems that are transparent and explainable. This means designing algorithms that can provide clear reasoning for their decisions. For global organizations, adopting open standards and sharing best practices can build trust and foster collaboration.  
-
-3. **Strengthening Data Privacy Protections**  
-Robust data governance frameworks are essential to protect privacy and security. The UN and other global organizations can advocate for international regulations that safeguard personal data while enabling innovation. Techniques like federated learning, where data remains on local devices, can also help minimize risks.  
-
-4. **Bridging the Digital Divide**  
-To ensure AI benefits everyone, global organizations must invest in capacity-building initiatives. This includes providing training, resources, and infrastructure to underserved regions. Partnerships between governments, private sectors, and NGOs can help create a more equitable AI ecosystem.  
-
-5. **Establishing Ethical Guidelines and Oversight**  
-The UN has already taken steps to address ethical AI through initiatives like the *Recommendation on the Ethics of Artificial Intelligence*. By setting global standards and establishing oversight mechanisms, organizations can ensure AI is used responsibly and aligned with human rights principles.  
-
-### **The Path Forward**  
-Ethical AI is not just a technical challenge—it's a moral imperative. As global organizations like the UN continue to integrate AI into their work, they must lead by example, demonstrating how technology can be harnessed for the greater good. By addressing ethical challenges head-on, we can create AI systems that are fair, transparent, and inclusive, ultimately advancing the UN's mission of peace, development, and human rights.  
-
-What are your thoughts on the ethical use of AI in global organizations? How can we ensure AI serves humanity equitably? Share your ideas in the comments below!  
-
-— Shahzad ASGHAR`,
+            content: `// ... keep existing code (third blog post content)`,
             excerpt: "Explore the ethical challenges and solutions in implementing AI within global organizations, drawing from United Nations experience.",
             author: "Shahzad ASGHAR",
             tags: ["AI Ethics", "United Nations", "Data Privacy", "Digital Divide", "Bias in AI", "Ethical Technology"],
@@ -135,6 +97,68 @@ What are your thoughts on the ethical use of AI in global organizations? How can
 
           await createBlogPost(thirdPost);
           console.log("Third blog post created successfully!");
+        }
+
+        // Fourth blog post initialization
+        const { data: existingFourthPost } = await supabase
+          .from('blog_posts')
+          .select('*')
+          .eq('slug', 'ai-for-good-technology-shaping-humanitarian-work')
+          .single();
+
+        if (!existingFourthPost) {
+          console.log("Creating fourth blog post...");
+          const fourthPost = {
+            title: "AI for Good: How Technology is Shaping the Future of Humanitarian Work",
+            slug: "ai-for-good-technology-shaping-humanitarian-work",
+            content: `Artificial intelligence (AI) is not just a buzzword—it is fundamentally reshaping how humanitarian organizations address pressing global challenges. By streamlining processes, predicting needs, and optimizing resource allocation, AI is becoming an indispensable tool in the quest for more effective humanitarian responses. Below, we explore specific AI tools and initiatives that are making a difference globally and highlight groundbreaking projects implemented in Jordan under the Data Analysis Group (DAG).
+
+Global AI Initiatives in Humanitarian Work
+1. Signpost by International Rescue Committee (IRC):
+This AI-powered platform provides real-time, multilingual information to displaced populations. By using AI chatbots and mobile apps, Signpost has helped millions of people navigate crises more effectively.
+
+2. Ulangizi AI Chatbot in Malawi:
+Designed for rural farmers, this AI chatbot offers agricultural advice in local languages. It's an example of how AI can empower underserved communities with localized solutions.
+
+3. Tarjimly Translation Services:
+This app, supported by Google, connects refugees with volunteer interpreters. AI integration enhances translation accuracy, especially for lesser-known languages, bridging communication gaps during critical resettlement processes.
+
+4. AI for Disaster Response:
+AI systems analyze satellite imagery, predict disaster-prone areas, and allocate resources more efficiently, enabling faster responses to natural calamities.
+
+AI Projects in Jordan: A Focus on Refugees and Humanitarian Support
+As Head of the Data Analysis Group (DAG), my team and I have led several initiatives that leverage AI to improve the lives of refugees and optimize humanitarian efforts:
+
+1. Predictive Analytics for Refugee Movements:
+Using machine learning models, we developed systems to analyze trends and predict refugee movements across Jordan. This helped humanitarian agencies preemptively allocate resources to high-need areas, ensuring timely and efficient support.
+
+2. AI-Driven Feedback System for Refugees:
+Our team built an AI-powered interactive voice response (IVR) system integrated with a chatbot to collect, transcribe, and categorize feedback from refugees. This system allowed refugees to share their concerns and needs in real time, while providing actionable insights to stakeholders.
+
+4. Skill Mapping Using AI:
+We leveraged AI to integrate and analyze skill data for refugees across Jordan. This enabled better matching of refugees' capabilities with employment opportunities, fostering self-reliance and economic inclusion.
+
+5. Heatmaps for Vulnerability Analysis:
+Using AI-powered geographic information systems (GIS), we created dynamic heatmaps to identify areas of high vulnerability among refugees. This facilitated targeted interventions and enhanced the efficiency of aid distribution.
+
+6. Enhanced Needs Assessments with AI:
+To streamline data collection for needs assessments, we integrated AI algorithms that categorized responses and identified trends. This enabled quicker, more reliable assessments to inform program planning.
+
+Ethical Considerations and the Path Forward
+While AI offers transformative potential, its implementation must be accompanied by ethical vigilance. Ensuring data privacy, addressing algorithmic biases, and involving affected communities in the design process are vital steps toward equitable use of AI in humanitarian efforts.
+
+AI is not just shaping the future of humanitarian work—it is redefining what is possible. Through innovation and collaboration, we can ensure these technologies continue to serve as tools for hope and resilience.`,
+            excerpt: "Discover how AI is revolutionizing humanitarian work through real-world applications and projects implemented in Jordan, focusing on refugee support and crisis response.",
+            author: "Shahzad ASGHAR",
+            tags: ["AI for Good", "Humanitarian Work", "Refugee Support", "Crisis Response", "Data Analysis", "Innovation"],
+            meta_description: "Learn how AI is transforming humanitarian work through innovative projects and initiatives, with a focus on refugee support and crisis response in Jordan.",
+            meta_keywords: ["AI humanitarian work", "refugee support", "crisis response", "data analysis", "innovation", "humanitarian technology", "AI for good"],
+            status: "published",
+            published_at: new Date().toISOString()
+          };
+
+          await createBlogPost(fourthPost);
+          console.log("Fourth blog post created successfully!");
         }
       } catch (error) {
         console.error("Error initializing blog:", error);
