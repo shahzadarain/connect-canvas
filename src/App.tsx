@@ -6,7 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { initializeResources, addAllResources } from "@/utils/resourceUtils";
-import { initializeBlog } from "@/utils/blogUtils";
+import { initializeBlogPosts } from "@/utils/blogUtils";
 import Index from "./pages/Index";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
@@ -21,7 +21,7 @@ const App = () => {
     const initialize = async () => {
       await Promise.all([
         initializeResources(),
-        initializeBlog(),
+        initializeBlogPosts(),
         addAllResources()
       ]);
     };
