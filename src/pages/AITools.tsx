@@ -1,124 +1,163 @@
-import { useQuery } from "@tanstack/react-query";
+import React, { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { supabase } from "@/integrations/supabase/client";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Badge } from "@/components/ui/badge";
+import { ExternalLink, RefreshCw } from 'lucide-react';
+import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
 import { useToast } from "@/components/ui/use-toast";
-import { Tables } from "@/integrations/supabase/types";
-import { useSession } from '@supabase/auth-helpers-react';
+import { Button } from "@/components/ui/button";
 
-type AITool = Tables<"ai_tools">;
+interface AITool {
+  id: number;
+  name: string;
+  description: string | null;
+  image_url: string | null;
+  url: string | null;
+  category: string | null;
+  pricing_type: string | null;
+  tags: string[] | null;
+}
 
 const AITools = () => {
+  const [isUpdating, setIsUpdating] = useState(false);
   const { toast } = useToast();
-  const session = useSession();
-  const isAdmin = session?.user?.email === 'admin@example.com'; // Replace with your admin email
 
   const { data: tools, isLoading, refetch } = useQuery({
     queryKey: ['ai-tools'],
     queryFn: async () => {
+      console.log('Fetching AI tools from Supabase...');
       const { data, error } = await supabase
         .from('ai_tools')
         .select('*')
         .order('name');
-      
-      if (error) throw error;
+
+      if (error) {
+        console.error('Error fetching AI tools:', error);
+        throw error;
+      }
+
+      console.log('Successfully fetched AI tools:', data);
       return data as AITool[];
     },
   });
 
-  const handleScrape = async () => {
+  const updateTools = async () => {
     try {
-      const response = await supabase.functions.invoke('scrape-ai-tools');
+      setIsUpdating(true);
+      console.log('Initiating AI tools update...');
       
-      if (response.error) throw response.error;
+      const response = await fetch('/api/fetch-ai-tools', {
+        method: 'POST',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update AI tools');
+      }
+
+      const result = await response.json();
+      console.log('Update result:', result);
       
       toast({
         title: "Success",
-        description: "AI tools have been updated successfully",
+        description: "AI tools have been updated successfully.",
       });
       
       refetch();
     } catch (error) {
-      console.error('Error scraping tools:', error);
+      console.error('Error updating AI tools:', error);
       toast({
         title: "Error",
-        description: "Failed to scrape AI tools",
+        description: "Failed to update AI tools. Please try again later.",
         variant: "destructive",
       });
+    } finally {
+      setIsUpdating(false);
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="container mx-auto p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {[...Array(6)].map((_, i) => (
-          <Card key={i} className="p-4 space-y-4">
-            <Skeleton className="h-40 w-full rounded-lg" />
-            <Skeleton className="h-4 w-3/4" />
-            <Skeleton className="h-4 w-full" />
-          </Card>
-        ))}
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto p-6">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold">AI Tools Directory</h1>
-          {isAdmin && (
-            <Button onClick={handleScrape} variant="outline">
-              Update Tools
-            </Button>
-          )}
+      <Navigation />
+      <main className="container mx-auto px-4 py-24">
+        <div className="flex flex-col items-center gap-8 mb-12">
+          <h1 className="text-4xl md:text-5xl font-bold text-center bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
+            AI Tools Directory
+          </h1>
+          <p className="text-lg text-center text-muted-foreground max-w-2xl">
+            Discover the latest AI tools and technologies that are shaping the future of innovation.
+          </p>
+          <Button
+            onClick={updateTools}
+            disabled={isUpdating}
+            className="flex items-center gap-2"
+          >
+            <RefreshCw className={`w-4 h-4 ${isUpdating ? 'animate-spin' : ''}`} />
+            Update Tools
+          </Button>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {tools?.map((tool) => (
-            <Card key={tool.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-              {tool.image_url && (
-                <div className="aspect-video w-full overflow-hidden bg-gray-100">
-                  <img 
-                    src={tool.image_url} 
-                    alt={tool.name}
-                    className="w-full h-full object-contain p-4"
-                  />
+
+        {isLoading ? (
+          <div className="flex justify-center items-center min-h-[400px]">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {tools?.map((tool) => (
+              <div
+                key={tool.id}
+                className="group bg-white dark:bg-gray-800/50 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-300"
+              >
+                <div className="aspect-video bg-gray-100 dark:bg-gray-900 relative">
+                  {tool.image_url ? (
+                    <img
+                      src={tool.image_url}
+                      alt={tool.name}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-gray-400">
+                      No image available
+                    </div>
+                  )}
                 </div>
-              )}
-              <div className="p-4 space-y-2">
-                <h3 className="text-xl font-semibold">{tool.name}</h3>
-                {tool.category && (
-                  <Badge variant="secondary" className="mb-2">
-                    {tool.category}
-                  </Badge>
-                )}
-                <p className="text-muted-foreground text-sm line-clamp-2">{tool.description}</p>
-                {tool.tags && tool.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mt-2">
-                    {tool.tags.map((tag, index) => (
-                      <Badge key={index} variant="outline">
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
-                )}
-                {tool.url && (
-                  <a
-                    href={tool.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-block mt-2 text-primary hover:underline"
-                  >
-                    Learn More →
-                  </a>
-                )}
+                
+                <div className="p-6">
+                  <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white group-hover:text-blue-500 transition-colors">
+                    {tool.name}
+                  </h3>
+                  
+                  {tool.category && (
+                    <div className="mb-2">
+                      <span className="text-sm px-2 py-1 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400">
+                        {tool.category}
+                      </span>
+                    </div>
+                  )}
+                  
+                  {tool.description && (
+                    <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-3">
+                      {tool.description}
+                    </p>
+                  )}
+
+                  {tool.url && (
+                    <a
+                      href={tool.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-sm font-medium text-blue-500 hover:text-blue-600 transition-colors"
+                    >
+                      Learn More
+                      <ExternalLink className="w-4 h-4" />
+                    </a>
+                  )}
+                </div>
               </div>
-            </Card>
-          ))}
-        </div>
-      </div>
+            ))}
+          </div>
+        )}
+      </main>
+      <Footer />
     </div>
   );
 };
