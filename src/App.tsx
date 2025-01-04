@@ -7,7 +7,6 @@ import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { initializeResources, addAllResources } from "@/utils/resourceUtils";
 import { initializeBlogPosts } from "@/utils/blogUtils";
-import { createBrowserSupabaseClient } from '@supabase/auth-helpers-shared';
 import { SessionContextProvider } from '@supabase/auth-helpers-react';
 import Index from "./pages/Index";
 import Blog from "./pages/Blog";

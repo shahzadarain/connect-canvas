@@ -9,13 +9,16 @@ interface Resource {
   title: string;
   author: string | null;
   type: string;
-  file_path: string | null;
   external_url: string | null;
   category: string | null;
   created_at?: string;
   updated_at?: string;
   description?: string;
   duration?: string;
+  views?: number;
+  featured?: boolean;
+  tags?: string[];
+  status?: string;
 }
 
 const ReadingList = () => {
