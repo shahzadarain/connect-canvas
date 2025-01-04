@@ -1,52 +1,64 @@
-import { Json } from './common';
-
 export interface BlogPost {
   Row: {
-    author: string
-    content: string
-    created_at: string | null
-    excerpt: string | null
-    featured_image: string | null
     id: number
+    title: string
+    slug: string
+    content: string
+    excerpt: string | null
+    author: string
+    published_at: string | null
+    created_at: string | null
+    updated_at: string | null
+    status: string | null
+    featured_image: string | null
+    tags: string[] | null
     meta_description: string | null
     meta_keywords: string[] | null
-    published_at: string | null
-    slug: string
-    status: string | null
-    tags: string[] | null
-    title: string
-    updated_at: string | null
   }
   Insert: {
-    author: string
-    content: string
-    created_at?: string | null
-    excerpt?: string | null
-    featured_image?: string | null
     id?: number
+    title: string
+    slug: string
+    content: string
+    excerpt?: string | null
+    author: string
+    published_at?: string | null
+    created_at?: string | null
+    updated_at?: string | null
+    status?: string | null
+    featured_image?: string | null
+    tags?: string[] | null
     meta_description?: string | null
     meta_keywords?: string[] | null
-    published_at?: string | null
-    slug: string
-    status?: string | null
-    tags?: string[] | null
-    title: string
-    updated_at?: string | null
   }
   Update: {
-    author?: string
-    content?: string
-    created_at?: string | null
-    excerpt?: string | null
-    featured_image?: string | null
     id?: number
+    title?: string
+    slug?: string
+    content?: string
+    excerpt?: string | null
+    author?: string
+    published_at?: string | null
+    created_at?: string | null
+    updated_at?: string | null
+    status?: string | null
+    featured_image?: string | null
+    tags?: string[] | null
     meta_description?: string | null
     meta_keywords?: string[] | null
-    published_at?: string | null
-    slug?: string
-    status?: string | null
-    tags?: string[] | null
-    title?: string
-    updated_at?: string | null
   }
+  Relationships: []
+}
+
+export type BlogPostInput = {
+  title: string
+  slug: string
+  content: string
+  excerpt?: string
+  author: string
+  status?: string
+  featured_image?: string
+  tags?: string[]
+  meta_description?: string
+  meta_keywords?: string[]
 }

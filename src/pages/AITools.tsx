@@ -2,6 +2,9 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Tables } from "@/integrations/supabase/types";
+
+type AITool = Tables<"ai_tools">;
 
 const AITools = () => {
   const { data: tools, isLoading } = useQuery({
@@ -13,7 +16,7 @@ const AITools = () => {
         .order('name');
       
       if (error) throw error;
-      return data;
+      return data as AITool[];
     },
   });
 

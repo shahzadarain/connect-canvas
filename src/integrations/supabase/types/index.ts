@@ -1,9 +1,9 @@
-import { Json } from './common';
 import { BlogPost } from './blog';
 import { LearningResource } from './learning';
 import { Idea } from './ideas';
 import { NewsArticle } from './news';
 import { NewsletterSubscriber } from './newsletter';
+import { AITool } from './ai-tools';
 
 export type Database = {
   public: {
@@ -13,6 +13,7 @@ export type Database = {
       learning_resources: LearningResource
       news_articles: NewsArticle
       newsletter_subscribers: NewsletterSubscriber
+      ai_tools: AITool
     }
     Views: {
       [_ in never]: never
@@ -96,37 +97,9 @@ export type TablesUpdate<
     : never
   : never
 
-export type Enums<
-  PublicEnumNameOrOptions extends
-    | keyof Database['public']['Enums']
-    | { schema: keyof Database },
-  EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicEnumNameOrOptions['schema']]['Enums']
-    : never = never,
-> = PublicEnumNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicEnumNameOrOptions['schema']]['Enums'][EnumName]
-  : PublicEnumNameOrOptions extends keyof Database['public']['Enums']
-  ? Database['public']['Enums'][PublicEnumNameOrOptions]
-  : never
-
-export type CompositeTypes<
-  PublicCompositeTypeNameOrOptions extends
-    | keyof Database['public']['CompositeTypes']
-    | { schema: keyof Database },
-  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
-    schema: keyof Database
-  }
-    ? keyof Database[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes']
-    : never = never,
-> = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes'][CompositeTypeName]
-  : PublicCompositeTypeNameOrOptions extends keyof Database['public']['CompositeTypes']
-  ? Database['public']['CompositeTypes'][PublicCompositeTypeNameOrOptions]
-  : never
-
-export type * from './common';
 export type * from './blog';
 export type * from './learning';
 export type * from './ideas';
 export type * from './news';
 export type * from './newsletter';
+export type * from './ai-tools';
