@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { BookOpen, Headphones, FileText, ExternalLink } from 'lucide-react';
+import { BookOpen, Headphones, FileText, ExternalLink, Search } from 'lucide-react';
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
+import { Input } from "@/components/ui/input";
 
 interface Resource {
   id: number;
@@ -20,6 +21,7 @@ interface Resource {
 const ReadingList = () => {
   const [resources, setResources] = useState<Resource[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
   const { toast } = useToast();
 
   useEffect(() => {
@@ -71,6 +73,16 @@ const ReadingList = () => {
     }
   };
 
+  const filteredResources = resources.filter(resource => {
+    const searchTerm = searchQuery.toLowerCase();
+    return (
+      resource.title.toLowerCase().includes(searchTerm) ||
+      (resource.author?.toLowerCase().includes(searchTerm)) ||
+      (resource.description?.toLowerCase().includes(searchTerm)) ||
+      (resource.category?.toLowerCase().includes(searchTerm))
+    );
+  });
+
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-[400px]">
@@ -82,20 +94,33 @@ const ReadingList = () => {
   return (
     <section className="py-24 bg-gradient-to-b from-background via-background/80 to-background">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-center gap-3 mb-12">
-          <BookOpen className="w-8 h-8 text-blue-500" />
-          <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
-            Learning Resources
-          </h2>
+        <div className="flex flex-col items-center gap-6 mb-12">
+          <div className="flex items-center justify-center gap-3">
+            <BookOpen className="w-8 h-8 text-blue-500" />
+            <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
+              Learning Resources
+            </h2>
+          </div>
+          
+          <div className="w-full max-w-md relative">
+            <Input
+              type="text"
+              placeholder="Search resources..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10"
+            />
+            <Search className="w-4 h-4 absolute left-3 top-3 text-gray-400" />
+          </div>
         </div>
         
-        {resources.length === 0 ? (
+        {filteredResources.length === 0 ? (
           <div className="text-center text-gray-500">
-            No resources available at the moment.
+            {searchQuery ? "No resources found matching your search." : "No resources available at the moment."}
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {resources.map((resource) => (
+            {filteredResources.map((resource) => (
               <a
                 key={resource.id}
                 href={resource.external_url || '#'}
