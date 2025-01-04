@@ -14,6 +14,7 @@ import BlogPost from "./pages/BlogPost";
 import Reading from "./pages/Reading";
 import AIHumanitarian from "./pages/AIHumanitarian";
 import AIHumanitarianTraining from "./pages/AIHumanitarianTraining";
+import AITools from "./pages/AITools";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -56,6 +57,7 @@ const AppContent = () => {
       } />
       <Route path="/ai-humanitarian-solutions" element={<AIHumanitarian />} />
       <Route path="/ai-humanitarian-training" element={<AIHumanitarianTraining />} />
+      <Route path="/ai-tools" element={<AITools />} />
       <Route path="/login" element={<Login />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
