@@ -21,7 +21,7 @@ const ImpactMetrics = () => {
     },
     {
       title: "AI Solutions",
-      value: "30+",
+      value: "3+",
       description: "AI-powered humanitarian projects",
       icon: Brain,
       color: "text-purple-500"
