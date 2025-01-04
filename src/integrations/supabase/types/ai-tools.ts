@@ -9,6 +9,7 @@ export interface AITool {
     image_url: string | null
     created_at: string | null
     updated_at: string | null
+    tags: string[] | null
   }
   Insert: {
     id?: number
@@ -20,6 +21,7 @@ export interface AITool {
     image_url?: string | null
     created_at?: string | null
     updated_at?: string | null
+    tags?: string[] | null
   }
   Update: {
     id?: number
@@ -31,6 +33,7 @@ export interface AITool {
     image_url?: string | null
     created_at?: string | null
     updated_at?: string | null
+    tags?: string[] | null
   }
   Relationships: []
 }
