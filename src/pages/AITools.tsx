@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { ExternalLink, RefreshCw } from 'lucide-react';
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 
 interface AITool {
@@ -46,16 +46,15 @@ const AITools = () => {
       setIsUpdating(true);
       console.log('Initiating AI tools update...');
       
-      const response = await fetch('/api/fetch-ai-tools', {
+      const { data, error } = await supabase.functions.invoke('fetch-ai-tools', {
         method: 'POST',
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to update AI tools');
+      if (error) {
+        throw error;
       }
 
-      const result = await response.json();
-      console.log('Update result:', result);
+      console.log('Update result:', data);
       
       toast({
         title: "Success",
