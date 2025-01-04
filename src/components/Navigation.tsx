@@ -10,7 +10,7 @@ const Navigation = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['projects', 'impact', 'learning', 'reading', 'submit'];
+      const sections = ['projects', 'impact', 'learning', 'submit'];
       const scrollPosition = window.scrollY + 100;
 
       if (location.pathname === '/') {
@@ -64,7 +64,6 @@ const Navigation = () => {
                 ['projects', 'Projects'],
                 ['impact', 'Global Impact'],
                 ['learning', 'Learning Journey'],
-                ['reading', 'Reading List'],
                 ['submit', 'Submit Idea']
               ].map(([id, label]) => (
                 <button 
@@ -96,6 +95,17 @@ const Navigation = () => {
                 )}
               >
                 Blog
+              </Link>
+              <Link 
+                to="/reading"
+                className={cn(
+                  "relative py-2 text-sm font-medium transition-all duration-300",
+                  location.pathname === '/reading'
+                    ? 'text-accent'
+                    : 'text-primary/80 hover:text-accent dark:text-white/80 dark:hover:text-accent'
+                )}
+              >
+                Reading List
               </Link>
               <Link 
                 to="/ai-humanitarian-solutions"
