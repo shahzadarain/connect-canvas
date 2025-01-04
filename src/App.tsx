@@ -18,38 +18,22 @@ const queryClient = new QueryClient();
 const App = () => {
   useEffect(() => {
     const initializeBlog = async () => {
-      console.log("Checking if we need to create the first blog post...");
+      console.log("Checking if we need to create blog posts...");
       
       try {
-        // Check if the post already exists
-        const { data: existingPosts } = await supabase
+        // First blog post initialization
+        const { data: existingFirstPost } = await supabase
           .from('blog_posts')
           .select('*')
           .eq('slug', 'ai-transforming-global-development-un-experience')
           .single();
 
-        if (!existingPosts) {
+        if (!existingFirstPost) {
           console.log("Creating first blog post...");
           const firstPost = {
             title: "How AI is Transforming Global Development: Insights from My UN Experience",
             slug: "ai-transforming-global-development-un-experience",
-            content: `Artificial intelligence (AI) is no longer a futuristic concept confined to science fiction. It's a powerful tool reshaping our world, and its impact on global development is particularly profound. My experience working with the United Nations has given me a front-row seat to this transformation, witnessing firsthand how AI is being harnessed to address some of the world's most pressing challenges.
-
-From predicting and mitigating the effects of climate change to alleviating poverty and improving healthcare outcomes, AI is proving to be a game-changer. Here are a few examples of how AI is being used in UN projects:
-
-**Poverty Alleviation:** AI is being used to identify and target vulnerable populations, enabling more efficient and effective delivery of aid and social services. For example, AI-powered systems can analyze satellite imagery to identify areas with high poverty rates, helping organizations direct resources where they are most needed.
-
-**Climate Change:** AI is playing a crucial role in monitoring and predicting the effects of climate change. AI algorithms can analyze vast amounts of climate data to identify trends, predict extreme weather events, and support the development of mitigation strategies. This information is vital for vulnerable communities to adapt to the changing climate and build resilience.
-
-**Healthcare:** AI is revolutionizing healthcare delivery, particularly in underserved communities. AI-powered diagnostic tools can analyze medical images and patient data to detect diseases at an early stage, enabling timely intervention and improving treatment outcomes. In remote areas with limited access to healthcare professionals, AI can provide vital support for diagnosis and treatment.
-
-**Personal Anecdote:** I recall working on a project in rural Africa where access to healthcare was limited. We implemented an AI-powered diagnostic tool that could analyze medical images and provide preliminary diagnoses. This tool proved invaluable in identifying cases that required urgent attention, enabling timely referrals and potentially saving lives. It was incredibly rewarding to see how AI could bridge the healthcare gap and make a tangible difference in people's lives.
-
-**The Future of AI in Global Development:**
-
-The potential of AI to transform global development is immense. As AI technology continues to evolve, we can expect even more innovative applications that will further accelerate progress towards the Sustainable Development Goals. However, it's crucial to ensure that AI is developed and deployed responsibly and ethically, addressing potential risks such as bias and job displacement.
-
-The UN is actively engaged in shaping global AI governance, promoting ethical guidelines, and fostering collaboration to harness AI's potential for good. By working together, we can ensure that AI is used to create a more equitable, sustainable, and prosperous future for all.`,
+            content: `// ... keep existing code (first blog post content)`,
             excerpt: "Explore how artificial intelligence is revolutionizing global development through UN initiatives, from poverty alleviation to healthcare and climate change mitigation.",
             author: "Shahzad ASGHAR",
             tags: ["AI", "United Nations", "Global Development", "Healthcare", "Climate Change", "Poverty Alleviation"],
@@ -61,8 +45,61 @@ The UN is actively engaged in shaping global AI governance, promoting ethical gu
 
           await createBlogPost(firstPost);
           console.log("First blog post created successfully!");
+        }
+
+        // Second blog post initialization
+        const { data: existingSecondPost } = await supabase
+          .from('blog_posts')
+          .select('*')
+          .eq('slug', 'ai-role-in-un-sustainable-development-goals')
+          .single();
+
+        if (!existingSecondPost) {
+          console.log("Creating second blog post...");
+          const secondPost = {
+            title: "The Role of Artificial Intelligence in Achieving the UN Sustainable Development Goals (SDGs)",
+            slug: "ai-role-in-un-sustainable-development-goals",
+            content: `The United Nations Sustainable Development Goals (SDGs) are a universal call to action to end poverty, protect the planet, and ensure prosperity for all by 2030. While these goals are ambitious, emerging technologies like Artificial Intelligence (AI) are proving to be powerful tools in accelerating progress. Let's break down a few specific SDGs and explore how AI can contribute to achieving them.
+
+1. SDG 2: Zero Hunger
+AI can revolutionize agriculture by optimizing crop yields, predicting weather patterns, and detecting diseases in plants. For instance, AI-powered drones and sensors can monitor soil health and water usage, enabling farmers to make data-driven decisions. This not only increases food production but also reduces waste, helping to combat hunger globally.
+
+2. SDG 3: Good Health and Well-Being
+AI is transforming healthcare by enabling early diagnosis, personalized treatment, and efficient resource management. Machine learning algorithms can analyze medical data to detect diseases like cancer at earlier stages, while AI-driven telemedicine platforms bring healthcare to remote areas. These advancements are critical in improving global health outcomes.
+
+3. SDG 7: Affordable and Clean Energy
+AI can optimize energy consumption and integrate renewable energy sources into power grids. Smart grids, powered by AI, can balance supply and demand, reduce energy waste, and lower costs. Additionally, AI can improve the efficiency of solar and wind energy systems, making clean energy more accessible and affordable.
+
+4. SDG 13: Climate Action
+Climate change is one of the most pressing challenges of our time, and AI can play a key role in addressing it. AI models can predict extreme weather events, track deforestation, and monitor carbon emissions. These insights enable governments and organizations to take proactive measures to mitigate climate risks and protect vulnerable communities.
+
+5. SDG 4: Quality Education
+AI-powered tools like personalized learning platforms and virtual tutors are making education more accessible and inclusive. These technologies adapt to individual learning styles, helping students grasp complex concepts at their own pace. AI can also bridge the gap in education by providing resources to underserved communities, ensuring no one is left behind.
+
+6. SDG 9: Industry, Innovation, and Infrastructure
+AI drives innovation by enhancing productivity and efficiency across industries. From predictive maintenance in manufacturing to optimizing supply chains, AI is reshaping how businesses operate. By fostering innovation, AI contributes to building resilient infrastructure and promoting sustainable industrialization.
+
+The Road Ahead
+While AI holds immense potential, it's important to address challenges like data privacy, ethical concerns, and the digital divide. Collaboration between governments, businesses, and communities is essential to ensure AI is used responsibly and equitably.
+
+By harnessing the power of AI, we can make significant strides toward achieving the SDGs and creating a better, more sustainable future for all. Let's embrace this technology as a force for good and work together to turn these global goals into reality.
+
+What are your thoughts on the role of AI in achieving the SDGs? Share your insights in the comments below!
+
+— Shahzad Asghar`,
+            excerpt: "Discover how artificial intelligence is accelerating progress towards the UN Sustainable Development Goals, from fighting hunger to climate action.",
+            author: "Shahzad ASGHAR",
+            tags: ["AI", "SDGs", "Sustainable Development", "United Nations", "Innovation", "Climate Action", "Education"],
+            meta_description: "Explore how AI technologies are helping achieve the UN Sustainable Development Goals across various sectors including agriculture, healthcare, energy, and education.",
+            meta_keywords: ["AI SDGs", "sustainable development", "artificial intelligence UN", "climate action", "zero hunger", "quality education", "clean energy", "innovation"],
+            status: "published",
+            published_at: new Date().toISOString()
+          };
+
+          await createBlogPost(secondPost);
+          console.log("Second blog post created successfully!");
         } else {
-          console.log("First blog post already exists, skipping creation.");
+          console.log("Second blog post already exists, skipping creation.");
         }
       } catch (error) {
         console.error("Error initializing blog:", error);
