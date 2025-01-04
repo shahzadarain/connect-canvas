@@ -94,7 +94,7 @@ const ReadingList = () => {
   return (
     <section className="py-24 bg-gradient-to-b from-background via-background/80 to-background">
       <div className="container mx-auto px-4">
-        <div className="flex flex-col items-center gap-6 mb-12">
+        <div className="flex flex-col items-center gap-8 mb-12">
           <div className="flex items-center justify-center gap-3">
             <BookOpen className="w-8 h-8 text-blue-500" />
             <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
@@ -102,20 +102,22 @@ const ReadingList = () => {
             </h2>
           </div>
           
-          <div className="w-full max-w-md relative">
-            <Input
-              type="text"
-              placeholder="Search resources..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10"
-            />
-            <Search className="w-4 h-4 absolute left-3 top-3 text-gray-400" />
+          <div className="w-full max-w-2xl">
+            <div className="relative">
+              <Input
+                type="text"
+                placeholder="Search resources by title, author, or category..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-12 pr-4 py-3 text-lg border-2 border-blue-200 focus:border-blue-500 rounded-xl shadow-md hover:shadow-lg transition-all"
+              />
+              <Search className="w-6 h-6 absolute left-4 top-1/2 -translate-y-1/2 text-blue-500" />
+            </div>
           </div>
         </div>
         
         {filteredResources.length === 0 ? (
-          <div className="text-center text-gray-500">
+          <div className="text-center text-gray-500 text-lg mt-8">
             {searchQuery ? "No resources found matching your search." : "No resources available at the moment."}
           </div>
         ) : (
