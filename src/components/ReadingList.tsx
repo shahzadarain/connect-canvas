@@ -3,6 +3,14 @@ import { BookOpen } from 'lucide-react';
 
 const books = [
   {
+    title: "HBR's 10 Must Reads on Innovation",
+    author: "Harvard Business Review",
+    cover: "/placeholder.svg",
+    type: "audio",
+    link: "https://drive.google.com/file/d/10sykJXuo3_hlZ1Qd8RulT57o7ky_q-RC/view?usp=drivesdk",
+    alt: "Book cover of HBR's 10 Must Reads on Innovation"
+  },
+  {
     title: "Humor, Seriously",
     author: "Jennifer Aaker & Naomi Bagdonas",
     cover: "/lovable-uploads/bdd53de1-ec83-441e-aece-00a17a8ed612.png",
@@ -22,13 +30,6 @@ const books = [
     cover: "/lovable-uploads/f9897ed6-0eb1-46ac-a75c-71229f7179b1.png",
     alt: "Book cover of The Innovator's Dilemma by Clayton M. Christensen",
     link: "https://www.amazon.com/Innovators-Dilemma-Technologies-Management-Innovation/dp/1633691780"
-  },
-  {
-    title: "Disciplined Dreaming",
-    author: "Josh Linkner",
-    cover: "/lovable-uploads/4c89cf12-c2f3-4952-afe6-1c742e2404d8.png",
-    alt: "Book cover of Disciplined Dreaming by Josh Linkner",
-    link: "https://joshlinkner.com/books/"
   }
 ];
 
@@ -70,6 +71,11 @@ const ReadingList = () => {
               <div className="absolute top-4 right-4 bg-blue-500 text-white text-xs font-semibold px-3 py-1 rounded-full opacity-0 group-hover:opacity-100 transform -translate-y-2 group-hover:translate-y-0 transition-all duration-300">
                 Read More
               </div>
+              {book.type === 'audio' && (
+                <div className="absolute top-4 left-4 bg-purple-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
+                  Audio
+                </div>
+              )}
             </a>
           ))}
         </div>
