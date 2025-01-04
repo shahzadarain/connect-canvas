@@ -1,13 +1,15 @@
 import React from "react";
 import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
+import QuickLinks from "@/components/QuickLinks";
+import ImpactMetrics from "@/components/ImpactMetrics";
 import Projects from "@/components/Projects";
 import WorldMap from "@/components/WorldMap";
-import SubmitIdea from "@/components/SubmitIdea";
-import ApprovedIdeas from "@/components/ApprovedIdeas";
-import Contact from "@/components/Contact";
-import Newsletter from "@/components/Newsletter";
 import LearningAchievements from "@/components/LearningAchievements";
+import ApprovedIdeas from "@/components/ApprovedIdeas";
+import SubmitIdea from "@/components/SubmitIdea";
+import Newsletter from "@/components/Newsletter";
+import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 
 const Index = () => {
@@ -15,6 +17,8 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Navigation />
       <Hero />
+      <QuickLinks />
+      <ImpactMetrics />
       <Projects />
       <WorldMap />
       <LearningAchievements />
