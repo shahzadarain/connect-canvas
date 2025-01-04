@@ -10,13 +10,21 @@ export const createBlogPost = async (post: {
   meta_description?: string;
   meta_keywords?: string[];
   status?: string;
+  published_at?: string;
 }) => {
+  console.log('Creating blog post with data:', { ...post, content: '...[content truncated]...' });
+  
   const { data, error } = await supabase
     .from('blog_posts')
     .insert([post])
     .select()
     .single();
 
-  if (error) throw error;
+  if (error) {
+    console.error('Error from Supabase:', error);
+    throw error;
+  }
+  
+  console.log('Blog post created successfully:', data);
   return data;
 };

@@ -30,15 +30,18 @@ const firstPost = {
   tags: ["AI", "United Nations", "Global Development", "Healthcare", "Climate Change", "Poverty Alleviation"],
   meta_description: "Discover how AI is transforming global development through UN initiatives in healthcare, climate change, and poverty alleviation, based on firsthand experience.",
   meta_keywords: ["AI in development", "UN technology", "global healthcare", "climate change AI", "poverty alleviation", "artificial intelligence UN", "sustainable development"],
-  status: "published"
+  status: "published",
+  published_at: new Date().toISOString()
 };
 
 const main = async () => {
+  console.log('Starting to create blog post...');
   try {
     const post = await createBlogPost(firstPost);
     console.log("Successfully created blog post:", post);
   } catch (error) {
     console.error("Error creating blog post:", error);
+    process.exit(1);
   }
 };
 
