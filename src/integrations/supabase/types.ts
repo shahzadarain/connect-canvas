@@ -96,39 +96,45 @@ export type Database = {
           category: string | null
           created_at: string | null
           description: string | null
-          duration: string | null
           external_url: string | null
-          file_path: string | null
+          featured: boolean | null
           id: number
+          status: string | null
+          tags: string[] | null
           title: string
           type: string
           updated_at: string | null
+          views: number | null
         }
         Insert: {
           author?: string | null
           category?: string | null
           created_at?: string | null
           description?: string | null
-          duration?: string | null
           external_url?: string | null
-          file_path?: string | null
+          featured?: boolean | null
           id?: number
+          status?: string | null
+          tags?: string[] | null
           title: string
-          type: string
+          type?: string
           updated_at?: string | null
+          views?: number | null
         }
         Update: {
           author?: string | null
           category?: string | null
           created_at?: string | null
           description?: string | null
-          duration?: string | null
           external_url?: string | null
-          file_path?: string | null
+          featured?: boolean | null
           id?: number
+          status?: string | null
+          tags?: string[] | null
           title?: string
           type?: string
           updated_at?: string | null
+          views?: number | null
         }
         Relationships: []
       }
