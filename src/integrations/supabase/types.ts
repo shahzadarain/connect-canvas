@@ -90,6 +90,48 @@ export type Database = {
         }
         Relationships: []
       }
+      learning_resources: {
+        Row: {
+          author: string | null
+          category: string | null
+          created_at: string | null
+          description: string | null
+          duration: string | null
+          external_url: string | null
+          file_path: string | null
+          id: number
+          title: string
+          type: string
+          updated_at: string | null
+        }
+        Insert: {
+          author?: string | null
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          duration?: string | null
+          external_url?: string | null
+          file_path?: string | null
+          id?: number
+          title: string
+          type: string
+          updated_at?: string | null
+        }
+        Update: {
+          author?: string | null
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          duration?: string | null
+          external_url?: string | null
+          file_path?: string | null
+          id?: number
+          title?: string
+          type?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       news_articles: {
         Row: {
           category: string | null

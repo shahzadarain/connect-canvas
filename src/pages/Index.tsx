@@ -12,6 +12,7 @@ import Newsletter from "@/components/Newsletter";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import GettingStarted from "@/components/GettingStarted";
+import ReadingList from "@/components/ReadingList";
 
 const Index = () => {
   return (
@@ -24,6 +25,7 @@ const Index = () => {
       <Projects />
       <WorldMap />
       <LearningAchievements />
+      <ReadingList />
       <ApprovedIdeas />
       <SubmitIdea />
       <Newsletter />
