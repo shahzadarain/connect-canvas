@@ -72,15 +72,26 @@ const ReadingList = () => {
   };
 
   const getCoverImage = (resource: Resource) => {
-    // Map resource types to specific images
+    // Carefully curated images for each resource type
     const imageMap: { [key: string]: string } = {
-      'pdf': 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b',
-      'audio': 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e',
-      'external_link': 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6',
-      'book': 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d'
+      'pdf': 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?q=80&w=2073&auto=format&fit=crop',
+      'audio': 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=2070&auto=format&fit=crop',
+      'external_link': 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop',
+      'book': 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=2070&auto=format&fit=crop'
     };
 
-    return imageMap[resource.type.toLowerCase()] || 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5';
+    // Category-specific images
+    const categoryImageMap: { [key: string]: string } = {
+      'technology': 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070&auto=format&fit=crop',
+      'ai': 'https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=2070&auto=format&fit=crop',
+      'health': 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=2070&auto=format&fit=crop',
+      'education': 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=2070&auto=format&fit=crop'
+    };
+
+    // Try to get a category-specific image first, fall back to type-specific image
+    return categoryImageMap[resource.category?.toLowerCase() || ''] || 
+           imageMap[resource.type.toLowerCase()] || 
+           'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?q=80&w=2073&auto=format&fit=crop';
   };
 
   if (loading) {
