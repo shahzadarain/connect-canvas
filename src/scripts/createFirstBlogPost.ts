@@ -3,8 +3,7 @@ import { createBlogPost } from '../utils/blogUtils';
 const firstPost = {
   title: "How AI is Transforming Global Development: Insights from My UN Experience",
   slug: "ai-transforming-global-development-un-experience",
-  content: `
-Artificial intelligence (AI) is no longer a futuristic concept confined to science fiction. It's a powerful tool reshaping our world, and its impact on global development is particularly profound. My experience working with the United Nations has given me a front-row seat to this transformation, witnessing firsthand how AI is being harnessed to address some of the world's most pressing challenges.
+  content: `Artificial intelligence (AI) is no longer a futuristic concept confined to science fiction. It's a powerful tool reshaping our world, and its impact on global development is particularly profound. My experience working with the United Nations has given me a front-row seat to this transformation, witnessing firsthand how AI is being harnessed to address some of the world's most pressing challenges.
 
 From predicting and mitigating the effects of climate change to alleviating poverty and improving healthcare outcomes, AI is proving to be a game-changer. Here are a few examples of how AI is being used in UN projects:
 
@@ -20,8 +19,7 @@ From predicting and mitigating the effects of climate change to alleviating pove
 
 The potential of AI to transform global development is immense. As AI technology continues to evolve, we can expect even more innovative applications that will further accelerate progress towards the Sustainable Development Goals. However, it's crucial to ensure that AI is developed and deployed responsibly and ethically, addressing potential risks such as bias and job displacement.
 
-The UN is actively engaged in shaping global AI governance, promoting ethical guidelines, and fostering collaboration to harness AI's potential for good. By working together, we can ensure that AI is used to create a more equitable, sustainable, and prosperous future for all.
-`,
+The UN is actively engaged in shaping global AI governance, promoting ethical guidelines, and fostering collaboration to harness AI's potential for good. By working together, we can ensure that AI is used to create a more equitable, sustainable, and prosperous future for all.`,
   excerpt: "Explore how artificial intelligence is revolutionizing global development through UN initiatives, from poverty alleviation to healthcare and climate change mitigation.",
   author: "Shahzad ASGHAR",
   tags: ["AI", "United Nations", "Global Development", "Healthcare", "Climate Change", "Poverty Alleviation"],
