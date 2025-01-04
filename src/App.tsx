@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { initializeResources, addAllResources } from "@/utils/resourceUtils";
 import { initializeBlogPosts } from "@/utils/blogUtils";
-import { SessionContextProvider } from '@supabase/auth-helpers-react';
+import { SessionContextProvider, useSession } from '@supabase/auth-helpers-react';
 import Index from "./pages/Index";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
@@ -20,19 +20,49 @@ import ProtectedRoute from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
 
-const App = () => {
+const AppContent = () => {
+  const session = useSession();
+
   useEffect(() => {
     const initialize = async () => {
-      await Promise.all([
-        initializeResources(),
-        initializeBlogPosts(),
-        addAllResources()
-      ]);
+      if (session) {
+        console.log('Initializing with authenticated session...');
+        try {
+          await Promise.all([
+            initializeResources(),
+            initializeBlogPosts(),
+            addAllResources()
+          ]);
+        } catch (error) {
+          console.error('Error during initialization:', error);
+        }
+      } else {
+        console.log('Skipping initialization - no authenticated session');
+      }
     };
 
     initialize();
-  }, []);
+  }, [session]);
 
+  return (
+    <Routes>
+      <Route path="/" element={<Index />} />
+      <Route path="/blog" element={<Blog />} />
+      <Route path="/blog/:slug" element={<BlogPost />} />
+      <Route path="/reading" element={
+        <ProtectedRoute>
+          <Reading />
+        </ProtectedRoute>
+      } />
+      <Route path="/ai-humanitarian-solutions" element={<AIHumanitarian />} />
+      <Route path="/ai-humanitarian-training" element={<AIHumanitarianTraining />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
+};
+
+const App = () => {
   return (
     <SessionContextProvider supabaseClient={supabase}>
       <QueryClientProvider client={queryClient}>
@@ -40,20 +70,7 @@ const App = () => {
           <Toaster />
           <Sonner />
           <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/blog" element={<Blog />} />
-              <Route path="/blog/:slug" element={<BlogPost />} />
-              <Route path="/reading" element={
-                <ProtectedRoute>
-                  <Reading />
-                </ProtectedRoute>
-              } />
-              <Route path="/ai-humanitarian-solutions" element={<AIHumanitarian />} />
-              <Route path="/ai-humanitarian-training" element={<AIHumanitarianTraining />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+            <AppContent />
           </BrowserRouter>
         </TooltipProvider>
       </QueryClientProvider>
