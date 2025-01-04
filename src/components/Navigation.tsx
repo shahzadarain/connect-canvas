@@ -132,6 +132,17 @@ const Navigation = () => {
                 Reading List
               </Link>
               <Link 
+                to="/ai-tools"
+                className={cn(
+                  "relative py-2 text-sm font-medium transition-all duration-300",
+                  location.pathname === '/ai-tools'
+                    ? 'text-accent'
+                    : 'text-primary/80 hover:text-accent dark:text-white/80 dark:hover:text-accent'
+                )}
+              >
+                AI Tools
+              </Link>
+              <Link 
                 to="/ai-humanitarian-solutions"
                 className="relative py-2 text-sm font-medium transition-all duration-300 text-primary/80 hover:text-accent dark:text-white/80 dark:hover:text-accent"
               >
