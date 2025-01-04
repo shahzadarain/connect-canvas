@@ -7,7 +7,7 @@ const ImpactMetrics = () => {
   const metrics = [
     {
       title: "People Impacted",
-      value: "500K+",
+      value: "2M+",
       description: "Lives touched through digital solutions",
       icon: Users,
       color: "text-blue-500"
@@ -21,7 +21,7 @@ const ImpactMetrics = () => {
     },
     {
       title: "AI Solutions",
-      value: "25+",
+      value: "30+",
       description: "AI-powered humanitarian projects",
       icon: Brain,
       color: "text-purple-500"
@@ -38,7 +38,7 @@ const ImpactMetrics = () => {
   return (
     <section className="py-16 bg-gradient-to-b from-background to-background/80">
       <div className="container px-4 mx-auto">
-        <h2 className="text-3xl font-bold text-center mb-12 text-primary">Our Global Impact</h2>
+        <h2 className="text-3xl font-bold text-center mb-12 text-primary">Global Impact</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {metrics.map((metric, index) => (
             <motion.div
