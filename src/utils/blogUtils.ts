@@ -267,20 +267,34 @@ export const initializeBlogPosts = async () => {
   console.log('Initializing blog posts...');
   
   for (const post of initialBlogPosts) {
-    const { data: existingPost } = await supabase
-      .from('blog_posts')
-      .select('id')
-      .eq('slug', post.slug)
-      .single();
-    
-    if (!existingPost) {
-      console.log(`Creating blog post: ${post.title}`);
-      await createBlogPost({
-        ...post,
-        published_at: new Date().toISOString(),
-      });
-    } else {
-      console.log(`Blog post already exists: ${post.title}`);
+    try {
+      console.log(`Checking if blog post exists: ${post.slug}`);
+      const { data: existingPost, error } = await supabase
+        .from('blog_posts')
+        .select('id')
+        .eq('slug', post.slug)
+        .maybeSingle();
+      
+      if (error) {
+        console.error(`Error checking for existing post ${post.slug}:`, error);
+        continue;
+      }
+
+      if (!existingPost) {
+        console.log(`Creating blog post: ${post.title}`);
+        await createBlogPost({
+          ...post,
+          published_at: new Date().toISOString(),
+        });
+      } else {
+        console.log(`Blog post already exists: ${post.title}`);
+      }
+    } catch (error) {
+      console.error(`Error processing blog post ${post.title}:`, error);
+      // Continue with next post even if one fails
+      continue;
     }
   }
+  
+  console.log('Blog posts initialization completed');
 };
