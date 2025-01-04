@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BookOpen, Headphones, FileText } from 'lucide-react';
+import { BookOpen, Headphones, FileText, ExternalLink } from 'lucide-react';
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -7,10 +7,14 @@ interface Resource {
   id: number;
   title: string;
   author: string | null;
-  type: 'pdf' | 'audio' | 'external_link';
+  type: string;
   file_path: string | null;
   external_url: string | null;
   category: string | null;
+  created_at?: string;
+  updated_at?: string;
+  description?: string;
+  duration?: string;
 }
 
 const ReadingList = () => {
@@ -55,11 +59,13 @@ const ReadingList = () => {
   };
 
   const getResourceIcon = (type: string) => {
-    switch (type) {
+    switch (type.toLowerCase()) {
       case 'audio':
         return <Headphones className="w-5 h-5" />;
       case 'pdf':
         return <FileText className="w-5 h-5" />;
+      case 'external_link':
+        return <ExternalLink className="w-5 h-5" />;
       default:
         return <BookOpen className="w-5 h-5" />;
     }
