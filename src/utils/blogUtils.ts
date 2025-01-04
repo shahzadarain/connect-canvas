@@ -2,10 +2,10 @@ import { supabase } from "@/integrations/supabase/client";
 
 export const createBlogPost = async (post: {
   title: string;
+  slug: string;
   content: string;
   excerpt?: string;
   author: string;
-  slug: string;
   tags?: string[];
   meta_description?: string;
   meta_keywords?: string[];
