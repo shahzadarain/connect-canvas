@@ -1,26 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 
 const Navigation = () => {
   const [activeSection, setActiveSection] = useState('');
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
       const sections = ['projects', 'impact', 'learning', 'reading', 'submit'];
       const scrollPosition = window.scrollY + 100;
 
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-          const offsetTop = element.offsetTop;
-          const offsetBottom = offsetTop + element.offsetHeight;
+      if (location.pathname === '/') {
+        for (const section of sections) {
+          const element = document.getElementById(section);
+          if (element) {
+            const offsetTop = element.offsetTop;
+            const offsetBottom = offsetTop + element.offsetHeight;
 
-          if (scrollPosition >= offsetTop && scrollPosition < offsetBottom) {
-            setActiveSection(section);
-            break;
+            if (scrollPosition >= offsetTop && scrollPosition < offsetBottom) {
+              setActiveSection(section);
+              break;
+            }
           }
         }
       }
@@ -30,7 +33,7 @@ const Navigation = () => {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [location.pathname]);
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
@@ -57,7 +60,7 @@ const Navigation = () => {
             "md:flex md:items-center md:gap-8"
           )}>
             <div className="flex flex-col md:flex-row gap-6 md:gap-8 px-6 md:px-0 pt-6 md:pt-0">
-              {[
+              {location.pathname === '/' && [
                 ['projects', 'Projects'],
                 ['impact', 'Global Impact'],
                 ['learning', 'Learning Journey'],
@@ -83,6 +86,17 @@ const Navigation = () => {
                   />
                 </button>
               ))}
+              <Link 
+                to="/blog"
+                className={cn(
+                  "relative py-2 text-sm font-medium transition-all duration-300",
+                  location.pathname.startsWith('/blog')
+                    ? 'text-accent'
+                    : 'text-primary/80 hover:text-accent dark:text-white/80 dark:hover:text-accent'
+                )}
+              >
+                Blog
+              </Link>
               <Link 
                 to="/ai-humanitarian-solutions"
                 className="relative py-2 text-sm font-medium transition-all duration-300 text-primary/80 hover:text-accent dark:text-white/80 dark:hover:text-accent"
