@@ -22,28 +22,46 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
 
-    // Fetch the webpage
-    const response = await fetch('https://www.futuretools.io/')
+    // Fetch the webpage with proper headers
+    const response = await fetch('https://www.futuretools.io/', {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+      }
+    })
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch: ${response.status} ${response.statusText}`);
+    }
+
     const html = await response.text()
+    console.log('Successfully fetched HTML content')
     
     // Parse HTML with cheerio
     const $ = cheerio.load(html)
     const tools: any[] = []
 
-    // Parse tools from the page
-    $('.tool-card').each((_, element) => {
+    // Updated selector to match the current structure
+    $('.grid .group').each((_, element) => {
       const card = $(element)
-      const tool = {
-        name: card.find('.tool-title').text().trim(),
-        description: card.find('.tool-description').text().trim(),
-        url: card.find('a').attr('href'),
-        category: card.find('.tool-category').text().trim(),
-        pricing_type: card.find('.tool-pricing').text().trim(),
-        image_url: card.find('img').attr('src'),
-      }
+      console.log('Processing card element:', card.html()?.substring(0, 100)) // Log first 100 chars of each card
+
+      const name = card.find('h2, h3').first().text().trim()
+      const description = card.find('p').first().text().trim()
+      const imageUrl = card.find('img').first().attr('src')
+      const url = card.find('a').first().attr('href')
+      const category = card.find('.category, .tag').first().text().trim()
       
-      if (tool.name && tool.description) {
-        tools.push(tool)
+      console.log('Extracted tool data:', { name, description: description.substring(0, 50) + '...' })
+
+      if (name && description) {
+        tools.push({
+          name,
+          description,
+          url: url?.startsWith('http') ? url : `https://www.futuretools.io${url}`,
+          category,
+          image_url: imageUrl?.startsWith('http') ? imageUrl : `https://www.futuretools.io${imageUrl}`,
+          pricing_type: 'Free/Paid', // Default value since pricing info might not be readily available
+        })
       }
     })
 
@@ -51,24 +69,30 @@ serve(async (req) => {
 
     if (tools.length > 0) {
       // Clear existing tools and insert new ones
+      console.log('Clearing existing tools...')
       const { error: deleteError } = await supabaseClient
         .from('ai_tools')
         .delete()
-        .neq('id', 0) // Delete all records
+        .neq('id', 0)
 
       if (deleteError) {
+        console.error('Error deleting existing tools:', deleteError)
         throw deleteError
       }
 
+      console.log('Inserting new tools...')
       const { error: insertError } = await supabaseClient
         .from('ai_tools')
         .insert(tools)
 
       if (insertError) {
+        console.error('Error inserting new tools:', insertError)
         throw insertError
       }
 
       console.log('Successfully updated AI tools in database')
+    } else {
+      console.log('No tools found to insert')
     }
 
     return new Response(
