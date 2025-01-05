@@ -73,19 +73,17 @@ const AIHumanitarian = () => {
           </section>
 
           {/* Other sections with consistent styling */}
-            {/* Other Sections */}
-            <section className="bg-card/50 backdrop-blur-sm rounded-lg p-8 shadow-lg">
-              <h2 className="text-3xl font-serif font-bold mb-4 text-primary">1. AIMON: AI-Based Media Monitoring Tool</h2>
-              <p className="text-lg leading-relaxed">
-                Developed by the CALP Network, AIMON is a cutting-edge tool that scans hundreds of thousands 
-                of online news sources in real-time. Using Natural Language Processing (NLP) and Machine 
-                Learning, it identifies reports of corruption related to vaccine procurement and delivery. 
-                By enhancing transparency and accountability, AIMON ensures that humanitarian aid reaches 
-                those who need it most.
-              </p>
-            </section>
+          <section className="bg-card/50 backdrop-blur-sm rounded-lg p-8 shadow-lg">
+            <h2 className="text-3xl font-serif font-bold mb-4 text-primary">1. AIMON: AI-Based Media Monitoring Tool</h2>
+            <p className="text-lg leading-relaxed">
+              Developed by the CALP Network, AIMON is a cutting-edge tool that scans hundreds of thousands 
+              of online news sources in real-time. Using Natural Language Processing (NLP) and Machine 
+              Learning, it identifies reports of corruption related to vaccine procurement and delivery. 
+              By enhancing transparency and accountability, AIMON ensures that humanitarian aid reaches 
+              those who need it most.
+            </p>
+          </section>
 
-            {/* Foresight Tool Section */}
             <section className="bg-card/50 backdrop-blur-sm rounded-lg p-8 shadow-lg">
               <h2 className="text-3xl font-serif font-bold mb-4 text-primary">2. Foresight Tool by the Danish Refugee Council</h2>
               <p className="text-lg leading-relaxed">
@@ -144,26 +142,24 @@ const AIHumanitarian = () => {
               </p>
             </section>
 
-            {/* Call to Action */}
-            <div className="bg-gradient-to-r from-secondary/10 to-accent/10 rounded-lg p-8 shadow-lg text-center">
-              <h3 className="text-2xl font-serif font-bold mb-4">Join the Movement</h3>
-              <p className="text-lg mb-6">
-                Together, we can harness the power of AI to build a more equitable and compassionate world.
-              </p>
-              <a 
-                href="https://www.linkedin.com/in/shahzadasghar1/" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="inline-flex items-center"
-              >
-                <Button className="bg-primary hover:bg-primary/90 text-white">
-                  Learn More
-                  <ExternalLink className="w-4 h-4 ml-2" />
-                </Button>
-              </a>
-            </div>
+          {/* Call to Action */}
+          <div className="bg-gradient-to-r from-secondary/10 to-accent/10 rounded-lg p-8 shadow-lg text-center">
+            <h3 className="text-2xl font-serif font-bold mb-4">Join the Movement</h3>
+            <p className="text-lg mb-6">
+              Together, we can harness the power of AI to build a more equitable and compassionate world.
+            </p>
+            <a 
+              href="https://www.linkedin.com/in/shahzadasghar1/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-flex items-center"
+            >
+              <Button className="bg-primary hover:bg-primary/90 text-white">
+                Learn More
+                <ExternalLink className="w-4 h-4 ml-2" />
+              </Button>
+            </a>
           </div>
-
         </article>
       </main>
     </div>
