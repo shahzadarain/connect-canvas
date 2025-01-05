@@ -14,19 +14,19 @@ const AIHumanitarian = () => {
         </Link>
         
         <article className="max-w-4xl mx-auto">
-          {/* Hero Section */}
+          {/* Hero Section with improved visibility */}
           <div className="mb-16 text-center">
-            <h1 className="text-5xl font-serif font-bold mb-6 bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
+            <h1 className="text-5xl font-serif font-bold mb-6 bg-gradient-to-r from-[#8B5CF6] via-[#D946EF] to-[#F97316] bg-clip-text text-transparent">
               AI Projects in the Humanitarian Sector
             </h1>
-            <p className="text-2xl text-muted-foreground font-serif italic">
+            <p className="text-2xl text-primary font-serif italic">
               Transforming Lives Through Innovation
             </p>
           </div>
 
-          {/* Introduction */}
-          <div className="mb-12 text-lg leading-relaxed">
-            <p className="first-letter:text-5xl first-letter:font-serif first-letter:mr-3 first-letter:float-left">
+          {/* Introduction with improved readability */}
+          <div className="mb-12 bg-[#F1F0FB] dark:bg-gray-800/50 p-8 rounded-xl shadow-lg">
+            <p className="text-lg leading-relaxed text-gray-800 dark:text-gray-200 first-letter:text-5xl first-letter:font-serif first-letter:mr-3 first-letter:float-left">
               Artificial Intelligence (AI) is no longer just a buzzword in the tech world—it is a powerful 
               tool driving transformative change in the humanitarian sector. From predicting crises to 
               improving service delivery, AI is revolutionizing how organizations respond to emergencies 
@@ -34,46 +34,45 @@ const AIHumanitarian = () => {
             </p>
           </div>
 
-          {/* Main Content */}
-          <div className="space-y-12">
-            {/* DAG Projects Section */}
-            <section className="bg-gradient-to-r from-primary/5 to-secondary/5 backdrop-blur-sm rounded-lg p-8 shadow-lg border border-primary/10">
-              <h2 className="text-3xl font-serif font-bold mb-6 text-primary">DAG Projects</h2>
-              <div className="space-y-6">
-                <div>
-                  <h3 className="text-2xl font-semibold mb-3 text-secondary">Project Athena</h3>
-                  <p className="text-lg leading-relaxed mb-4">
-                    A machine learning system that analyzes satellite imagery to identify areas affected by natural disasters. 
-                    This helps humanitarian organizations prioritize their response efforts and allocate resources more effectively.
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="text-2xl font-semibold mb-3 text-secondary">Project Hermes</h3>
-                  <p className="text-lg leading-relaxed mb-4">
-                    A natural language processing tool that translates emergency communications in real-time across multiple languages, 
-                    enabling faster and more effective communication during crisis situations.
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="text-2xl font-semibold mb-3 text-secondary">Project Demeter</h3>
-                  <p className="text-lg leading-relaxed mb-4">
-                    An AI-powered agricultural monitoring system that predicts crop yields and potential food shortages, 
-                    helping organizations prepare for and prevent humanitarian crises before they occur.
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="text-2xl font-semibold mb-3 text-secondary">Project Iris</h3>
-                  <p className="text-lg leading-relaxed">
-                    A computer vision system that assists in medical diagnosis in remote areas with limited access to healthcare professionals, 
-                    focusing particularly on infectious diseases and malnutrition.
-                  </p>
-                </div>
+          {/* DAG Projects Section with improved contrast */}
+          <section className="bg-white dark:bg-gray-800 backdrop-blur-sm rounded-lg p-8 shadow-lg border border-primary/10 mb-12">
+            <h2 className="text-3xl font-serif font-bold mb-6 text-[#8B5CF6] dark:text-[#D946EF]">DAG Projects</h2>
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-2xl font-semibold mb-3 text-[#0EA5E9] dark:text-[#60A5FA]">Project Athena</h3>
+                <p className="text-lg leading-relaxed mb-4 text-gray-800 dark:text-gray-200">
+                  A machine learning system that analyzes satellite imagery to identify areas affected by natural disasters. 
+                  This helps humanitarian organizations prioritize their response efforts and allocate resources more effectively.
+                </p>
               </div>
-            </section>
 
+              <div>
+                <h3 className="text-2xl font-semibold mb-3 text-[#0EA5E9] dark:text-[#60A5FA]">Project Hermes</h3>
+                <p className="text-lg leading-relaxed mb-4 text-gray-800 dark:text-gray-200">
+                  A natural language processing tool that translates emergency communications in real-time across multiple languages, 
+                  enabling faster and more effective communication during crisis situations.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-2xl font-semibold mb-3 text-[#0EA5E9] dark:text-[#60A5FA]">Project Demeter</h3>
+                <p className="text-lg leading-relaxed mb-4 text-gray-800 dark:text-gray-200">
+                  An AI-powered agricultural monitoring system that predicts crop yields and potential food shortages, 
+                  helping organizations prepare for and prevent humanitarian crises before they occur.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-2xl font-semibold mb-3 text-[#0EA5E9] dark:text-[#60A5FA]">Project Iris</h3>
+                <p className="text-lg leading-relaxed text-gray-800 dark:text-gray-200">
+                  A computer vision system that assists in medical diagnosis in remote areas with limited access to healthcare professionals, 
+                  focusing particularly on infectious diseases and malnutrition.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* Other sections with consistent styling */}
             {/* Other Sections */}
             <section className="bg-card/50 backdrop-blur-sm rounded-lg p-8 shadow-lg">
               <h2 className="text-3xl font-serif font-bold mb-4 text-primary">1. AIMON: AI-Based Media Monitoring Tool</h2>
@@ -164,6 +163,7 @@ const AIHumanitarian = () => {
               </a>
             </div>
           </div>
+
         </article>
       </main>
     </div>
