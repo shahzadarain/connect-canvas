@@ -55,22 +55,20 @@ serve(async (req) => {
     // Log the full HTML structure for debugging
     console.log('HTML Structure:', $.html().substring(0, 500)) // Log first 500 chars
 
-    // Updated selector to match the current structure
-    $('.collection-list-wrapper-tools .w-dyn-item').each((_, element) => {
+    // Using the provided selectors
+    $('.w-dyn-item').each((_, element) => {
       const card = $(element)
       
-      const name = card.find('.tool-heading').text().trim()
-      const description = card.find('.tool-description').text().trim()
-      const imageUrl = card.find('img').attr('src')
-      const url = card.find('a').attr('href')
-      const category = card.find('.tool-category').text().trim()
+      const name = card.find('.tool-item-link---new').text().trim()
+      const description = card.find('.tool-item-description-box---new').text().trim()
+      const url = card.find('.tool-item-link-block---new').attr('href')
+      const type = card.find('.text-block-53').text().trim()
       
       console.log('Processing tool:', { 
         name, 
         description: description.substring(0, 50) + '...',
-        imageUrl,
         url,
-        category
+        type
       })
 
       if (name && description) {
@@ -78,8 +76,7 @@ serve(async (req) => {
           name,
           description,
           url: url?.startsWith('http') ? url : `https://www.futuretools.io${url}`,
-          category: category || 'Uncategorized',
-          image_url: imageUrl?.startsWith('http') ? imageUrl : (imageUrl ? `https://www.futuretools.io${imageUrl}` : null),
+          category: type || 'Uncategorized',
           pricing_type: 'Free/Paid', // Default value
         })
       }
