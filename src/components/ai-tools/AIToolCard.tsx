@@ -3,7 +3,6 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Bookmark, Scale, ExternalLink } from "lucide-react";
 import { AITool } from '@/integrations/supabase/types/ai-tools';
-import Image from '@/components/ui/image';
 
 interface AIToolCardProps {
   tool: AITool['Row'];
