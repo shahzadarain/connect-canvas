@@ -36,65 +36,41 @@ const AIHumanitarian = () => {
 
           {/* Main Content */}
           <div className="space-y-12">
-            {/* DAG Team Projects Section */}
+            {/* DAG Projects Section */}
             <section className="bg-gradient-to-r from-primary/5 to-secondary/5 backdrop-blur-sm rounded-lg p-8 shadow-lg border border-primary/10">
-              <h2 className="text-3xl font-serif font-bold mb-6 text-primary">DAG Team Projects</h2>
-              
-              {/* Project 1: Aid Distribution Network */}
-              <div className="mb-8">
-                <h3 className="text-2xl font-semibold mb-3 text-secondary">1. Aid Distribution Network Optimization</h3>
-                <p className="text-lg leading-relaxed mb-4">
-                  Our DAG team has developed an innovative system that optimizes humanitarian aid distribution 
-                  using directed acyclic graphs. This approach ensures:
-                </p>
-                <ul className="list-disc list-inside space-y-2 text-lg ml-4 mb-4">
-                  <li>Efficient routing of aid supplies through complex networks</li>
-                  <li>Real-time tracking of resources from source to beneficiary</li>
-                  <li>Minimization of distribution bottlenecks</li>
-                  <li>Transparent and auditable supply chains</li>
-                </ul>
-              </div>
+              <h2 className="text-3xl font-serif font-bold mb-6 text-primary">DAG Projects</h2>
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-2xl font-semibold mb-3 text-secondary">Project Athena</h3>
+                  <p className="text-lg leading-relaxed mb-4">
+                    A machine learning system that analyzes satellite imagery to identify areas affected by natural disasters. 
+                    This helps humanitarian organizations prioritize their response efforts and allocate resources more effectively.
+                  </p>
+                </div>
 
-              {/* Project 2: Smart Contract Integration */}
-              <div className="mb-8">
-                <h3 className="text-2xl font-semibold mb-3 text-secondary">2. Smart Contract Integration</h3>
-                <p className="text-lg leading-relaxed mb-4">
-                  The team has implemented smart contracts within the DAG framework to:
-                </p>
-                <ul className="list-disc list-inside space-y-2 text-lg ml-4 mb-4">
-                  <li>Automate aid distribution based on predefined criteria</li>
-                  <li>Ensure fair and transparent resource allocation</li>
-                  <li>Create immutable records of all transactions</li>
-                  <li>Enable real-time auditing and compliance monitoring</li>
-                </ul>
-              </div>
+                <div>
+                  <h3 className="text-2xl font-semibold mb-3 text-secondary">Project Hermes</h3>
+                  <p className="text-lg leading-relaxed mb-4">
+                    A natural language processing tool that translates emergency communications in real-time across multiple languages, 
+                    enabling faster and more effective communication during crisis situations.
+                  </p>
+                </div>
 
-              {/* Project 3: Data Analytics Platform */}
-              <div className="mb-8">
-                <h3 className="text-2xl font-semibold mb-3 text-secondary">3. Humanitarian Data Analytics Platform</h3>
-                <p className="text-lg leading-relaxed mb-4">
-                  A comprehensive analytics platform that leverages DAG structures to:
-                </p>
-                <ul className="list-disc list-inside space-y-2 text-lg ml-4 mb-4">
-                  <li>Analyze patterns in aid distribution and effectiveness</li>
-                  <li>Predict future humanitarian needs using historical data</li>
-                  <li>Generate insights for strategic decision-making</li>
-                  <li>Monitor and evaluate program impact</li>
-                </ul>
-              </div>
+                <div>
+                  <h3 className="text-2xl font-semibold mb-3 text-secondary">Project Demeter</h3>
+                  <p className="text-lg leading-relaxed mb-4">
+                    An AI-powered agricultural monitoring system that predicts crop yields and potential food shortages, 
+                    helping organizations prepare for and prevent humanitarian crises before they occur.
+                  </p>
+                </div>
 
-              {/* Project 4: Collaboration Hub */}
-              <div>
-                <h3 className="text-2xl font-semibold mb-3 text-secondary">4. Cross-Organization Collaboration Hub</h3>
-                <p className="text-lg leading-relaxed mb-4">
-                  A collaborative platform enabling multiple humanitarian organizations to:
-                </p>
-                <ul className="list-disc list-inside space-y-2 text-lg ml-4">
-                  <li>Share resources and information securely</li>
-                  <li>Coordinate response efforts efficiently</li>
-                  <li>Avoid duplication of aid delivery</li>
-                  <li>Build a unified response to humanitarian crises</li>
-                </ul>
+                <div>
+                  <h3 className="text-2xl font-semibold mb-3 text-secondary">Project Iris</h3>
+                  <p className="text-lg leading-relaxed">
+                    A computer vision system that assists in medical diagnosis in remote areas with limited access to healthcare professionals, 
+                    focusing particularly on infectious diseases and malnutrition.
+                  </p>
+                </div>
               </div>
             </section>
 
