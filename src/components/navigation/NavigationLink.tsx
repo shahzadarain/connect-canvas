@@ -13,12 +13,16 @@ const NavigationLink = ({ to, children, isActive, mobile }: NavigationLinkProps)
     <Link 
       to={to}
       className={cn(
-        "relative py-2 text-sm font-medium transition-all duration-300",
-        mobile ? "block w-full px-3 py-2 text-base" : "mx-4",
+        "relative transition-all duration-300",
+        mobile 
+          ? "block w-full px-4 py-3 text-base touch-manipulation" 
+          : "mx-4 py-2 text-sm font-medium",
         isActive
           ? 'text-accent'
           : 'text-primary/80 hover:text-accent dark:text-white/80 dark:hover:text-accent',
-        !mobile && "after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-accent after:transform after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100"
+        !mobile && "after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-accent after:transform after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100",
+        // Add touch target padding for mobile
+        mobile && "touch-manipulation min-h-[44px] flex items-center"
       )}
     >
       {children}

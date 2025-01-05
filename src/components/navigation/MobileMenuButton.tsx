@@ -1,3 +1,5 @@
+import { motion } from "framer-motion";
+
 interface MobileMenuButtonProps {
   isOpen: boolean;
   toggleMenu: () => void;
@@ -5,26 +7,44 @@ interface MobileMenuButtonProps {
 
 const MobileMenuButton = ({ isOpen, toggleMenu }: MobileMenuButtonProps) => {
   return (
-    <button 
+    <motion.button 
       onClick={toggleMenu}
-      className="sm:hidden p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-300"
+      className="sm:hidden p-3 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-300 touch-manipulation min-h-[44px] min-w-[44px] flex items-center justify-center"
+      whileTap={{ scale: 0.95 }}
       aria-label="Toggle mobile menu"
     >
-      <svg
-        className="w-6 h-6"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
+      <motion.div
+        className="w-6 h-6 relative"
+        animate={isOpen ? "open" : "closed"}
       >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d={isOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
+        <motion.span
+          className="absolute w-6 h-0.5 bg-current transform-gpu"
+          variants={{
+            open: { rotate: 45, y: 6 },
+            closed: { rotate: 0, y: 0 }
+          }}
+          transition={{ duration: 0.2 }}
         />
-      </svg>
-    </button>
+        <motion.span
+          className="absolute w-6 h-0.5 bg-current transform-gpu"
+          variants={{
+            open: { opacity: 0 },
+            closed: { opacity: 1 }
+          }}
+          transition={{ duration: 0.2 }}
+          style={{ top: "50%", marginTop: "-1px" }}
+        />
+        <motion.span
+          className="absolute w-6 h-0.5 bg-current transform-gpu"
+          variants={{
+            open: { rotate: -45, y: -6 },
+            closed: { rotate: 0, y: 0 }
+          }}
+          transition={{ duration: 0.2 }}
+          style={{ bottom: 0 }}
+        />
+      </motion.div>
+    </motion.button>
   );
 };
 
