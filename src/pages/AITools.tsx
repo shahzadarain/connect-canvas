@@ -1,33 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from "@/integrations/supabase/client";
-import { ExternalLink, RefreshCw, Grid3x3, List, Filter, ArrowUpDown, Save } from 'lucide-react';
+import { RefreshCw } from 'lucide-react';
 import Footer from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-
-interface AITool {
-  id: number;
-  name: string;
-  description: string | null;
-  image_url: string | null;
-  url: string | null;
-  category: string | null;
-  pricing_type: string | null;
-  tags: string[] | null;
-}
+import { AITool } from '@/integrations/supabase/types/ai-tools';
+import AIToolCard from '@/components/ai-tools/AIToolCard';
+import ToolsHeader from '@/components/ai-tools/ToolsHeader';
 
 type ViewMode = 'grid' | 'list';
 type SortField = 'name' | 'category';
@@ -39,18 +25,26 @@ const AITools = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [sortField, setSortField] = useState<SortField>('name');
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
-  const [savedTools, setSavedTools] = useState<number[]>(() => {
-    const saved = localStorage.getItem('savedTools');
-    return saved ? JSON.parse(saved) : [];
-  });
-  const [compareTools, setCompareTools] = useState<AITool[]>([]);
+  const [savedTools, setSavedTools] = useState<number[]>([]);
+  const [compareTools, setCompareTools] = useState<AITool['Row'][]>([]);
   const [showComparison, setShowComparison] = useState(false);
   const { toast } = useToast();
 
+  // Load saved tools from localStorage on component mount
+  useEffect(() => {
+    const saved = localStorage.getItem('savedTools');
+    if (saved) {
+      setSavedTools(JSON.parse(saved));
+    }
+  }, []);
+
   const { data: tools, isLoading, refetch } = useQuery({
-    queryKey: ['ai-tools'],
+    queryKey: ['ai-tools', sortField, sortOrder],
     queryFn: async () => {
       console.log('Fetching AI tools from Supabase...');
+      console.log('Sort field:', sortField);
+      console.log('Sort order:', sortOrder);
+      
       const { data, error } = await supabase
         .from('ai_tools')
         .select('*')
@@ -62,7 +56,7 @@ const AITools = () => {
       }
 
       console.log('Successfully fetched AI tools:', data);
-      return data as AITool[];
+      return data as AITool['Row'][];
     },
   });
 
@@ -84,15 +78,17 @@ const AITools = () => {
     const newSavedTools = savedTools.includes(toolId)
       ? savedTools.filter(id => id !== toolId)
       : [...savedTools, toolId];
+    
     setSavedTools(newSavedTools);
     localStorage.setItem('savedTools', JSON.stringify(newSavedTools));
+    
     toast({
       title: savedTools.includes(toolId) ? "Tool removed from saved" : "Tool saved for later",
       description: "Your saved tools list has been updated.",
     });
   };
 
-  const toggleCompare = (tool: AITool) => {
+  const toggleCompare = (tool: AITool['Row']) => {
     if (compareTools.find(t => t.id === tool.id)) {
       setCompareTools(compareTools.filter(t => t.id !== tool.id));
     } else if (compareTools.length < 2) {
@@ -136,88 +132,6 @@ const AITools = () => {
     }
   };
 
-  const renderToolCard = (tool: AITool) => {
-    const isSaved = savedTools.includes(tool.id);
-    const isCompared = compareTools.find(t => t.id === tool.id);
-
-    return (
-      <div
-        key={tool.id}
-        className={`group transition-all duration-300 ${
-          viewMode === 'grid'
-            ? 'bg-white dark:bg-gray-800/50 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:-translate-y-1'
-            : 'flex gap-4 bg-white dark:bg-gray-800/50 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 p-4 hover:shadow-lg'
-        }`}
-      >
-        <div className={`${viewMode === 'grid' ? 'aspect-video' : 'w-48'} bg-gray-100 dark:bg-gray-900 relative`}>
-          {tool.image_url ? (
-            <img
-              src={tool.image_url}
-              alt={tool.name}
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center text-gray-400">
-              No image available
-            </div>
-          )}
-        </div>
-        
-        <div className={`${viewMode === 'grid' ? 'p-6' : 'flex-1'}`}>
-          <div className="flex justify-between items-start mb-2">
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white group-hover:text-blue-500 transition-colors">
-              {tool.name}
-            </h3>
-            <div className="flex gap-2">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => toggleSaveTool(tool.id)}
-                className={`${isSaved ? 'text-blue-500' : 'text-gray-500'}`}
-              >
-                <Save className="w-5 h-5" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => toggleCompare(tool)}
-                className={`${isCompared ? 'text-blue-500' : 'text-gray-500'}`}
-              >
-                <ArrowUpDown className="w-5 h-5" />
-              </Button>
-            </div>
-          </div>
-          
-          {tool.category && (
-            <div className="mb-2">
-              <span className="text-sm px-2 py-1 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400">
-                {tool.category}
-              </span>
-            </div>
-          )}
-          
-          {tool.description && (
-            <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-3">
-              {tool.description}
-            </p>
-          )}
-
-          {tool.url && (
-            <a
-              href={tool.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-sm font-medium text-blue-500 hover:text-blue-600 transition-colors"
-            >
-              Learn More
-              <ExternalLink className="w-4 h-4" />
-            </a>
-          )}
-        </div>
-      </div>
-    );
-  };
-
   return (
     <div className="min-h-screen bg-background">
       <main className="container mx-auto px-4 py-24">
@@ -236,81 +150,34 @@ const AITools = () => {
           </div>
         ) : (
           <>
-            <div className="flex flex-wrap gap-4 justify-between items-center mb-8">
-              <div className="flex gap-4">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline" className="flex items-center gap-2">
-                      <Filter className="w-4 h-4" />
-                      {selectedCategory || 'All Categories'}
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    <DropdownMenuItem onClick={() => setSelectedCategory(null)}>
-                      All Categories
-                    </DropdownMenuItem>
-                    {categories.map((category) => (
-                      <DropdownMenuItem
-                        key={category}
-                        onClick={() => setSelectedCategory(category)}
-                      >
-                        {category}
-                      </DropdownMenuItem>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline" className="flex items-center gap-2">
-                      <ArrowUpDown className="w-4 h-4" />
-                      Sort by {sortField}
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    <DropdownMenuItem onClick={() => setSortField('name')}>
-                      Name
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setSortField('category')}>
-                      Category
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-
-                <Button
-                  variant="outline"
-                  onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
-                >
-                  {sortOrder === 'asc' ? 'Ascending' : 'Descending'}
-                </Button>
-              </div>
-
-              <div className="flex gap-4">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => setViewMode('grid')}
-                  className={viewMode === 'grid' ? 'bg-blue-100' : ''}
-                >
-                  <Grid3x3 className="w-4 h-4" />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => setViewMode('list')}
-                  className={viewMode === 'list' ? 'bg-blue-100' : ''}
-                >
-                  <List className="w-4 h-4" />
-                </Button>
-              </div>
-            </div>
+            <ToolsHeader
+              categories={categories}
+              selectedCategory={selectedCategory}
+              setSelectedCategory={setSelectedCategory}
+              sortField={sortField}
+              setSortField={setSortField}
+              sortOrder={sortOrder}
+              setSortOrder={setSortOrder}
+              viewMode={viewMode}
+              setViewMode={setViewMode}
+            />
 
             <div className={`${
               viewMode === 'grid'
                 ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'
                 : 'flex flex-col gap-4'
             } mb-12`}>
-              {filteredTools.map(renderToolCard)}
+              {filteredTools.map((tool) => (
+                <AIToolCard
+                  key={tool.id}
+                  tool={tool}
+                  viewMode={viewMode}
+                  isSaved={savedTools.includes(tool.id)}
+                  isCompared={compareTools.some(t => t.id === tool.id)}
+                  onSave={toggleSaveTool}
+                  onCompare={toggleCompare}
+                />
+              ))}
             </div>
 
             <Dialog open={showComparison} onOpenChange={setShowComparison}>
