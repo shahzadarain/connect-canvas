@@ -31,10 +31,10 @@ const Navigation = () => {
               <>
                 <ScrollButton to="hero">Home</ScrollButton>
                 <ScrollButton to="projects">Projects</ScrollButton>
-                <ScrollButton to="achievements">Achievements</ScrollButton>
                 <ScrollButton to="contact">Contact</ScrollButton>
               </>
             ) : null}
+            <NavigationLink to="/achievements">Achievements</NavigationLink>
             <NavigationLink to="/ai-tools">AI Tools</NavigationLink>
             <NavigationLink to="/ai-news">AI News</NavigationLink>
             <NavigationLink to="/ai-humanitarian">AI Humanitarian</NavigationLink>
@@ -55,10 +55,10 @@ const Navigation = () => {
             <>
               <ScrollButton to="hero" mobile>Home</ScrollButton>
               <ScrollButton to="projects" mobile>Projects</ScrollButton>
-              <ScrollButton to="achievements" mobile>Achievements</ScrollButton>
               <ScrollButton to="contact" mobile>Contact</ScrollButton>
             </>
           ) : null}
+          <NavigationLink to="/achievements" mobile>Achievements</NavigationLink>
           <NavigationLink to="/ai-tools" mobile>AI Tools</NavigationLink>
           <NavigationLink to="/ai-news" mobile>AI News</NavigationLink>
           <NavigationLink to="/ai-humanitarian" mobile>AI Humanitarian</NavigationLink>
