@@ -3,6 +3,9 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useToast } from '@/components/ui/use-toast';
+import NavigationLink from './navigation/NavigationLink';
+import ScrollButton from './navigation/ScrollButton';
+import MobileMenuButton from './navigation/MobileMenuButton';
 
 const Navigation = () => {
   const [activeSection, setActiveSection] = useState('');
@@ -90,70 +93,57 @@ const Navigation = () => {
                 ['learning', 'Learning Journey'],
                 ['submit', 'Submit Idea']
               ].map(([id, label]) => (
-                <button 
+                <ScrollButton 
                   key={id}
-                  onClick={() => scrollToSection(id)} 
-                  className={cn(
-                    "relative py-2 text-sm font-medium transition-all duration-300",
-                    activeSection === id 
-                      ? 'text-accent' 
-                      : 'text-primary/80 hover:text-accent dark:text-white/80 dark:hover:text-accent'
-                  )}
-                >
-                  {label}
-                  <span 
-                    className={cn(
-                      "absolute bottom-0 left-0 w-full h-0.5 bg-accent transform origin-left transition-transform duration-500",
-                      activeSection === id ? 'scale-x-100' : 'scale-x-0'
-                    )}
-                  />
-                </button>
+                  id={id}
+                  label={label}
+                  isActive={activeSection === id}
+                  onClick={scrollToSection}
+                />
               ))}
-              <Link 
+              
+              <NavigationLink 
                 to="/blog"
-                className={cn(
-                  "relative py-2 text-sm font-medium transition-all duration-300",
-                  location.pathname.startsWith('/blog')
-                    ? 'text-accent'
-                    : 'text-primary/80 hover:text-accent dark:text-white/80 dark:hover:text-accent'
-                )}
+                isActive={location.pathname.startsWith('/blog')}
               >
                 Blog
-              </Link>
-              <Link 
+              </NavigationLink>
+              
+              <NavigationLink 
                 to="/reading"
-                className={cn(
-                  "relative py-2 text-sm font-medium transition-all duration-300",
-                  location.pathname === '/reading'
-                    ? 'text-accent'
-                    : 'text-primary/80 hover:text-accent dark:text-white/80 dark:hover:text-accent'
-                )}
+                isActive={location.pathname === '/reading'}
               >
                 Reading List
-              </Link>
-              <Link 
+              </NavigationLink>
+              
+              <NavigationLink 
                 to="/ai-tools"
-                className={cn(
-                  "relative py-2 text-sm font-medium transition-all duration-300",
-                  location.pathname === '/ai-tools'
-                    ? 'text-accent'
-                    : 'text-primary/80 hover:text-accent dark:text-white/80 dark:hover:text-accent'
-                )}
+                isActive={location.pathname === '/ai-tools'}
               >
                 AI Tools
-              </Link>
-              <Link 
+              </NavigationLink>
+
+              <NavigationLink 
+                to="/ai-news"
+                isActive={location.pathname === '/ai-news'}
+              >
+                AI News
+              </NavigationLink>
+              
+              <NavigationLink 
                 to="/ai-humanitarian-solutions"
-                className="relative py-2 text-sm font-medium transition-all duration-300 text-primary/80 hover:text-accent dark:text-white/80 dark:hover:text-accent"
+                isActive={location.pathname === '/ai-humanitarian-solutions'}
               >
                 AI Humanitarian
-              </Link>
-              <Link 
+              </NavigationLink>
+              
+              <NavigationLink 
                 to="/ai-humanitarian-training"
-                className="relative py-2 text-sm font-medium transition-all duration-300 text-primary/80 hover:text-accent dark:text-white/80 dark:hover:text-accent"
+                isActive={location.pathname === '/ai-humanitarian-training'}
               >
                 AI Training
-              </Link>
+              </NavigationLink>
+              
               {session ? (
                 <button
                   onClick={handleLogout}
@@ -162,36 +152,17 @@ const Navigation = () => {
                   Logout
                 </button>
               ) : (
-                <Link
-                  to="/login"
-                  className="relative py-2 text-sm font-medium transition-all duration-300 text-primary/80 hover:text-accent dark:text-white/80 dark:hover:text-accent"
-                >
+                <NavigationLink to="/login">
                   Login
-                </Link>
+                </NavigationLink>
               )}
             </div>
           </div>
 
-          <button 
+          <MobileMenuButton 
+            isOpen={isMobileMenuOpen}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-300"
-            aria-label="Toggle mobile menu"
-          >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d={isMobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
-              />
-            </svg>
-          </button>
+          />
         </div>
       </div>
     </nav>
