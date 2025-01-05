@@ -35,6 +35,7 @@ serve(async (req) => {
       .select('*')
       .gt('created_at', fiveMinutesAgo.toISOString())
       .order('created_at', { ascending: false })
+      .limit(6)
 
     if (dbError) {
       console.error('Database error:', dbError)
@@ -52,15 +53,13 @@ serve(async (req) => {
     }
 
     // Initialize OpenAI
-    const configuration = new Configuration({
-      apiKey: openaiApiKey,
-    })
+    const configuration = new Configuration({ apiKey: openaiApiKey })
     const openai = new OpenAIApi(configuration)
 
     // Generate new articles using OpenAI
     console.log('Generating new articles using OpenAI')
     const completion = await openai.createChatCompletion({
-      model: 'gpt-3.5-turbo', // Fixed model name
+      model: 'gpt-4o-mini',
       messages: [
         {
           role: 'system',
