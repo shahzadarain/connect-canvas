@@ -65,7 +65,7 @@ const AINews = () => {
                     {format(new Date(article.published_at), "MMMM d, yyyy")}
                   </time>
                   <span className="text-sm text-blue-600 font-medium">
-                    {article.source}
+                    {article.category || 'AI News'}
                   </span>
                 </div>
                 <h2 className="text-xl font-bold text-gray-900 mb-4 font-serif leading-tight">

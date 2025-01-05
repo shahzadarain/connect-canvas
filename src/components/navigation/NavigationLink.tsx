@@ -3,16 +3,18 @@ import { Link } from 'react-router-dom';
 
 interface NavigationLinkProps {
   to: string;
-  isActive?: boolean;
   children: React.ReactNode;
+  isActive?: boolean;
+  mobile?: boolean;
 }
 
-const NavigationLink = ({ to, isActive, children }: NavigationLinkProps) => {
+const NavigationLink = ({ to, children, isActive, mobile }: NavigationLinkProps) => {
   return (
     <Link 
       to={to}
       className={cn(
         "relative py-2 text-sm font-medium transition-all duration-300",
+        mobile ? "block w-full px-3 py-2 text-base" : "mx-4",
         isActive
           ? 'text-accent'
           : 'text-primary/80 hover:text-accent dark:text-white/80 dark:hover:text-accent'

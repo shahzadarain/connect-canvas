@@ -1,13 +1,13 @@
 interface MobileMenuButtonProps {
   isOpen: boolean;
-  onClick: () => void;
+  toggleMenu: () => void;
 }
 
-const MobileMenuButton = ({ isOpen, onClick }: MobileMenuButtonProps) => {
+const MobileMenuButton = ({ isOpen, toggleMenu }: MobileMenuButtonProps) => {
   return (
     <button 
-      onClick={onClick}
-      className="md:hidden p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-300"
+      onClick={toggleMenu}
+      className="sm:hidden p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-300"
       aria-label="Toggle mobile menu"
     >
       <svg
