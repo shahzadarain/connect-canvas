@@ -1,30 +1,21 @@
-import React from "react";
-import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
-import ImpactMetrics from "@/components/ImpactMetrics";
 import Projects from "@/components/Projects";
-import WorldMap from "@/components/WorldMap";
-import LearningAchievements from "@/components/LearningAchievements";
+import ImpactMetrics from "@/components/ImpactMetrics";
+import Contact from "@/components/Contact";
 import ApprovedIdeas from "@/components/ApprovedIdeas";
 import SubmitIdea from "@/components/SubmitIdea";
-import Newsletter from "@/components/Newsletter";
-import Contact from "@/components/Contact";
-import Footer from "@/components/Footer";
+import WorldMap from "@/components/WorldMap";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background">
-      <Navigation />
+    <div className="flex flex-col gap-20">
       <Hero />
-      <ImpactMetrics />
       <Projects />
+      <ImpactMetrics />
       <WorldMap />
-      <LearningAchievements />
       <ApprovedIdeas />
       <SubmitIdea />
-      <Newsletter />
       <Contact />
-      <Footer />
     </div>
   );
 };
