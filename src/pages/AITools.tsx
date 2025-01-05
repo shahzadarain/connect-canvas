@@ -5,32 +5,24 @@ import { RefreshCw } from 'lucide-react';
 import Footer from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { AITool } from '@/integrations/supabase/types/ai-tools';
 import AIToolCard from '@/components/ai-tools/AIToolCard';
 import ToolsHeader from '@/components/ai-tools/ToolsHeader';
-
-type ViewMode = 'grid' | 'list';
-type SortField = 'name' | 'category';
-type SortOrder = 'asc' | 'desc';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
+import { ToolsGridSkeleton } from '@/components/ui/loading-skeleton';
 
 const AITools = () => {
   const [isUpdating, setIsUpdating] = useState(false);
-  const [viewMode, setViewMode] = useState<ViewMode>('grid');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [sortField, setSortField] = useState<SortField>('name');
-  const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
+  const [sortField, setSortField] = useState<'name' | 'category'>('name');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [savedTools, setSavedTools] = useState<number[]>([]);
   const [compareTools, setCompareTools] = useState<AITool['Row'][]>([]);
   const [showComparison, setShowComparison] = useState(false);
   const { toast } = useToast();
 
-  // Load saved tools from localStorage on component mount
   useEffect(() => {
     const saved = localStorage.getItem('savedTools');
     if (saved) {
@@ -41,21 +33,13 @@ const AITools = () => {
   const { data: tools, isLoading, refetch } = useQuery({
     queryKey: ['ai-tools', sortField, sortOrder],
     queryFn: async () => {
-      console.log('Fetching AI tools from Supabase...');
-      console.log('Sort field:', sortField);
-      console.log('Sort order:', sortOrder);
-      
+      console.log('Fetching AI tools...');
       const { data, error } = await supabase
         .from('ai_tools')
         .select('*')
         .order(sortField, { ascending: sortOrder === 'asc' });
 
-      if (error) {
-        console.error('Error fetching AI tools:', error);
-        throw error;
-      }
-
-      console.log('Successfully fetched AI tools:', data);
+      if (error) throw error;
       return data as AITool['Row'][];
     },
   });
@@ -83,20 +67,33 @@ const AITools = () => {
     localStorage.setItem('savedTools', JSON.stringify(newSavedTools));
     
     toast({
-      title: savedTools.includes(toolId) ? "Tool removed from saved" : "Tool saved for later",
-      description: "Your saved tools list has been updated.",
+      title: savedTools.includes(toolId) ? "Tool removed" : "Tool saved",
+      description: savedTools.includes(toolId) 
+        ? "The tool has been removed from your saved list" 
+        : "The tool has been saved to your list",
+      className: "bg-white dark:bg-gray-800",
     });
   };
 
   const toggleCompare = (tool: AITool['Row']) => {
     if (compareTools.find(t => t.id === tool.id)) {
       setCompareTools(compareTools.filter(t => t.id !== tool.id));
+      toast({
+        title: "Removed from comparison",
+        description: "Tool removed from comparison list",
+        className: "bg-white dark:bg-gray-800",
+      });
     } else if (compareTools.length < 2) {
       setCompareTools([...compareTools, tool]);
+      toast({
+        title: "Added to comparison",
+        description: "Tool added to comparison list",
+        className: "bg-white dark:bg-gray-800",
+      });
     } else {
       toast({
         title: "Comparison limit reached",
-        description: "You can only compare two tools at a time.",
+        description: "You can only compare two tools at a time",
         variant: "destructive",
       });
     }
@@ -105,26 +102,23 @@ const AITools = () => {
   const updateTools = async () => {
     try {
       setIsUpdating(true);
-      console.log('Initiating AI tools update...');
-      
-      const { data, error } = await supabase.functions.invoke('fetch-ai-tools', {
+      const { error } = await supabase.functions.invoke('fetch-ai-tools', {
         method: 'POST',
       });
 
       if (error) throw error;
 
-      console.log('Update result:', data);
       await refetch();
-      
       toast({
         title: "Success",
-        description: "AI tools have been updated successfully.",
+        description: "AI tools have been updated successfully",
+        className: "bg-white dark:bg-gray-800",
       });
     } catch (error) {
       console.error('Error updating AI tools:', error);
       toast({
         title: "Error",
-        description: "Failed to update AI tools. Please try again later.",
+        description: "Failed to update AI tools. Please try again later",
         variant: "destructive",
       });
     } finally {
@@ -133,9 +127,9 @@ const AITools = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background transition-colors duration-300">
       <main className="container mx-auto px-4 py-24">
-        <div className="flex flex-col items-center gap-8 mb-12">
+        <div className="flex flex-col items-center gap-8 mb-12 animate-fade-in">
           <h1 className="text-4xl md:text-5xl font-bold text-center bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
             AI Tools Directory
           </h1>
@@ -145,9 +139,7 @@ const AITools = () => {
         </div>
 
         {isLoading ? (
-          <div className="flex justify-center items-center min-h-[400px]">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-          </div>
+          <ToolsGridSkeleton />
         ) : (
           <>
             <ToolsHeader
@@ -181,7 +173,7 @@ const AITools = () => {
             </div>
 
             <Dialog open={showComparison} onOpenChange={setShowComparison}>
-              <DialogContent className="max-w-4xl">
+              <DialogContent className="max-w-4xl bg-background">
                 <DialogHeader>
                   <DialogTitle>Tool Comparison</DialogTitle>
                 </DialogHeader>
@@ -189,7 +181,7 @@ const AITools = () => {
                   {compareTools.map((tool) => (
                     <div key={tool.id} className="p-4 border rounded-lg">
                       <h3 className="text-lg font-semibold mb-2">{tool.name}</h3>
-                      <p className="text-sm text-gray-600 mb-2">{tool.description}</p>
+                      <p className="text-sm text-muted-foreground mb-2">{tool.description}</p>
                       <div className="text-sm">
                         <p><strong>Category:</strong> {tool.category}</p>
                         <p><strong>Pricing:</strong> {tool.pricing_type}</p>
@@ -200,11 +192,11 @@ const AITools = () => {
               </DialogContent>
             </Dialog>
 
-            <div className="flex justify-center mt-8">
+            <div className="flex justify-center mt-8 gap-4">
               <Button
                 onClick={updateTools}
                 disabled={isUpdating}
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 transition-transform hover:scale-105"
               >
                 <RefreshCw className={`w-4 h-4 ${isUpdating ? 'animate-spin' : ''}`} />
                 Update Tools
@@ -212,7 +204,7 @@ const AITools = () => {
               {compareTools.length > 0 && (
                 <Button
                   onClick={() => setShowComparison(true)}
-                  className="ml-4"
+                  className="transition-transform hover:scale-105"
                 >
                   Compare Selected ({compareTools.length})
                 </Button>
@@ -221,6 +213,7 @@ const AITools = () => {
           </>
         )}
       </main>
+      <ThemeToggle />
       <Footer />
     </div>
   );
