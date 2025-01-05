@@ -34,13 +34,9 @@ const Navigation = () => {
               {isHomePage ? (
                 <>
                   <ScrollButton to="hero">Home</ScrollButton>
-                  <ScrollButton to="projects">Projects</ScrollButton>
                   <ScrollButton to="contact">Contact</ScrollButton>
                 </>
               ) : null}
-              <NavigationLink to="/projects" isActive={location.pathname === '/projects'}>
-                Projects
-              </NavigationLink>
               <NavigationLink to="/achievements" isActive={location.pathname === '/achievements'}>
                 Achievements
               </NavigationLink>
@@ -59,6 +55,9 @@ const Navigation = () => {
               <NavigationLink to="/reading" isActive={location.pathname === '/reading'}>
                 Reading List
               </NavigationLink>
+              <NavigationLink to="/projects" isActive={location.pathname === '/projects'}>
+                Projects
+              </NavigationLink>
             </div>
 
             {/* Mobile menu button */}
@@ -76,13 +75,9 @@ const Navigation = () => {
             {isHomePage ? (
               <>
                 <ScrollButton to="hero" mobile>Home</ScrollButton>
-                <ScrollButton to="projects" mobile>Projects</ScrollButton>
                 <ScrollButton to="contact" mobile>Contact</ScrollButton>
               </>
             ) : null}
-            <NavigationLink to="/projects" mobile isActive={location.pathname === '/projects'}>
-              Projects
-            </NavigationLink>
             <NavigationLink to="/achievements" mobile isActive={location.pathname === '/achievements'}>
               Achievements
             </NavigationLink>
@@ -100,6 +95,9 @@ const Navigation = () => {
             </NavigationLink>
             <NavigationLink to="/reading" mobile isActive={location.pathname === '/reading'}>
               Reading List
+            </NavigationLink>
+            <NavigationLink to="/projects" mobile isActive={location.pathname === '/projects'}>
+              Projects
             </NavigationLink>
           </div>
         </div>
