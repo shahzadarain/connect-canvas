@@ -1,168 +1,70 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { cn } from '@/lib/utils';
-import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
-import { useToast } from '@/components/ui/use-toast';
-import NavigationLink from './navigation/NavigationLink';
-import ScrollButton from './navigation/ScrollButton';
-import MobileMenuButton from './navigation/MobileMenuButton';
+import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import NavigationLink from "./navigation/NavigationLink";
+import MobileMenuButton from "./navigation/MobileMenuButton";
+import ScrollButton from "./navigation/ScrollButton";
 
 const Navigation = () => {
-  const [activeSection, setActiveSection] = useState('');
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-  const session = useSession();
-  const supabase = useSupabaseClient();
-  const navigate = useNavigate();
-  const { toast } = useToast();
+  const isHomePage = location.pathname === "/";
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const sections = ['projects', 'impact', 'learning', 'submit'];
-      const scrollPosition = window.scrollY + 100;
-
-      if (location.pathname === '/') {
-        for (const section of sections) {
-          const element = document.getElementById(section);
-          if (element) {
-            const offsetTop = element.offsetTop;
-            const offsetBottom = offsetTop + element.offsetHeight;
-
-            if (scrollPosition >= offsetTop && scrollPosition < offsetBottom) {
-              setActiveSection(section);
-              break;
-            }
-          }
-        }
-      }
-
-      setIsScrolled(window.scrollY > 50);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [location.pathname]);
-
-  const handleLogout = async () => {
-    try {
-      await supabase.auth.signOut();
-      toast({
-        title: "Logged out successfully",
-        description: "You have been logged out of your account",
-      });
-      navigate('/');
-    } catch (error) {
-      console.error('Error logging out:', error);
-      toast({
-        title: "Error logging out",
-        description: "There was a problem logging out. Please try again.",
-        variant: "destructive",
-      });
-    }
-  };
-
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-    setIsMobileMenuOpen(false);
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
   };
 
   return (
-    <nav className={cn(
-      'fixed top-0 left-0 right-0 z-50 transition-all duration-500',
-      isScrolled ? 'bg-white/80 backdrop-blur-xl shadow-lg dark:bg-gray-900/80' : 'bg-transparent'
-    )}>
-      <div className="container mx-auto px-6">
-        <div className="flex items-center justify-between h-20">
-          <Link to="/" className="text-2xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent hover:opacity-80 transition-opacity duration-300">
-            Shahzad ASGHAR
-          </Link>
-          
-          <div className={cn(
-            "fixed md:relative top-20 md:top-0 left-0 md:left-auto w-full md:w-auto h-screen md:h-auto bg-white/95 dark:bg-gray-900/95 md:bg-transparent backdrop-blur-xl md:backdrop-blur-none transition-transform duration-300 ease-in-out transform md:transform-none",
-            isMobileMenuOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0",
-            "md:flex md:items-center md:gap-8"
-          )}>
-            <div className="flex flex-col md:flex-row gap-6 md:gap-8 px-6 md:px-0 pt-6 md:pt-0">
-              {location.pathname === '/' && [
-                ['projects', 'Projects'],
-                ['impact', 'Global Impact'],
-                ['learning', 'Learning Journey'],
-                ['submit', 'Submit Idea']
-              ].map(([id, label]) => (
-                <ScrollButton 
-                  key={id}
-                  id={id}
-                  label={label}
-                  isActive={activeSection === id}
-                  onClick={scrollToSection}
-                />
-              ))}
-              
-              <NavigationLink 
-                to="/blog"
-                isActive={location.pathname.startsWith('/blog')}
-              >
-                Blog
-              </NavigationLink>
-              
-              <NavigationLink 
-                to="/reading"
-                isActive={location.pathname === '/reading'}
-              >
-                Reading List
-              </NavigationLink>
-              
-              <NavigationLink 
-                to="/ai-tools"
-                isActive={location.pathname === '/ai-tools'}
-              >
-                AI Tools
-              </NavigationLink>
-
-              <NavigationLink 
-                to="/ai-news"
-                isActive={location.pathname === '/ai-news'}
-              >
-                AI News
-              </NavigationLink>
-              
-              <NavigationLink 
-                to="/ai-humanitarian-solutions"
-                isActive={location.pathname === '/ai-humanitarian-solutions'}
-              >
-                AI Humanitarian
-              </NavigationLink>
-              
-              <NavigationLink 
-                to="/ai-humanitarian-training"
-                isActive={location.pathname === '/ai-humanitarian-training'}
-              >
-                AI Training
-              </NavigationLink>
-              
-              {session ? (
-                <button
-                  onClick={handleLogout}
-                  className="relative py-2 text-sm font-medium transition-all duration-300 text-primary/80 hover:text-accent dark:text-white/80 dark:hover:text-accent"
-                >
-                  Logout
-                </button>
-              ) : (
-                <NavigationLink to="/login">
-                  Login
-                </NavigationLink>
-              )}
+    <nav className="bg-white shadow-lg fixed w-full z-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16">
+          <div className="flex">
+            <div className="flex-shrink-0 flex items-center">
+              <Link to="/" className="text-xl font-bold text-gray-800">
+                Shahzad Asghar
+              </Link>
             </div>
           </div>
 
-          <MobileMenuButton 
-            isOpen={isMobileMenuOpen}
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          />
+          {/* Desktop menu */}
+          <div className="hidden sm:flex sm:items-center">
+            {isHomePage ? (
+              <>
+                <ScrollButton to="hero">Home</ScrollButton>
+                <ScrollButton to="projects">Projects</ScrollButton>
+                <ScrollButton to="achievements">Achievements</ScrollButton>
+                <ScrollButton to="contact">Contact</ScrollButton>
+              </>
+            ) : null}
+            <NavigationLink to="/ai-tools">AI Tools</NavigationLink>
+            <NavigationLink to="/ai-news">AI News</NavigationLink>
+            <NavigationLink to="/ai-humanitarian">AI Humanitarian</NavigationLink>
+            <NavigationLink to="/ai-humanitarian-training">Training</NavigationLink>
+            <NavigationLink to="/blog">Blog</NavigationLink>
+            <NavigationLink to="/reading">Reading List</NavigationLink>
+          </div>
+
+          {/* Mobile menu button */}
+          <MobileMenuButton isOpen={isOpen} toggleMenu={toggleMenu} />
+        </div>
+      </div>
+
+      {/* Mobile menu */}
+      <div className={`sm:hidden ${isOpen ? "block" : "hidden"}`}>
+        <div className="pt-2 pb-3 space-y-1">
+          {isHomePage ? (
+            <>
+              <ScrollButton to="hero" mobile>Home</ScrollButton>
+              <ScrollButton to="projects" mobile>Projects</ScrollButton>
+              <ScrollButton to="achievements" mobile>Achievements</ScrollButton>
+              <ScrollButton to="contact" mobile>Contact</ScrollButton>
+            </>
+          ) : null}
+          <NavigationLink to="/ai-tools" mobile>AI Tools</NavigationLink>
+          <NavigationLink to="/ai-news" mobile>AI News</NavigationLink>
+          <NavigationLink to="/ai-humanitarian" mobile>AI Humanitarian</NavigationLink>
+          <NavigationLink to="/ai-humanitarian-training" mobile>Training</NavigationLink>
+          <NavigationLink to="/blog" mobile>Blog</NavigationLink>
+          <NavigationLink to="/reading" mobile>Reading List</NavigationLink>
         </div>
       </div>
     </nav>
