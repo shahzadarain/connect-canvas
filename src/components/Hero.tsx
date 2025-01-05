@@ -3,7 +3,7 @@ import { Sparkles, Globe, Building } from 'lucide-react';
 
 const Hero = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-[#1A1F2C] via-[#2C3E50] to-[#1A1F2C] py-20">
+    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-[#1A1F2C] via-[#2C3E50] to-[#1A1F2C] py-20">
       {/* Animated background patterns */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute inset-0 opacity-[0.03]">

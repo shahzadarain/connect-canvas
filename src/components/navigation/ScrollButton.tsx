@@ -10,7 +10,19 @@ const ScrollButton = ({ to, children, mobile }: ScrollButtonProps) => {
   const handleClick = () => {
     const element = document.getElementById(to);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      // Add smooth scrolling and proper offset for fixed header
+      element.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+      // Adjust scroll position to account for fixed header
+      window.scrollBy(0, -64); // 64px is the height of our fixed header
+    }
+    
+    // If it's a mobile menu, we should close it after clicking
+    const mobileMenu = document.querySelector('[aria-label="Toggle mobile menu"]');
+    if (mobile && mobileMenu) {
+      (mobileMenu as HTMLButtonElement).click();
     }
   };
 
@@ -24,7 +36,7 @@ const ScrollButton = ({ to, children, mobile }: ScrollButtonProps) => {
       )}
     >
       {children}
-      <span className="absolute bottom-0 left-0 w-full h-0.5 bg-accent transform origin-left transition-transform duration-500 scale-x-0 group-hover:scale-x-100" />
+      <span className="absolute bottom-0 left-0 w-full h-0.5 bg-accent transform origin-left transition-transform duration-500 scale-x-0 hover:scale-x-100" />
     </button>
   );
 };
