@@ -5,6 +5,7 @@ import Contact from "@/components/Contact";
 import ApprovedIdeas from "@/components/ApprovedIdeas";
 import SubmitIdea from "@/components/SubmitIdea";
 import WorldMap from "@/components/WorldMap";
+import LearningAchievements from "@/components/LearningAchievements";
 
 const Index = () => {
   return (
@@ -12,6 +13,7 @@ const Index = () => {
       <Hero />
       <Projects />
       <ImpactMetrics />
+      <LearningAchievements />
       <WorldMap />
       <ApprovedIdeas />
       <SubmitIdea />
