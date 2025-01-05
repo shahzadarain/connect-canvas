@@ -14,6 +14,8 @@ serve(async (req) => {
   }
 
   try {
+    console.log('Starting news fetch process')
+    
     // Initialize Supabase client
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
@@ -28,11 +30,16 @@ serve(async (req) => {
 
     // Check for recent articles in the database (within last 5 minutes)
     const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000)
-    const { data: existingArticles } = await supabaseClient
+    const { data: existingArticles, error: dbError } = await supabaseClient
       .from('news_articles')
       .select('*')
       .gt('created_at', fiveMinutesAgo.toISOString())
       .order('created_at', { ascending: false })
+
+    if (dbError) {
+      console.error('Database error:', dbError)
+      throw dbError
+    }
 
     if (existingArticles && existingArticles.length >= 6) {
       console.log('Returning existing articles from database')
@@ -53,7 +60,7 @@ serve(async (req) => {
     // Generate new articles using OpenAI
     console.log('Generating new articles using OpenAI')
     const completion = await openai.createChatCompletion({
-      model: 'gpt-4o-mini',
+      model: 'gpt-3.5-turbo', // Fixed model name
       messages: [
         {
           role: 'system',
@@ -74,7 +81,13 @@ serve(async (req) => {
       max_tokens: 1000,
     })
 
+    if (!completion.data.choices[0].message?.content) {
+      throw new Error('No content received from OpenAI')
+    }
+
     const generatedArticles = JSON.parse(completion.data.choices[0].message.content)
+
+    console.log('Generated articles:', generatedArticles)
 
     // Delete old articles before inserting new ones
     await supabaseClient
@@ -100,6 +113,8 @@ serve(async (req) => {
       throw insertError
     }
 
+    console.log('Successfully inserted articles:', insertedArticles)
+
     return new Response(
       JSON.stringify({ articles: insertedArticles }),
       {
@@ -107,9 +122,12 @@ serve(async (req) => {
       }
     )
   } catch (error) {
-    console.error('Error:', error)
+    console.error('Error in fetch-news function:', error)
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ 
+        error: error.message,
+        details: error.toString()
+      }),
       {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
