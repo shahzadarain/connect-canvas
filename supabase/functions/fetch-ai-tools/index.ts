@@ -8,7 +8,6 @@ const corsHeaders = {
 }
 
 serve(async (req) => {
-  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders })
   }
@@ -25,12 +24,16 @@ serve(async (req) => {
     // Fetch the webpage with proper headers
     const response = await fetch('https://www.futuretools.io/', {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.5',
+        'Connection': 'keep-alive',
+        'Upgrade-Insecure-Requests': '1'
       }
     })
 
     if (!response.ok) {
-      throw new Error(`Failed to fetch: ${response.status} ${response.statusText}`);
+      throw new Error(`Failed to fetch: ${response.status} ${response.statusText}`)
     }
 
     const html = await response.text()
@@ -41,26 +44,25 @@ serve(async (req) => {
     const tools: any[] = []
 
     // Updated selector to match the current structure
-    $('.grid .group').each((_, element) => {
+    $('.tool.w-dyn-item').each((_, element) => {
       const card = $(element)
-      console.log('Processing card element:', card.html()?.substring(0, 100)) // Log first 100 chars of each card
-
-      const name = card.find('h2, h3').first().text().trim()
-      const description = card.find('p').first().text().trim()
-      const imageUrl = card.find('img').first().attr('src')
-      const url = card.find('a').first().attr('href')
-      const category = card.find('.category, .tag').first().text().trim()
       
-      console.log('Extracted tool data:', { name, description: description.substring(0, 50) + '...' })
+      const name = card.find('.tool-item-heading---new').text().trim()
+      const description = card.find('.tool-item-description---new').text().trim()
+      const imageUrl = card.find('.tool-item-image---new').attr('src')
+      const url = card.find('.tool-item-link-block---new').attr('href')
+      const category = card.find('.tool-item-category---new').text().trim()
+      
+      console.log('Found tool:', { name, description: description.substring(0, 50) + '...' })
 
       if (name && description) {
         tools.push({
           name,
           description,
           url: url?.startsWith('http') ? url : `https://www.futuretools.io${url}`,
-          category,
-          image_url: imageUrl?.startsWith('http') ? imageUrl : `https://www.futuretools.io${imageUrl}`,
-          pricing_type: 'Free/Paid', // Default value since pricing info might not be readily available
+          category: category || 'Uncategorized',
+          image_url: imageUrl?.startsWith('http') ? imageUrl : (imageUrl ? `https://www.futuretools.io${imageUrl}` : null),
+          pricing_type: 'Free/Paid', // Default value
         })
       }
     })
