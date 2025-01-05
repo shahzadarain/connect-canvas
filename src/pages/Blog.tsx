@@ -2,7 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Tables } from "@/integrations/supabase/types";
 import { Link } from "react-router-dom";
-import { formatDate } from "@/utils/blogUtils";
+import { formatDate, calculateReadingTime } from "@/utils/blogUtils";
+import { Clock } from "lucide-react";
 
 type BlogPost = Tables<"blog_posts">;
 
@@ -43,7 +44,7 @@ const Blog = () => {
             to={`/blog/${post.slug}`}
             className="group hover:no-underline"
           >
-            <article className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform duration-300 group-hover:transform group-hover:scale-105">
+            <article className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden transition-transform duration-300 group-hover:transform group-hover:scale-105">
               {post.featured_image && (
                 <img
                   src={post.featured_image}
@@ -52,13 +53,19 @@ const Blog = () => {
                 />
               )}
               <div className="p-6">
-                <h2 className="text-2xl font-semibold mb-2 text-gray-800 group-hover:text-primary">
+                <h2 className="text-2xl font-semibold mb-2 text-gray-800 dark:text-white group-hover:text-primary">
                   {post.title}
                 </h2>
-                <p className="text-gray-600 mb-4">{post.excerpt}</p>
-                <div className="flex justify-between items-center text-sm text-gray-500">
+                <p className="text-gray-600 dark:text-gray-300 mb-4">{post.excerpt}</p>
+                <div className="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400">
                   <span>{post.author}</span>
-                  <span>{formatDate(post.published_at)}</span>
+                  <span className="flex items-center gap-1">
+                    <Clock className="w-4 h-4" />
+                    {calculateReadingTime(post.content)} min read
+                  </span>
+                </div>
+                <div className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+                  {formatDate(post.published_at)}
                 </div>
               </div>
             </article>

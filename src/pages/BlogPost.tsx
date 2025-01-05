@@ -6,6 +6,10 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { format } from 'date-fns';
 import { Helmet } from 'react-helmet';
 import Navigation from '@/components/Navigation';
+import { TableOfContents } from '@/components/blog/TableOfContents';
+import { ShareButtons } from '@/components/blog/ShareButtons';
+import { Clock, BookOpen } from 'lucide-react';
+import { calculateReadingTime, generateTableOfContents } from '@/utils/blogUtils';
 
 const BlogPost = () => {
   const { slug } = useParams();
@@ -30,27 +34,42 @@ const BlogPost = () => {
     },
   });
 
+  const { data: relatedPosts } = useQuery({
+    queryKey: ['related-posts', post?.tags],
+    enabled: !!post?.tags,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('blog_posts')
+        .select('*')
+        .neq('id', post.id)
+        .eq('status', 'published')
+        .contains('tags', post.tags)
+        .limit(3);
+
+      if (error) throw error;
+      return data;
+    },
+  });
+
   // Function to format content with proper spacing and styling
   const formatContent = (content: string) => {
-    // Split content by double newlines to separate paragraphs
     const paragraphs = content.split('\n\n');
     
     return paragraphs.map((paragraph, index) => {
-      // Check if the paragraph is a heading
       if (paragraph.startsWith('#')) {
         const level = paragraph.match(/^#+/)[0].length;
         const text = paragraph.replace(/^#+\s/, '');
+        const id = text.toLowerCase().replace(/[^a-z0-9]+/g, '-');
         const headingClasses = {
-          1: 'text-4xl font-bold mb-8 mt-12 leading-tight',
-          2: 'text-3xl font-bold mb-6 mt-10 leading-tight',
-          3: 'text-2xl font-bold mb-4 mt-8 leading-tight',
-          4: 'text-xl font-bold mb-3 mt-6 leading-tight',
-        }[level] || 'text-lg font-bold mb-2 mt-4';
+          1: 'text-4xl font-bold mb-8 mt-12 leading-tight scroll-mt-20',
+          2: 'text-3xl font-bold mb-6 mt-10 leading-tight scroll-mt-20',
+          3: 'text-2xl font-bold mb-4 mt-8 leading-tight scroll-mt-20',
+          4: 'text-xl font-bold mb-3 mt-6 leading-tight scroll-mt-20',
+        }[level] || 'text-lg font-bold mb-2 mt-4 scroll-mt-20';
         
-        return <h1 key={index} className={headingClasses}>{text}</h1>;
+        return <h1 key={index} id={id} className={headingClasses}>{text}</h1>;
       }
       
-      // Check if the paragraph is a list
       if (paragraph.trim().startsWith('- ') || paragraph.trim().match(/^\d+\./)) {
         const items = paragraph.split('\n').map(item => 
           item.replace(/^-\s|^\d+\.\s/, '').trim()
@@ -67,7 +86,6 @@ const BlogPost = () => {
         );
       }
       
-      // Regular paragraph with enhanced typography
       return (
         <p key={index} className="text-xl leading-relaxed mb-8 text-gray-700 dark:text-gray-300 font-serif">
           {paragraph}
@@ -114,8 +132,16 @@ const BlogPost = () => {
                 <h1 className="text-5xl font-bold mb-8 leading-tight text-gray-900 dark:text-white font-serif">
                   {post.title}
                 </h1>
-                <div className="text-gray-600 dark:text-gray-400 mb-8 text-lg">
-                  {format(new Date(post.published_at), 'MMMM d, yyyy')} • {post.author}
+                <div className="flex items-center justify-center gap-6 text-gray-600 dark:text-gray-400 mb-8">
+                  <span className="flex items-center">
+                    <BookOpen className="w-5 h-5 mr-2" />
+                    {post.author}
+                  </span>
+                  <span>{format(new Date(post.published_at), 'MMMM d, yyyy')}</span>
+                  <span className="flex items-center">
+                    <Clock className="w-5 h-5 mr-2" />
+                    {calculateReadingTime(post.content)} min read
+                  </span>
                 </div>
                 {post.tags && (
                   <div className="flex flex-wrap gap-3 justify-center mt-6">
@@ -130,6 +156,7 @@ const BlogPost = () => {
                   </div>
                 )}
               </header>
+
               {post.featured_image && (
                 <div className="mb-16">
                   <img
@@ -139,9 +166,40 @@ const BlogPost = () => {
                   />
                 </div>
               )}
+
+              <TableOfContents items={generateTableOfContents(post.content)} />
+              
               <div className="prose prose-xl max-w-none dark:prose-invert prose-headings:font-serif prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-a:text-blue-600 dark:prose-a:text-blue-400 hover:prose-a:text-blue-800 dark:hover:prose-a:text-blue-300">
                 {formatContent(post.content)}
               </div>
+
+              <ShareButtons 
+                url={window.location.href} 
+                title={post.title} 
+              />
+
+              {relatedPosts && relatedPosts.length > 0 && (
+                <div className="mt-16 pt-8 border-t border-gray-200 dark:border-gray-700">
+                  <h2 className="text-2xl font-bold mb-6">Related Posts</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {relatedPosts.map((relatedPost) => (
+                      <a
+                        key={relatedPost.id}
+                        href={`/blog/${relatedPost.slug}`}
+                        className="group block bg-gray-50 dark:bg-gray-800 rounded-lg p-6 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                      >
+                        <h3 className="text-xl font-semibold mb-2 group-hover:text-blue-500 transition-colors">
+                          {relatedPost.title}
+                        </h3>
+                        <p className="text-gray-600 dark:text-gray-400 line-clamp-2">
+                          {relatedPost.excerpt}
+                        </p>
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               <div className="mt-16 pt-8 border-t border-gray-200 dark:border-gray-700">
                 <div className="flex items-center justify-between text-lg">
                   <div className="text-gray-600 dark:text-gray-400">
