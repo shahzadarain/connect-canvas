@@ -12,6 +12,7 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 
   useEffect(() => {
     if (!session) {
+      console.log('No session found, redirecting to login');
       navigate("/login");
     }
   }, [session, navigate]);
