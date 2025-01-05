@@ -1,8 +1,9 @@
 import React from 'react';
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Bookmark, Scale } from "lucide-react";
+import { Bookmark, Scale, ExternalLink } from "lucide-react";
 import { AITool } from '@/integrations/supabase/types/ai-tools';
+import Image from '@/components/ui/image';
 
 interface AIToolCardProps {
   tool: AITool['Row'];
@@ -29,10 +30,36 @@ const AIToolCard = ({
         animate-fade-in bg-card hover:scale-[1.02]
       `}
     >
+      {tool.image_url && (
+        <div className="relative w-full h-48 overflow-hidden">
+          <img
+            src={tool.image_url}
+            alt={tool.name}
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+          />
+        </div>
+      )}
+      
       <div className="p-6">
         <div className="flex justify-between items-start mb-4">
-          <h3 className="text-xl font-semibold text-card-foreground">{tool.name}</h3>
-          <div className="flex gap-2">
+          <div className="flex-1">
+            <h3 className="text-xl font-semibold text-card-foreground">
+              {tool.url ? (
+                <a 
+                  href={tool.url} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="hover:text-blue-500 transition-colors duration-200 flex items-center gap-2"
+                >
+                  {tool.name}
+                  <ExternalLink className="w-4 h-4" />
+                </a>
+              ) : (
+                tool.name
+              )}
+            </h3>
+          </div>
+          <div className="flex gap-2 ml-4">
             <Button
               variant="ghost"
               size="icon"
