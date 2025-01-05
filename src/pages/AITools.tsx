@@ -56,12 +56,13 @@ const AITools = () => {
 
       console.log('Update result:', data);
       
+      // Refetch the data immediately after update
+      await refetch();
+      
       toast({
         title: "Success",
         description: "AI tools have been updated successfully.",
       });
-      
-      refetch();
     } catch (error) {
       console.error('Error updating AI tools:', error);
       toast({
