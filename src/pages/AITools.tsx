@@ -56,7 +56,6 @@ const AITools = () => {
 
       console.log('Update result:', data);
       
-      // Refetch the data immediately after update
       await refetch();
       
       toast({
@@ -86,14 +85,6 @@ const AITools = () => {
           <p className="text-lg text-center text-muted-foreground max-w-2xl">
             Discover the latest AI tools and technologies that are shaping the future of innovation.
           </p>
-          <Button
-            onClick={updateTools}
-            disabled={isUpdating}
-            className="flex items-center gap-2"
-          >
-            <RefreshCw className={`w-4 h-4 ${isUpdating ? 'animate-spin' : ''}`} />
-            Update Tools
-          </Button>
         </div>
 
         {isLoading ? (
@@ -101,60 +92,72 @@ const AITools = () => {
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {tools?.map((tool) => (
-              <div
-                key={tool.id}
-                className="group bg-white dark:bg-gray-800/50 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-300"
-              >
-                <div className="aspect-video bg-gray-100 dark:bg-gray-900 relative">
-                  {tool.image_url ? (
-                    <img
-                      src={tool.image_url}
-                      alt={tool.name}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-gray-400">
-                      No image available
-                    </div>
-                  )}
-                </div>
-                
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white group-hover:text-blue-500 transition-colors">
-                    {tool.name}
-                  </h3>
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+              {tools?.map((tool) => (
+                <div
+                  key={tool.id}
+                  className="group bg-white dark:bg-gray-800/50 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-300"
+                >
+                  <div className="aspect-video bg-gray-100 dark:bg-gray-900 relative">
+                    {tool.image_url ? (
+                      <img
+                        src={tool.image_url}
+                        alt={tool.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-gray-400">
+                        No image available
+                      </div>
+                    )}
+                  </div>
                   
-                  {tool.category && (
-                    <div className="mb-2">
-                      <span className="text-sm px-2 py-1 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400">
-                        {tool.category}
-                      </span>
-                    </div>
-                  )}
-                  
-                  {tool.description && (
-                    <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-3">
-                      {tool.description}
-                    </p>
-                  )}
+                  <div className="p-6">
+                    <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white group-hover:text-blue-500 transition-colors">
+                      {tool.name}
+                    </h3>
+                    
+                    {tool.category && (
+                      <div className="mb-2">
+                        <span className="text-sm px-2 py-1 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400">
+                          {tool.category}
+                        </span>
+                      </div>
+                    )}
+                    
+                    {tool.description && (
+                      <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-3">
+                        {tool.description}
+                      </p>
+                    )}
 
-                  {tool.url && (
-                    <a
-                      href={tool.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-sm font-medium text-blue-500 hover:text-blue-600 transition-colors"
-                    >
-                      Learn More
-                      <ExternalLink className="w-4 h-4" />
-                    </a>
-                  )}
+                    {tool.url && (
+                      <a
+                        href={tool.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-sm font-medium text-blue-500 hover:text-blue-600 transition-colors"
+                      >
+                        Learn More
+                        <ExternalLink className="w-4 h-4" />
+                      </a>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+            <div className="flex justify-center mt-8">
+              <Button
+                onClick={updateTools}
+                disabled={isUpdating}
+                className="flex items-center gap-2"
+              >
+                <RefreshCw className={`w-4 h-4 ${isUpdating ? 'animate-spin' : ''}`} />
+                Update Tools
+              </Button>
+            </div>
+          </>
         )}
       </main>
       <Footer />
