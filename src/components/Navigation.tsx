@@ -58,6 +58,9 @@ const Navigation = () => {
               <NavigationLink to="/projects" isActive={location.pathname === '/projects'}>
                 Projects
               </NavigationLink>
+              <NavigationLink to="/ideas" isActive={location.pathname === '/ideas'}>
+                Ideas
+              </NavigationLink>
             </div>
 
             {/* Mobile menu button */}
@@ -98,6 +101,9 @@ const Navigation = () => {
             </NavigationLink>
             <NavigationLink to="/projects" mobile isActive={location.pathname === '/projects'}>
               Projects
+            </NavigationLink>
+            <NavigationLink to="/ideas" mobile isActive={location.pathname === '/ideas'}>
+              Ideas
             </NavigationLink>
           </div>
         </div>
