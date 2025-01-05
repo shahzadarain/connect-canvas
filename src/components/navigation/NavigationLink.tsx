@@ -17,16 +17,14 @@ const NavigationLink = ({ to, children, isActive, mobile }: NavigationLinkProps)
         mobile ? "block w-full px-3 py-2 text-base" : "mx-4",
         isActive
           ? 'text-accent'
-          : 'text-primary/80 hover:text-accent dark:text-white/80 dark:hover:text-accent'
+          : 'text-primary/80 hover:text-accent dark:text-white/80 dark:hover:text-accent',
+        !mobile && "after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-accent after:transform after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100"
       )}
     >
       {children}
-      <span 
-        className={cn(
-          "absolute bottom-0 left-0 w-full h-0.5 bg-accent transform origin-left transition-transform duration-500",
-          isActive ? 'scale-x-100' : 'scale-x-0'
-        )}
-      />
+      {isActive && !mobile && (
+        <span className="absolute bottom-0 left-0 w-full h-0.5 bg-accent transform scale-x-100 transition-transform duration-300" />
+      )}
     </Link>
   );
 };

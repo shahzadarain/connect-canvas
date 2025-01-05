@@ -1,13 +1,34 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import NavigationLink from "./navigation/NavigationLink";
 import MobileMenuButton from "./navigation/MobileMenuButton";
 import ScrollButton from "./navigation/ScrollButton";
+import { Progress } from "./ui/progress";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
   const isHomePage = location.pathname === "/";
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Calculate scroll progress
+      const winScroll = document.documentElement.scrollTop;
+      const height = 
+        document.documentElement.scrollHeight - 
+        document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      setScrollProgress(scrolled);
+      
+      // Set navbar background blur based on scroll position
+      setIsScrolled(window.scrollY > 0);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -15,7 +36,13 @@ const Navigation = () => {
 
   return (
     <>
-      <nav className="bg-white/80 backdrop-blur-md shadow-lg fixed w-full z-50 border-b border-gray-100">
+      <nav 
+        className={`fixed w-full z-50 transition-all duration-300 ${
+          isScrolled 
+            ? "bg-white/80 backdrop-blur-md shadow-lg" 
+            : "bg-white/50 backdrop-blur-sm"
+        }`}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex">
@@ -106,6 +133,11 @@ const Navigation = () => {
               Ideas
             </NavigationLink>
           </div>
+        </div>
+
+        {/* Scroll Progress Indicator */}
+        <div className="absolute bottom-0 left-0 w-full h-0.5">
+          <Progress value={scrollProgress} className="rounded-none" />
         </div>
       </nav>
       {/* Spacer to prevent content from hiding under fixed nav */}
