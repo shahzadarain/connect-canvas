@@ -1,8 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { BlogPost } from "@/integrations/supabase/types/blog";
+import { Tables } from "@/integrations/supabase/types";
 import { Link } from "react-router-dom";
 import { formatDate } from "@/utils/blogUtils";
+
+type BlogPost = Tables<"blog_posts">;
 
 const Blog = () => {
   const { data: posts, isLoading } = useQuery({
