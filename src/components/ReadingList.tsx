@@ -3,6 +3,8 @@ import { BookOpen, Headphones, FileText, ExternalLink, Search } from 'lucide-rea
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
+import { useSession } from "@supabase/auth-helpers-react";
+import { useNavigate } from "react-router-dom";
 
 interface Resource {
   id: number;
@@ -26,12 +28,25 @@ const ReadingList = () => {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const { toast } = useToast();
+  const session = useSession();
+  const navigate = useNavigate();
 
   useEffect(() => {
+    if (!session) {
+      console.log('No session found, redirecting to login');
+      navigate("/login");
+      return;
+    }
+    
     fetchResources();
-  }, []);
+  }, [session, navigate]);
 
   const fetchResources = async () => {
+    if (!session) {
+      console.log('No session, skipping fetch');
+      return;
+    }
+
     try {
       console.log('Fetching resources from Supabase...');
       const { data, error } = await supabase
@@ -85,6 +100,10 @@ const ReadingList = () => {
       (resource.category?.toLowerCase().includes(searchTerm))
     );
   });
+
+  if (!session) {
+    return null;
+  }
 
   if (loading) {
     return (
