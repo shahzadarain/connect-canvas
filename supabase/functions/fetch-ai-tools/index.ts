@@ -24,36 +24,54 @@ serve(async (req) => {
     // Fetch the webpage with proper headers
     const response = await fetch('https://www.futuretools.io/', {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-        'Accept-Language': 'en-US,en;q=0.5',
-        'Connection': 'keep-alive',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache',
+        'Sec-Ch-Ua': '"Not_A Brand";v="8", "Chromium";v="120"',
+        'Sec-Ch-Ua-Mobile': '?0',
+        'Sec-Ch-Ua-Platform': '"Windows"',
+        'Sec-Fetch-Dest': 'document',
+        'Sec-Fetch-Mode': 'navigate',
+        'Sec-Fetch-Site': 'none',
+        'Sec-Fetch-User': '?1',
         'Upgrade-Insecure-Requests': '1'
       }
     })
 
     if (!response.ok) {
+      console.error(`Failed to fetch with status: ${response.status}`)
       throw new Error(`Failed to fetch: ${response.status} ${response.statusText}`)
     }
 
     const html = await response.text()
-    console.log('Successfully fetched HTML content')
+    console.log('Successfully fetched HTML content, length:', html.length)
     
     // Parse HTML with cheerio
     const $ = cheerio.load(html)
     const tools: any[] = []
 
+    // Log the full HTML structure for debugging
+    console.log('HTML Structure:', $.html().substring(0, 500)) // Log first 500 chars
+
     // Updated selector to match the current structure
-    $('.tool.w-dyn-item').each((_, element) => {
+    $('.collection-list-wrapper-tools .w-dyn-item').each((_, element) => {
       const card = $(element)
       
-      const name = card.find('.tool-item-heading---new').text().trim()
-      const description = card.find('.tool-item-description---new').text().trim()
-      const imageUrl = card.find('.tool-item-image---new').attr('src')
-      const url = card.find('.tool-item-link-block---new').attr('href')
-      const category = card.find('.tool-item-category---new').text().trim()
+      const name = card.find('.tool-heading').text().trim()
+      const description = card.find('.tool-description').text().trim()
+      const imageUrl = card.find('img').attr('src')
+      const url = card.find('a').attr('href')
+      const category = card.find('.tool-category').text().trim()
       
-      console.log('Found tool:', { name, description: description.substring(0, 50) + '...' })
+      console.log('Processing tool:', { 
+        name, 
+        description: description.substring(0, 50) + '...',
+        imageUrl,
+        url,
+        category
+      })
 
       if (name && description) {
         tools.push({
