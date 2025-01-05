@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 import { Smartphone, Globe } from "lucide-react";
 
@@ -63,15 +62,21 @@ const Hero = () => {
           <Button
             asChild
             className="bg-[#3B82F6] hover:bg-[#2563EB] text-white px-8"
+            onClick={() => window.open('https://www.linkedin.com/in/shahzadasghar1/', '_blank')}
           >
-            <Link to="/projects">View Profile →</Link>
+            <a href="https://www.linkedin.com/in/shahzadasghar1/" target="_blank" rel="noopener noreferrer">
+              View Profile →
+            </a>
           </Button>
           <Button
             asChild
             variant="outline"
             className="bg-transparent border-[#3B82F6] text-[#3B82F6] hover:bg-[#3B82F6]/10 px-8"
+            onClick={() => window.open('https://www.linkedin.com/in/shahzadasghar1/', '_blank')}
           >
-            <Link to="/contact">Connect with Me →</Link>
+            <a href="https://www.linkedin.com/in/shahzadasghar1/" target="_blank" rel="noopener noreferrer">
+              Connect with Me →
+            </a>
           </Button>
         </motion.div>
       </div>
