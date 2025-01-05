@@ -63,12 +63,14 @@ serve(async (req) => {
       const description = card.find('.tool-item-description-box---new').text().trim()
       const url = card.find('.tool-item-link-block---new').attr('href')
       const type = card.find('.text-block-53').text().trim()
+      const imageUrl = card.find('.tool-item-image---new').attr('src')
       
       console.log('Processing tool:', { 
         name, 
         description: description.substring(0, 50) + '...',
         url,
-        type
+        type,
+        imageUrl
       })
 
       if (name && description) {
@@ -77,6 +79,7 @@ serve(async (req) => {
           description,
           url: url?.startsWith('http') ? url : `https://www.futuretools.io${url}`,
           category: type || 'Uncategorized',
+          image_url: imageUrl?.startsWith('http') ? imageUrl : (imageUrl ? `https://www.futuretools.io${imageUrl}` : null),
           pricing_type: 'Free/Paid', // Default value
         })
       }
