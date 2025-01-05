@@ -1,13 +1,10 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Navigation from "@/components/Navigation";
-import Footer from "@/components/Footer";
 
 const AIHumanitarian = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-gray-50 dark:from-background dark:to-gray-900/50">
-      <Navigation />
       <main className="container mx-auto px-4 py-24">
         <Link to="/">
           <Button variant="ghost" className="mb-8" aria-label="Back to Home">
@@ -131,7 +128,6 @@ const AIHumanitarian = () => {
           </div>
         </article>
       </main>
-      <Footer />
     </div>
   );
 };
