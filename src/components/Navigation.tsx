@@ -38,6 +38,9 @@ const Navigation = () => {
                   <ScrollButton to="contact">Contact</ScrollButton>
                 </>
               ) : null}
+              <NavigationLink to="/projects" isActive={location.pathname === '/projects'}>
+                Projects
+              </NavigationLink>
               <NavigationLink to="/achievements" isActive={location.pathname === '/achievements'}>
                 Achievements
               </NavigationLink>
@@ -77,6 +80,9 @@ const Navigation = () => {
                 <ScrollButton to="contact" mobile>Contact</ScrollButton>
               </>
             ) : null}
+            <NavigationLink to="/projects" mobile isActive={location.pathname === '/projects'}>
+              Projects
+            </NavigationLink>
             <NavigationLink to="/achievements" mobile isActive={location.pathname === '/achievements'}>
               Achievements
             </NavigationLink>
