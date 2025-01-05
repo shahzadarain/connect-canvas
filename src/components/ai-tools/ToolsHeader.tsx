@@ -32,8 +32,8 @@ const ToolsHeader = ({
   setViewMode,
 }: ToolsHeaderProps) => {
   return (
-    <div className="flex flex-wrap gap-4 justify-between items-center mb-8 relative">
-      <div className="flex gap-4">
+    <div className="flex flex-wrap gap-4 justify-between items-center mb-8">
+      <div className="flex gap-4 relative">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="flex items-center gap-2 min-w-[180px]">
@@ -42,9 +42,11 @@ const ToolsHeader = ({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent 
-            className="w-[180px] bg-white dark:bg-gray-800 shadow-lg border border-gray-200 dark:border-gray-700 z-50"
+            className="w-[180px] bg-white dark:bg-gray-800 shadow-lg border border-gray-200 dark:border-gray-700"
             align="start"
-            sideOffset={5}
+            sideOffset={8}
+            alignOffset={0}
+            side="bottom"
           >
             <DropdownMenuItem 
               onClick={() => setSelectedCategory(null)}
@@ -72,9 +74,11 @@ const ToolsHeader = ({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent 
-            className="w-[140px] bg-white dark:bg-gray-800 shadow-lg border border-gray-200 dark:border-gray-700 z-50"
+            className="w-[140px] bg-white dark:bg-gray-800 shadow-lg border border-gray-200 dark:border-gray-700"
             align="start"
-            sideOffset={5}
+            sideOffset={8}
+            alignOffset={0}
+            side="bottom"
           >
             <DropdownMenuItem 
               onClick={() => setSortField('name')}
