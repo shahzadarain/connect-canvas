@@ -10,17 +10,19 @@ interface BlogHeaderProps {
 
 export const BlogHeader = ({ post }: BlogHeaderProps) => {
   return (
-    <header className="mb-16 text-center">
-      <h1 className="text-5xl font-bold mb-8 leading-tight text-gray-900 dark:text-white font-serif">
+    <header className="mb-16 text-center animate-fade-in">
+      <h1 className="text-5xl font-bold mb-8 leading-tight bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent font-serif">
         {post.title}
       </h1>
-      <div className="flex items-center justify-center gap-6 text-gray-600 dark:text-gray-400 mb-8">
-        <span className="flex items-center">
+      <div className="flex items-center justify-center gap-8 text-gray-600 dark:text-gray-400 mb-8">
+        <span className="flex items-center hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
           <BookOpen className="w-5 h-5 mr-2" />
           {post.author}
         </span>
-        <span>{format(new Date(post.published_at || ''), 'MMMM d, yyyy')}</span>
-        <span className="flex items-center">
+        <span className="text-sm">
+          {format(new Date(post.published_at || ''), 'MMMM d, yyyy')}
+        </span>
+        <span className="flex items-center hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
           <Clock className="w-5 h-5 mr-2" />
           {calculateReadingTime(post.content)} min read
         </span>
@@ -30,7 +32,7 @@ export const BlogHeader = ({ post }: BlogHeaderProps) => {
           {post.tags.map((tag) => (
             <span
               key={tag}
-              className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-100 px-4 py-2 rounded-full text-sm font-medium"
+              className="bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 px-4 py-2 rounded-full text-sm font-medium hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors cursor-default"
             >
               {tag}
             </span>
