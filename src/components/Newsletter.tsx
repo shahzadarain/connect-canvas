@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Loader2 } from "lucide-react";
+import { Mail, Loader2, CheckCircle } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Card } from "./ui/card";
@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 const Newsletter = () => {
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isSubscribed, setIsSubscribed] = useState(false);
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -27,6 +28,7 @@ const Newsletter = () => {
       }
 
       console.log('Successfully subscribed to newsletter');
+      setIsSubscribed(true);
       toast({
         title: "Successfully subscribed!",
         description: "Thank you for subscribing to our newsletter.",
@@ -62,24 +64,34 @@ const Newsletter = () => {
           
           <Card className="p-6 md:p-8 bg-white shadow-lg">
             <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-4">
-              <Input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
-                required
-                className="flex-1 h-12 text-lg"
-                disabled={isLoading}
-              />
+              <div className="flex-1">
+                <label htmlFor="email-input" className="sr-only">Email address</label>
+                <Input
+                  id="email-input"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email"
+                  required
+                  className="h-12 text-lg"
+                  disabled={isLoading || isSubscribed}
+                  aria-label="Email address for newsletter subscription"
+                />
+              </div>
               <Button 
                 type="submit" 
-                className="h-12 px-8 text-lg bg-blue-600 hover:bg-blue-700"
-                disabled={isLoading}
+                className="h-12 px-8 text-lg"
+                disabled={isLoading || isSubscribed}
               >
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                     Subscribing...
+                  </>
+                ) : isSubscribed ? (
+                  <>
+                    <CheckCircle className="mr-2 h-5 w-5" />
+                    Subscribed!
                   </>
                 ) : (
                   'Subscribe'
