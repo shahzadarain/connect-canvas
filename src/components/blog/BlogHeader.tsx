@@ -2,7 +2,7 @@ import React from 'react';
 import { format } from 'date-fns';
 import { Clock, BookOpen } from 'lucide-react';
 import { calculateReadingTime } from '@/utils/blogUtils';
-import { BlogPost } from '@/integrations/supabase/types';
+import { BlogPost } from '@/integrations/supabase/types/blog';
 
 interface BlogHeaderProps {
   post: BlogPost['Row'];
