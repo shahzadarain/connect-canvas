@@ -57,9 +57,9 @@ export const BlogContent = ({ content }: BlogContentProps) => {
         const text = line.replace(/^#+\s/, '');
         const id = text.toLowerCase().replace(/[^a-z0-9]+/g, '-');
         const headingClasses = {
-          1: 'text-4xl font-bold mb-8 mt-16 leading-tight scroll-mt-20 text-gray-900 dark:text-white font-serif',
-          2: 'text-3xl font-bold mb-6 mt-12 leading-tight scroll-mt-20 text-gray-800 dark:text-gray-100 font-serif',
-          3: 'text-2xl font-bold mb-4 mt-8 leading-tight scroll-mt-20 text-gray-800 dark:text-gray-100 font-serif',
+          1: 'text-4xl font-bold mb-8 mt-16 leading-tight scroll-mt-20 text-gray-900 dark:text-white font-serif tracking-tight',
+          2: 'text-3xl font-bold mb-6 mt-12 leading-tight scroll-mt-20 text-gray-800 dark:text-gray-100 font-serif tracking-tight',
+          3: 'text-2xl font-bold mb-4 mt-8 leading-tight scroll-mt-20 text-gray-800 dark:text-gray-100 font-serif tracking-tight',
           4: 'text-xl font-bold mb-3 mt-6 leading-tight scroll-mt-20 text-gray-700 dark:text-gray-200',
         }[level] || 'text-lg font-bold mb-2 mt-4 scroll-mt-20';
         
@@ -108,8 +108,8 @@ export const BlogContent = ({ content }: BlogContentProps) => {
   };
 
   return (
-    <div className="prose prose-lg max-w-none dark:prose-invert prose-headings:font-serif prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-a:text-blue-600 dark:prose-a:text-blue-400 hover:prose-a:text-blue-800 dark:hover:prose-a:text-blue-300">
+    <article className="prose prose-lg max-w-none dark:prose-invert prose-headings:font-serif prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-a:text-blue-600 dark:prose-a:text-blue-400 hover:prose-a:text-blue-800 dark:hover:prose-a:text-blue-300 prose-img:rounded-xl prose-img:shadow-lg">
       {formatContent(content)}
-    </div>
+    </article>
   );
 };

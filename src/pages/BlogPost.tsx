@@ -18,7 +18,6 @@ const BlogPost = () => {
     queryKey: ['blog-post', slug],
     queryFn: async () => {
       console.log('Fetching blog post:', slug);
-      // First try to fetch by slug
       let { data, error } = await supabase
         .from('blog_posts')
         .select('*')
@@ -28,7 +27,6 @@ const BlogPost = () => {
       
       if (!data && !error) {
         console.log('Post not found by slug, trying ID 45');
-        // If not found by slug, try ID 45
         ({ data, error } = await supabase
           .from('blog_posts')
           .select('*')
@@ -49,7 +47,7 @@ const BlogPost = () => {
   return (
     <>
       <Navigation />
-      <main className="min-h-screen pt-20 bg-white dark:bg-gray-900">
+      <main className="min-h-screen pt-20 bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">
         {isLoading ? (
           <div className="container mx-auto px-4 py-8 max-w-4xl">
             <Skeleton className="h-12 w-3/4 mb-4" />
@@ -83,23 +81,25 @@ const BlogPost = () => {
               <BlogHeader post={post} />
 
               {post.featured_image && (
-                <div className="mb-16">
+                <div className="mb-16 animate-fade-in">
                   <img
                     src={post.featured_image}
                     alt={post.title}
-                    className="w-full h-[500px] object-cover rounded-xl shadow-xl"
+                    className="w-full h-[500px] object-cover rounded-xl shadow-xl hover:shadow-2xl transition-shadow duration-300"
                   />
                 </div>
               )}
 
-              <TableOfContents items={generateTableOfContents(post.content)} />
-              
-              <BlogContent content={post.content} />
+              <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl p-8 mb-8">
+                <TableOfContents items={generateTableOfContents(post.content)} />
+                
+                <BlogContent content={post.content} />
 
-              <ShareButtons 
-                url={window.location.href} 
-                title={post.title} 
-              />
+                <ShareButtons 
+                  url={window.location.href} 
+                  title={post.title} 
+                />
+              </div>
             </article>
           </>
         )}
