@@ -40,6 +40,12 @@ export default {
           DEFAULT: "rgba(255, 255, 255, 0.9)",
           foreground: "#0F172A",
         },
+        code: {
+          DEFAULT: "hsl(var(--code-bg))",
+          foreground: "hsl(var(--code-fg))",
+          border: "hsl(var(--code-border))",
+          highlight: "hsl(var(--code-highlight))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

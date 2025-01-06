@@ -106,18 +106,18 @@
   }
 
   pre {
-    @apply rounded-lg border border-code-border bg-[hsl(var(--code-bg))] p-4 overflow-x-auto;
+    @apply rounded-lg border border-code-border bg-code p-4 overflow-x-auto;
   }
 
   pre code {
-    @apply text-[hsl(var(--code-fg))] text-sm font-mono;
+    @apply text-code-foreground text-sm font-mono;
   }
 
   .prose pre {
-    @apply bg-[hsl(var(--code-bg))] text-[hsl(var(--code-fg))] border border-code-border;
+    @apply bg-code text-code-foreground border border-code-border;
   }
 
   .prose code {
-    @apply text-[hsl(var(--code-fg))] bg-transparent p-0;
+    @apply text-code-foreground bg-transparent p-0;
   }
 }
