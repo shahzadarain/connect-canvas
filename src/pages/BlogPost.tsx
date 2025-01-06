@@ -10,6 +10,7 @@ import { TableOfContents } from '@/components/blog/TableOfContents';
 import { ShareButtons } from '@/components/blog/ShareButtons';
 import { Clock, BookOpen } from 'lucide-react';
 import { calculateReadingTime, generateTableOfContents } from '@/utils/blogUtils';
+import { Card } from '@/components/ui/card';
 
 const BlogPost = () => {
   const { slug } = useParams();
@@ -34,28 +35,30 @@ const BlogPost = () => {
     },
   });
 
-  const { data: relatedPosts } = useQuery({
-    queryKey: ['related-posts', post?.tags],
-    enabled: !!post?.tags,
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('blog_posts')
-        .select('*')
-        .neq('id', post.id)
-        .eq('status', 'published')
-        .contains('tags', post.tags)
-        .limit(3);
-
-      if (error) throw error;
-      return data;
-    },
-  });
-
-  // Function to format content with proper spacing and styling
+  // Function to format content with proper spacing, styling, and code blocks
   const formatContent = (content: string) => {
     const paragraphs = content.split('\n\n');
     
     return paragraphs.map((paragraph, index) => {
+      // Handle code blocks
+      if (paragraph.trim().startsWith('```')) {
+        const [, language, ...codeLines] = paragraph.trim().split('\n');
+        const code = codeLines.slice(0, -1).join('\n'); // Remove the closing ```
+        return (
+          <Card key={index} className="my-8 overflow-hidden">
+            <div className="bg-gray-800 text-gray-200 px-4 py-2 text-sm font-mono">
+              {language.replace('```', '')}
+            </div>
+            <pre className="p-4 overflow-x-auto bg-gray-900 text-gray-100">
+              <code className="text-sm font-mono whitespace-pre">
+                {code}
+              </code>
+            </pre>
+          </Card>
+        );
+      }
+      
+      // Handle headings
       if (paragraph.startsWith('#')) {
         const level = paragraph.match(/^#+/)[0].length;
         const text = paragraph.replace(/^#+\s/, '');
@@ -70,6 +73,7 @@ const BlogPost = () => {
         return <h1 key={index} id={id} className={headingClasses}>{text}</h1>;
       }
       
+      // Handle lists
       if (paragraph.trim().startsWith('- ') || paragraph.trim().match(/^\d+\./)) {
         const items = paragraph.split('\n').map(item => 
           item.replace(/^-\s|^\d+\.\s/, '').trim()
@@ -86,6 +90,7 @@ const BlogPost = () => {
         );
       }
       
+      // Regular paragraphs
       return (
         <p key={index} className="text-xl leading-relaxed mb-8 text-gray-700 dark:text-gray-300 font-serif">
           {paragraph}
@@ -99,7 +104,7 @@ const BlogPost = () => {
       <Navigation />
       <main className="min-h-screen pt-20 bg-white dark:bg-gray-900">
         {isLoading ? (
-          <div className="container mx-auto px-4 py-8 max-w-3xl">
+          <div className="container mx-auto px-4 py-8 max-w-4xl">
             <Skeleton className="h-12 w-3/4 mb-4" />
             <Skeleton className="h-6 w-1/2 mb-8" />
             <div className="space-y-4">
@@ -109,7 +114,7 @@ const BlogPost = () => {
             </div>
           </div>
         ) : !post ? (
-          <div className="container mx-auto px-4 py-8 max-w-3xl">
+          <div className="container mx-auto px-4 py-8 max-w-4xl">
             <h1 className="text-4xl font-bold mb-4">Post not found</h1>
             <p>The blog post you're looking for doesn't exist or has been removed.</p>
           </div>
@@ -127,7 +132,7 @@ const BlogPost = () => {
                 <meta property="og:image" content={post.featured_image} />
               )}
             </Helmet>
-            <article className="container mx-auto px-4 py-12 max-w-3xl">
+            <article className="container mx-auto px-4 py-12 max-w-4xl">
               <header className="mb-16 text-center">
                 <h1 className="text-5xl font-bold mb-8 leading-tight text-gray-900 dark:text-white font-serif">
                   {post.title}
@@ -148,7 +153,7 @@ const BlogPost = () => {
                     {post.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-full text-sm font-medium hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                        className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-100 px-4 py-2 rounded-full text-sm font-medium"
                       >
                         {tag}
                       </span>
@@ -177,39 +182,6 @@ const BlogPost = () => {
                 url={window.location.href} 
                 title={post.title} 
               />
-
-              {relatedPosts && relatedPosts.length > 0 && (
-                <div className="mt-16 pt-8 border-t border-gray-200 dark:border-gray-700">
-                  <h2 className="text-2xl font-bold mb-6">Related Posts</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {relatedPosts.map((relatedPost) => (
-                      <a
-                        key={relatedPost.id}
-                        href={`/blog/${relatedPost.slug}`}
-                        className="group block bg-gray-50 dark:bg-gray-800 rounded-lg p-6 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                      >
-                        <h3 className="text-xl font-semibold mb-2 group-hover:text-blue-500 transition-colors">
-                          {relatedPost.title}
-                        </h3>
-                        <p className="text-gray-600 dark:text-gray-400 line-clamp-2">
-                          {relatedPost.excerpt}
-                        </p>
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              <div className="mt-16 pt-8 border-t border-gray-200 dark:border-gray-700">
-                <div className="flex items-center justify-between text-lg">
-                  <div className="text-gray-600 dark:text-gray-400">
-                    Written by {post.author}
-                  </div>
-                  <div className="text-gray-600 dark:text-gray-400">
-                    {format(new Date(post.published_at), 'MMMM d, yyyy')}
-                  </div>
-                </div>
-              </div>
             </article>
           </>
         )}
