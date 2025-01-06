@@ -35,26 +35,29 @@ const BlogPost = () => {
     },
   });
 
-  // Function to format content with proper spacing, styling, and code blocks
   const formatContent = (content: string) => {
     const paragraphs = content.split('\n\n');
     
     return paragraphs.map((paragraph, index) => {
-      // Handle code blocks
+      // Handle code blocks with language specification
       if (paragraph.trim().startsWith('```')) {
-        const [, language, ...codeLines] = paragraph.trim().split('\n');
-        const code = codeLines.slice(0, -1).join('\n'); // Remove the closing ```
+        const lines = paragraph.trim().split('\n');
+        const language = lines[0].replace('```', '').trim();
+        const code = lines.slice(1, -1).join('\n'); // Remove first and last lines (``` markers)
+        
         return (
-          <Card key={index} className="my-8 overflow-hidden">
-            <div className="bg-gray-800 text-gray-200 px-4 py-2 text-sm font-mono">
-              {language.replace('```', '')}
+          <div key={index} className="my-8">
+            <div className="rounded-t-lg bg-code border border-b-0 border-code-border px-4 py-2">
+              <span className="text-sm font-mono text-code-foreground">
+                {language || 'plaintext'}
+              </span>
             </div>
-            <pre className="p-4 overflow-x-auto bg-gray-900 text-gray-100">
-              <code className="text-sm font-mono whitespace-pre">
+            <pre className="rounded-t-none">
+              <code className="language-{language}">
                 {code}
               </code>
             </pre>
-          </Card>
+          </div>
         );
       }
       
