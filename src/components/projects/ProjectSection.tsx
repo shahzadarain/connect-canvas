@@ -28,23 +28,17 @@ const ProjectSection: React.FC<ProjectSectionProps> = ({ section }) => {
           >
             <h3 className="text-xl font-semibold mb-3">{project.title}</h3>
             <p className="text-gray-600 mb-4">{project.description}</p>
-            <div className="space-y-3">
-              <div>
-                <strong className="text-sm text-gray-700">Expected Impact:</strong>
-                <p className="text-sm text-gray-600">{project.expectedImpact}</p>
-              </div>
-              <div>
-                <strong className="text-sm text-gray-700">Tags:</strong>
-                <div className="flex flex-wrap gap-2 mt-1">
-                  {project.tags.map((tag, tagIndex) => (
-                    <span
-                      key={tagIndex}
-                      className="px-2 py-1 bg-blue-50 text-blue-700 text-xs rounded-full"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
+            <div>
+              <strong className="text-sm text-gray-700">Tags:</strong>
+              <div className="flex flex-wrap gap-2 mt-1">
+                {project.tags.map((tag, tagIndex) => (
+                  <span
+                    key={tagIndex}
+                    className="px-2 py-1 bg-blue-50 text-blue-700 text-xs rounded-full"
+                  >
+                    {tag}
+                  </span>
+                ))}
               </div>
             </div>
           </Card>

@@ -4,7 +4,6 @@ export interface Project {
   title: string;
   description: string;
   tags: string[];
-  expectedImpact: string;
 }
 
 export interface ProjectSectionType {
