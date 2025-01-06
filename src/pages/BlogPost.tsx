@@ -47,35 +47,61 @@ const BlogPost = () => {
   });
 
   const formatContent = (content: string) => {
-    const paragraphs = content.split('\n\n');
-    
-    return paragraphs.map((paragraph, index) => {
-      // Handle code blocks with language specification
-      if (paragraph.trim().startsWith('```')) {
-        const lines = paragraph.trim().split('\n');
-        const language = lines[0].replace('```', '').trim();
-        const code = lines.slice(1, -1).join('\n');
-        
-        return (
-          <div key={index} className="my-8">
-            <div className="bg-code border border-code-border rounded-t-lg px-4 py-2">
-              <span className="text-sm font-mono text-code-foreground">
-                {language || 'plaintext'}
-              </span>
+    let inCodeBlock = false;
+    let currentLanguage = '';
+    let currentCode = '';
+    const formattedContent: JSX.Element[] = [];
+    let currentIndex = 0;
+
+    const lines = content.split('\n');
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+
+      // Handle code block start
+      if (line.trim().startsWith('```')) {
+        if (!inCodeBlock) {
+          inCodeBlock = true;
+          currentLanguage = line.trim().slice(3).toLowerCase() || 'plaintext';
+          currentCode = '';
+          continue;
+        } else {
+          // End of code block
+          inCodeBlock = false;
+          formattedContent.push(
+            <div key={currentIndex} className="my-8">
+              <div className="bg-code border border-code-border rounded-t-lg px-4 py-2">
+                <span className="text-sm font-mono text-code-foreground">
+                  {currentLanguage}
+                </span>
+              </div>
+              <pre className="bg-code border border-code-border border-t-0 rounded-b-lg p-4">
+                <code className="text-code-foreground whitespace-pre">
+                  {currentCode.trim()}
+                </code>
+              </pre>
             </div>
-            <pre className="bg-code border border-code-border border-t-0 rounded-b-lg">
-              <code className="text-code-foreground">
-                {code}
-              </code>
-            </pre>
-          </div>
-        );
+          );
+          currentIndex++;
+          continue;
+        }
       }
-      
+
+      // Inside code block
+      if (inCodeBlock) {
+        currentCode += line + '\n';
+        continue;
+      }
+
+      // Handle empty lines between paragraphs
+      if (line.trim() === '') {
+        continue;
+      }
+
       // Handle headings
-      if (paragraph.startsWith('#')) {
-        const level = paragraph.match(/^#+/)[0].length;
-        const text = paragraph.replace(/^#+\s/, '');
+      if (line.startsWith('#')) {
+        const level = line.match(/^#+/)[0].length;
+        const text = line.replace(/^#+\s/, '');
         const id = text.toLowerCase().replace(/[^a-z0-9]+/g, '-');
         const headingClasses = {
           1: 'text-4xl font-bold mb-8 mt-12 leading-tight scroll-mt-20',
@@ -84,33 +110,49 @@ const BlogPost = () => {
           4: 'text-xl font-bold mb-3 mt-6 leading-tight scroll-mt-20',
         }[level] || 'text-lg font-bold mb-2 mt-4 scroll-mt-20';
         
-        return <h1 key={index} id={id} className={headingClasses}>{text}</h1>;
-      }
-      
-      // Handle lists
-      if (paragraph.trim().startsWith('- ') || paragraph.trim().match(/^\d+\./)) {
-        const items = paragraph.split('\n').map(item => 
-          item.replace(/^-\s|^\d+\.\s/, '').trim()
+        formattedContent.push(
+          <h1 key={currentIndex} id={id} className={headingClasses}>
+            {text}
+          </h1>
         );
+        currentIndex++;
+        continue;
+      }
+
+      // Handle lists
+      if (line.trim().startsWith('- ') || line.trim().match(/^\d+\./)) {
+        let listItems = [line];
+        // Collect all consecutive list items
+        while (i + 1 < lines.length && 
+               (lines[i + 1].trim().startsWith('- ') || 
+                lines[i + 1].trim().match(/^\d+\./))) {
+          i++;
+          listItems.push(lines[i]);
+        }
         
-        return (
-          <ul key={index} className="list-disc list-inside space-y-4 mb-6 ml-6">
-            {items.map((item, i) => (
-              <li key={i} className="text-xl leading-relaxed text-gray-700 dark:text-gray-300">
-                {item}
+        formattedContent.push(
+          <ul key={currentIndex} className="list-disc list-inside space-y-4 mb-6 ml-6">
+            {listItems.map((item, idx) => (
+              <li key={idx} className="text-xl leading-relaxed text-gray-700 dark:text-gray-300">
+                {item.replace(/^-\s|^\d+\.\s/, '').trim()}
               </li>
             ))}
           </ul>
         );
+        currentIndex++;
+        continue;
       }
-      
+
       // Regular paragraphs
-      return (
-        <p key={index} className="text-xl leading-relaxed mb-8 text-gray-700 dark:text-gray-300 font-serif">
-          {paragraph}
+      formattedContent.push(
+        <p key={currentIndex} className="text-xl leading-relaxed mb-8 text-gray-700 dark:text-gray-300 font-serif">
+          {line}
         </p>
       );
-    });
+      currentIndex++;
+    }
+
+    return formattedContent;
   };
 
   return (
