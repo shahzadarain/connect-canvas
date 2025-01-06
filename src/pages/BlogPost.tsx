@@ -42,17 +42,17 @@ const BlogPost = () => {
       if (paragraph.trim().startsWith('```')) {
         const lines = paragraph.trim().split('\n');
         const language = lines[0].replace('```', '').trim();
-        const code = lines.slice(1, -1).join('\n'); // Remove first and last lines (``` markers)
+        const code = lines.slice(1, -1).join('\n');
         
         return (
           <div key={index} className="my-8">
-            <div className="bg-gray-800 dark:bg-gray-900 border border-gray-700 dark:border-gray-800 rounded-t-lg px-4 py-2">
-              <span className="text-sm font-mono text-gray-200">
+            <div className="bg-code border border-code-border rounded-t-lg px-4 py-2">
+              <span className="text-sm font-mono text-code-foreground">
                 {language || 'plaintext'}
               </span>
             </div>
-            <pre className="bg-gray-800 dark:bg-gray-900 border border-gray-700 dark:border-gray-800 border-t-0 rounded-b-lg p-4 overflow-x-auto">
-              <code className="text-sm font-mono text-gray-200 whitespace-pre">
+            <pre className="bg-code border border-code-border border-t-0 rounded-b-lg">
+              <code className="text-code-foreground">
                 {code}
               </code>
             </pre>
