@@ -36,11 +36,7 @@ const Projects = () => {
                 </div>
               }
             >
-              <ProjectSection
-                title={section.title}
-                icon={<section.icon className="w-6 h-6" aria-hidden="true" />}
-                projects={section.projects}
-              />
+              <ProjectSection section={section} />
             </Suspense>
           ))}
         </div>
