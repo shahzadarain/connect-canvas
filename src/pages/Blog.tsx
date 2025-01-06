@@ -8,7 +8,7 @@ import { Clock } from "lucide-react";
 type BlogPost = Tables<"blog_posts">;
 
 const Blog = () => {
-  const { data: posts, isLoading } = useQuery({
+  const { data: posts, isLoading, error } = useQuery({
     queryKey: ["blog-posts"],
     queryFn: async () => {
       console.log("Fetching blog posts...");
@@ -35,6 +35,17 @@ const Blog = () => {
           {[...Array(3)].map((_, i) => (
             <div key={i} className="bg-gray-200 h-48 rounded-lg"></div>
           ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    console.error("Error in blog component:", error);
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="text-center text-red-500">
+          Error loading blog posts. Please try again later.
         </div>
       </div>
     );

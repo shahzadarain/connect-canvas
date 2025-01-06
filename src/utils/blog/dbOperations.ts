@@ -1,58 +1,54 @@
 import { supabase } from "@/integrations/supabase/client";
+import { initialBlogPosts } from "./initialPosts";
 import { BlogPostInput } from "./types";
 
-export const createBlogPost = async (post: BlogPostInput) => {
-  console.log('Creating blog post with data:', { ...post, content: '...[content truncated]...' });
+export const initializeBlogPosts = async () => {
+  console.log("Initializing blog posts...");
   
-  const { data, error } = await supabase
-    .from('blog_posts')
-    .insert([post])
-    .select()
-    .single();
+  try {
+    // Check if posts already exist
+    const { data: existingPosts, error: checkError } = await supabase
+      .from("blog_posts")
+      .select("slug");
 
-  if (error) {
-    console.error('Error from Supabase:', error);
+    if (checkError) {
+      console.error("Error checking existing posts:", checkError);
+      throw checkError;
+    }
+
+    const existingSlugs = new Set(existingPosts?.map(post => post.slug));
+    const postsToInsert = initialBlogPosts.filter(post => !existingSlugs.has(post.slug));
+
+    if (postsToInsert.length === 0) {
+      console.log("No new posts to insert");
+      return;
+    }
+
+    console.log(`Inserting ${postsToInsert.length} new posts...`);
+    const { data, error } = await supabase
+      .from("blog_posts")
+      .insert(postsToInsert)
+      .select();
+
+    if (error) {
+      console.error("Error inserting blog posts:", error);
+      throw error;
+    }
+
+    console.log("Successfully inserted blog posts:", data);
+    return data;
+  } catch (error) {
+    console.error("Error in initializeBlogPosts:", error);
     throw error;
   }
-  
-  console.log('Blog post created successfully:', data);
-  return data;
 };
 
-export const initializeBlogPosts = async () => {
-  console.log('Initializing blog posts...');
-  
-  const { initialBlogPosts } = await import('./initialPosts');
-  
-  for (const post of initialBlogPosts) {
-    try {
-      console.log(`Checking if blog post exists: ${post.slug}`);
-      const { data: existingPost, error } = await supabase
-        .from('blog_posts')
-        .select('id')
-        .eq('slug', post.slug)
-        .maybeSingle();
-      
-      if (error) {
-        console.error(`Error checking for existing post ${post.slug}:`, error);
-        continue;
-      }
+export const createBlogPost = async (post: BlogPostInput) => {
+  const { data, error } = await supabase
+    .from("blog_posts")
+    .insert([post])
+    .select();
 
-      if (!existingPost) {
-        console.log(`Creating blog post: ${post.title}`);
-        await createBlogPost({
-          ...post,
-          published_at: new Date().toISOString(),
-        });
-      } else {
-        console.log(`Blog post already exists: ${post.title}`);
-      }
-    } catch (error) {
-      console.error(`Error processing blog post ${post.title}:`, error);
-      // Continue with next post even if one fails
-      continue;
-    }
-  }
-  
-  console.log('Blog posts initialization completed');
+  if (error) throw error;
+  return data;
 };
