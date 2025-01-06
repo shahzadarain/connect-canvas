@@ -11,13 +11,19 @@ const Blog = () => {
   const { data: posts, isLoading } = useQuery({
     queryKey: ["blog-posts"],
     queryFn: async () => {
+      console.log("Fetching blog posts...");
       const { data, error } = await supabase
         .from("blog_posts")
         .select("*")
         .eq("status", "published")
         .order("published_at", { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error fetching blog posts:", error);
+        throw error;
+      }
+      
+      console.log("Fetched blog posts:", data);
       return data as BlogPost[];
     },
   });
