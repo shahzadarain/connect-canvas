@@ -39,16 +39,25 @@ const SubmitIdea = () => {
       const { name, email, idea } = formData;
       console.log('Submitting idea to Supabase:', { name, email, idea });
       
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('ideas')
-        .insert([{ name, email, idea }]);
+        .insert([
+          { 
+            name, 
+            email, 
+            idea,
+            approval_status: 'pending',
+            created_at: new Date().toISOString()
+          }
+        ])
+        .select();
 
       if (error) {
         console.error('Error submitting idea:', error);
         throw error;
       }
 
-      console.log('Idea submitted successfully');
+      console.log('Idea submitted successfully:', data);
       
       setFormData({ name: '', email: '', idea: '' });
       
