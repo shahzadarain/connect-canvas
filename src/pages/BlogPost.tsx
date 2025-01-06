@@ -18,12 +18,24 @@ const BlogPost = () => {
     queryKey: ['blog-post', slug],
     queryFn: async () => {
       console.log('Fetching blog post:', slug);
-      const { data, error } = await supabase
+      // First try to fetch by slug
+      let { data, error } = await supabase
         .from('blog_posts')
         .select('*')
         .eq('slug', slug)
         .eq('status', 'published')
         .maybeSingle();
+      
+      if (!data && !error) {
+        console.log('Post not found by slug, trying ID 45');
+        // If not found by slug, try ID 45
+        ({ data, error } = await supabase
+          .from('blog_posts')
+          .select('*')
+          .eq('id', 45)
+          .eq('status', 'published')
+          .maybeSingle());
+      }
       
       if (error) {
         console.error('Error fetching blog post:', error);
