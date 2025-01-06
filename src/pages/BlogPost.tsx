@@ -10,7 +10,6 @@ import { TableOfContents } from '@/components/blog/TableOfContents';
 import { ShareButtons } from '@/components/blog/ShareButtons';
 import { Clock, BookOpen } from 'lucide-react';
 import { calculateReadingTime, generateTableOfContents } from '@/utils/blogUtils';
-import { Card } from '@/components/ui/card';
 
 const BlogPost = () => {
   const { slug } = useParams();
@@ -47,13 +46,13 @@ const BlogPost = () => {
         
         return (
           <div key={index} className="my-8">
-            <div className="rounded-t-lg bg-code border border-b-0 border-code-border px-4 py-2">
-              <span className="text-sm font-mono text-code-foreground">
+            <div className="bg-gray-800 dark:bg-gray-900 border border-gray-700 dark:border-gray-800 rounded-t-lg px-4 py-2">
+              <span className="text-sm font-mono text-gray-200">
                 {language || 'plaintext'}
               </span>
             </div>
-            <pre className="rounded-t-none">
-              <code className="language-{language}">
+            <pre className="bg-gray-800 dark:bg-gray-900 border border-gray-700 dark:border-gray-800 border-t-0 rounded-b-lg p-4 overflow-x-auto">
+              <code className="text-sm font-mono text-gray-200 whitespace-pre">
                 {code}
               </code>
             </pre>
