@@ -12,6 +12,8 @@ export const BlogContent = ({ content }: BlogContentProps) => {
     let currentCode = '';
     const formattedContent: JSX.Element[] = [];
     let currentIndex = 0;
+    let inList = false;
+    let listItems: string[] = [];
 
     const lines = content.split('\n');
 
@@ -48,6 +50,20 @@ export const BlogContent = ({ content }: BlogContentProps) => {
 
       // Handle empty lines between paragraphs
       if (line.trim() === '') {
+        if (inList) {
+          formattedContent.push(
+            <ul key={currentIndex} className="space-y-3 my-6 list-disc list-inside ml-6">
+              {listItems.map((item, idx) => (
+                <li key={idx} className="text-lg leading-relaxed text-gray-700 dark:text-gray-300">
+                  <span dangerouslySetInnerHTML={{ __html: item }} />
+                </li>
+              ))}
+            </ul>
+          );
+          currentIndex++;
+          inList = false;
+          listItems = [];
+        }
         continue;
       }
 
@@ -57,7 +73,7 @@ export const BlogContent = ({ content }: BlogContentProps) => {
         const text = line.replace(/^#+\s/, '');
         const id = text.toLowerCase().replace(/[^a-z0-9]+/g, '-');
         const headingClasses = {
-          1: 'text-4xl font-bold mb-8 mt-16 leading-tight scroll-mt-20 text-gray-900 dark:text-white font-serif tracking-tight',
+          1: 'text-4xl font-bold mb-8 mt-16 leading-tight scroll-mt-20 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent font-serif tracking-tight',
           2: 'text-3xl font-bold mb-6 mt-12 leading-tight scroll-mt-20 text-gray-800 dark:text-gray-100 font-serif tracking-tight',
           3: 'text-2xl font-bold mb-4 mt-8 leading-tight scroll-mt-20 text-gray-800 dark:text-gray-100 font-serif tracking-tight',
           4: 'text-xl font-bold mb-3 mt-6 leading-tight scroll-mt-20 text-gray-700 dark:text-gray-200',
@@ -73,35 +89,39 @@ export const BlogContent = ({ content }: BlogContentProps) => {
       }
 
       // Handle lists
-      if (line.trim().startsWith('- ') || line.trim().match(/^\d+\./)) {
-        let listItems = [line];
-        while (i + 1 < lines.length && 
-               (lines[i + 1].trim().startsWith('- ') || 
-                lines[i + 1].trim().match(/^\d+\./))) {
-          i++;
-          listItems.push(lines[i]);
-        }
-        
-        formattedContent.push(
-          <ul key={currentIndex} className="list-disc list-inside space-y-4 mb-8 ml-8 animate-fade-in">
-            {listItems.map((item, idx) => (
-              <li key={idx} className="text-lg leading-relaxed text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
-                {item.replace(/^-\s|^\d+\.\s/, '').trim()}
-              </li>
-            ))}
-          </ul>
-        );
-        currentIndex++;
+      if (line.trim().startsWith('- ') || line.trim().startsWith('* ') || line.trim().match(/^\d+\./)) {
+        inList = true;
+        const itemContent = line.replace(/^[-*]\s|^\d+\.\s/, '')
+          .replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold">$1</strong>')
+          .replace(/`(.*?)`/g, '<code class="px-1.5 py-0.5 rounded bg-gray-100 dark:bg-gray-800 font-mono text-sm">$1</code>');
+        listItems.push(itemContent);
         continue;
       }
 
-      // Regular paragraphs
+      // Handle paragraphs with inline formatting
+      const formattedText = line
+        .replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold">$1</strong>')
+        .replace(/`(.*?)`/g, '<code class="px-1.5 py-0.5 rounded bg-gray-100 dark:bg-gray-800 font-mono text-sm">$1</code>');
+
       formattedContent.push(
         <p key={currentIndex} className="text-lg leading-relaxed mb-6 text-gray-700 dark:text-gray-300 font-serif hover:text-gray-900 dark:hover:text-white transition-colors animate-fade-in">
-          {line}
+          <span dangerouslySetInnerHTML={{ __html: formattedText }} />
         </p>
       );
       currentIndex++;
+    }
+
+    // Handle any remaining list items
+    if (inList && listItems.length > 0) {
+      formattedContent.push(
+        <ul key={currentIndex} className="space-y-3 my-6 list-disc list-inside ml-6">
+          {listItems.map((item, idx) => (
+            <li key={idx} className="text-lg leading-relaxed text-gray-700 dark:text-gray-300">
+              <span dangerouslySetInnerHTML={{ __html: item }} />
+            </li>
+          ))}
+        </ul>
+      );
     }
 
     return formattedContent;
