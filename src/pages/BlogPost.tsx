@@ -4,7 +4,6 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Helmet } from 'react-helmet';
-import Navigation from '@/components/Navigation';
 import { TableOfContents } from '@/components/blog/TableOfContents';
 import { ShareButtons } from '@/components/blog/ShareButtons';
 import { generateTableOfContents } from '@/utils/blogUtils';
@@ -46,7 +45,6 @@ const BlogPost = () => {
 
   return (
     <>
-      <Navigation />
       <main className="min-h-screen pt-20 bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">
         {isLoading ? (
           <div className="container mx-auto px-4 py-8 max-w-4xl">
