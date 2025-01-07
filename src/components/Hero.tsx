@@ -95,16 +95,16 @@ const Hero = () => {
             ))}
           </motion.div>
           
-          {/* CTA Buttons */}
+          {/* CTA Button */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center mt-8"
+            className="flex justify-center mt-8"
           >
             <Button
               asChild
-              className="bg-[#60A5FA] hover:bg-[#60A5FA]/90 text-white px-8 py-6 text-lg font-semibold rounded-xl"
+              className="bg-gradient-to-r from-[#4F46E5] via-[#7C3AED] to-[#9333EA] hover:from-[#4338CA] hover:via-[#6D28D9] hover:to-[#7E22CE] text-white px-12 py-7 text-lg font-semibold rounded-2xl shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 border border-purple-500/20"
             >
               <a 
                 href="https://www.linkedin.com/in/shahzadasghar1/" 
@@ -112,19 +112,6 @@ const Hero = () => {
                 rel="noopener noreferrer"
               >
                 View Profile →
-              </a>
-            </Button>
-            <Button
-              asChild
-              variant="outline"
-              className="border-2 border-[#60A5FA]/30 text-white hover:bg-[#60A5FA]/10 px-8 py-6 text-lg font-semibold rounded-xl"
-            >
-              <a 
-                href="https://www.linkedin.com/in/shahzadasghar1/" 
-                target="_blank" 
-                rel="noopener noreferrer"
-              >
-                Connect with Me →
               </a>
             </Button>
           </motion.div>
