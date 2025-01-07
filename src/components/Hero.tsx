@@ -35,7 +35,7 @@ const Hero = () => {
   ];
 
   return (
-    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-[#1A1F2C] via-[#1A1F2C]/95 to-[#1A1F2C]/90">
+    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-[#1A1F2C] via-[#2A2F3C] to-[#6E59A5]">
       {/* Background Pattern */}
       <div 
         className="absolute inset-0 opacity-5"
@@ -44,6 +44,9 @@ const Hero = () => {
           backgroundSize: '40px 40px'
         }}
       />
+
+      {/* Gradient Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-[#1A1F2C] via-transparent to-transparent opacity-40" />
 
       {/* Main Content Container */}
       <div className="relative container mx-auto px-4 py-16">
