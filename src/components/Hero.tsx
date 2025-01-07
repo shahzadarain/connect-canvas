@@ -61,7 +61,7 @@ const Hero = () => {
             transition={{ delay: 0.2 }}
           >
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 tracking-tight">
-              <span className="bg-gradient-to-r from-[#9b87f5] via-[#D946EF] to-[#0EA5E9] bg-clip-text text-transparent animate-gradient-x">
+              <span className="bg-gradient-to-r from-[#B794F4] via-[#FF79C6] to-[#7DD3FC] bg-clip-text text-transparent animate-gradient-x drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
                 SHAHZAD ASGHAR
               </span>
             </h1>
