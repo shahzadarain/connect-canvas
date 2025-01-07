@@ -71,9 +71,15 @@ const Hero = () => {
               </span>
             </p>
             <p className="text-lg md:text-xl text-white/90 max-w-4xl mx-auto leading-relaxed font-serif">
-              With two decades of experience, I've merged IT infrastructure, cloud services, AI, and analytics to support
-              informed decisions and protect vulnerable communities. My work spans from integrating refugee data
-              with national health systems to implementing AI-enabled communication solutions.
+              With two decades of experience, I've merged{' '}
+              <span className="bg-[#0047AB]/20 px-1">IT infrastructure</span>,{' '}
+              <span className="bg-[#0047AB]/20 px-1">cloud services</span>,{' '}
+              <span className="bg-[#0047AB]/20 px-1">AI</span>, and{' '}
+              <span className="bg-[#0047AB]/20 px-1">analytics</span> to support
+              informed decisions and protect vulnerable communities. My work spans from integrating{' '}
+              <span className="bg-[#0047AB]/20 px-1">refugee data</span> with{' '}
+              <span className="bg-[#0047AB]/20 px-1">national health systems</span> to implementing{' '}
+              <span className="bg-[#0047AB]/20 px-1">AI-enabled communication solutions</span>.
             </p>
           </motion.div>
 
