@@ -1,9 +1,6 @@
 import { motion } from "framer-motion";
 import { Button } from "./ui/button";
-import { Smartphone, Globe } from "lucide-react";
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
-import { StarField, FloatingOrbs } from "./hero/HeroBackground";
+import { Shield, Cloud, Globe, Brain, Database, Smartphone } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -23,8 +20,6 @@ const Hero = () => {
   useEffect(() => {
     const handleMouseMove = (e) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
-      
-      // Add particle effect
       if (!isMobile) {
         const particle = {
           x: e.clientX,
@@ -39,23 +34,139 @@ const Hero = () => {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, [isMobile]);
 
+  const hashTags = [
+    { tag: "#DigitalTransformation", icon: <Database className="w-4 h-4" /> },
+    { tag: "#HumanitarianTech", icon: <Globe className="w-4 h-4" /> },
+    { tag: "#AIInnovation", icon: <Brain className="w-4 h-4" /> },
+    { tag: "#CloudComputing", icon: <Cloud className="w-4 h-4" /> },
+    { tag: "#Cybersecurity", icon: <Shield className="w-4 h-4" /> }
+  ];
+
   return (
-    <section 
-      className="relative min-h-[80vh] sm:min-h-[90vh] flex items-center justify-center overflow-hidden"
-      aria-label="Introduction"
-    >
-      {/* 3D Background */}
-      <div className="absolute inset-0 -z-10">
-        <Canvas camera={{ position: [0, 0, 2] }}>
-          <ambientLight intensity={0.5} />
-          <pointLight position={[10, 10, 10]} />
-          <StarField />
-          <FloatingOrbs />
-          <OrbitControls enableZoom={false} enablePan={false} />
-        </Canvas>
+    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-primary via-primary/95 to-primary/90">
+      {/* Background Pattern */}
+      <div 
+        className="absolute inset-0 opacity-5"
+        style={{
+          backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)',
+          backgroundSize: '40px 40px'
+        }}
+      />
+
+      {/* Main Content Container */}
+      <div className="relative container mx-auto px-4 py-16">
+        <motion.div 
+          className="max-w-5xl mx-auto"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          {/* Header Section */}
+          <motion.div 
+            className="text-center mb-12"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-secondary to-accent animate-gradient-x mb-4">
+              SHAHZAD ASGHAR
+            </h1>
+            <p className="text-xl md:text-2xl text-secondary/90 font-light mb-6">
+              {greeting}, Welcome to the Future of Technology
+            </p>
+            <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto">
+              Bridging Innovation and Humanity through Digital Transformation
+            </p>
+          </motion.div>
+
+          {/* Main Content */}
+          <div className="grid md:grid-cols-2 gap-12 items-center mb-12">
+            {/* Left Column - Abstract Illustration */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.4 }}
+              className="relative h-[300px] md:h-[400px] rounded-2xl overflow-hidden bg-gradient-to-br from-secondary/20 to-accent/20 border border-white/10"
+            >
+              <div className="absolute inset-0 backdrop-blur-sm">
+                {/* Add your 3D or abstract illustration here */}
+                <div className="absolute inset-0 bg-gradient-to-br from-secondary/30 to-accent/30 mix-blend-overlay" />
+              </div>
+            </motion.div>
+
+            {/* Right Column - Description */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.6 }}
+              className="space-y-6 text-white/90"
+            >
+              <p className="text-lg leading-relaxed">
+                With two decades of experience, I've pioneered the integration of IT infrastructure,
+                cloud services, AI, and analytics to support informed decisions and protect vulnerable
+                communities.
+              </p>
+              <p className="text-lg leading-relaxed">
+                My work spans from integrating refugee data with national health systems to
+                implementing AI-enabled communication solutions.
+              </p>
+              
+              {/* CTA Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 pt-6">
+                <Button
+                  asChild
+                  className="group bg-secondary hover:bg-secondary-dark text-white px-8 py-6 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden"
+                >
+                  <a 
+                    href="https://www.linkedin.com/in/shahzadasghar1/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                  >
+                    <span className="relative z-10">View Profile →</span>
+                    <div className="absolute inset-0 bg-gradient-to-r from-secondary via-secondary-dark to-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  </a>
+                </Button>
+                <Button
+                  asChild
+                  variant="outline"
+                  className="group bg-transparent border-2 border-secondary text-secondary hover:bg-secondary/10 px-8 py-6 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                >
+                  <a 
+                    href="https://www.linkedin.com/in/shahzadasghar1/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                  >
+                    Connect with Me →
+                  </a>
+                </Button>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* HashTags Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8 }}
+            className="flex flex-wrap justify-center gap-3 mt-8"
+          >
+            {hashTags.map((item, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.9 + index * 0.1 }}
+                className="group flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 text-secondary text-sm font-medium border border-secondary/20 hover:border-secondary/50 transition-all duration-300 cursor-pointer backdrop-blur-sm"
+              >
+                {item.icon}
+                <span>{item.tag}</span>
+              </motion.div>
+            ))}
+          </motion.div>
+        </motion.div>
       </div>
 
-      {/* Cursor particles */}
+      {/* Cursor particles effect */}
       {cursorParticles.map((particle) => (
         <motion.div
           key={particle.id}
@@ -70,118 +181,6 @@ const Hero = () => {
           transition={{ duration: 1 }}
         />
       ))}
-
-      <motion.div 
-        className="relative max-w-5xl mx-auto p-4 sm:p-6 md:p-10 rounded-3xl bg-black/30 backdrop-blur-sm border border-white/10"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <div className="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-6 mb-6 sm:mb-8">
-          <motion.div
-            initial={{ scale: 0.5, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            whileHover={{ scale: 1.1 }}
-            className="transition-transform"
-          >
-            <Smartphone className="w-8 h-8 sm:w-10 sm:h-10 text-secondary" aria-hidden="true" />
-          </motion.div>
-          <motion.h1
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-secondary via-secondary-dark to-accent animate-gradient-x"
-          >
-            {greeting}, I'm SHAHZAD ASGHAR
-          </motion.h1>
-          <motion.div
-            initial={{ scale: 0.5, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            whileHover={{ scale: 1.1 }}
-            className="transition-transform"
-          >
-            <Globe className="w-8 h-8 sm:w-10 sm:h-10 text-secondary" aria-hidden="true" />
-          </motion.div>
-        </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="text-center mb-8 sm:mb-10 max-w-3xl mx-auto"
-        >
-          <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-secondary mb-4 sm:mb-6 tracking-wide">
-            ✨ Innovation is my passion ✨
-          </h2>
-          <p className="text-base sm:text-lg md:text-xl text-white/90 leading-relaxed px-4 sm:px-0">
-            With two decades of experience, I've merged IT infrastructure, cloud services,
-            AI, and analytics to support informed decisions and protect vulnerable
-            communities. My work spans from integrating refugee data with national
-            health systems to implementing AI-enabled communication solutions.
-          </p>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="flex flex-wrap justify-center gap-2 sm:gap-4 mb-8 sm:mb-10 px-2 sm:px-0"
-        >
-          {["#DigitalTransformation", "#HumanitarianTech", "#AIInnovation", "#CloudComputing", "#Cybersecurity"].map(
-            (tag, index) => (
-              <motion.span
-                key={index}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.5 + index * 0.1 }}
-                whileHover={{ scale: 1.05, backgroundColor: "rgba(96, 165, 250, 0.2)" }}
-                className="px-3 sm:px-6 py-2 sm:py-3 rounded-full bg-white/5 text-secondary text-sm sm:text-base font-medium border border-secondary/20 hover:border-secondary/50 transition-all duration-300 cursor-pointer backdrop-blur-sm"
-              >
-                {tag}
-              </motion.span>
-            )
-          )}
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
-          className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6"
-        >
-          <Button
-            asChild
-            className="group bg-secondary hover:bg-secondary-dark text-white px-6 sm:px-8 py-4 sm:py-5 text-sm sm:text-base font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 w-full sm:w-auto relative overflow-hidden"
-          >
-            <a 
-              href="https://www.linkedin.com/in/shahzadasghar1/" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              aria-label="View Shahzad's LinkedIn Profile"
-            >
-              <span className="relative z-10">View Profile →</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-secondary via-secondary-dark to-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            </a>
-          </Button>
-          <Button
-            asChild
-            variant="outline"
-            className="group bg-transparent border-2 border-secondary text-secondary hover:bg-secondary/10 px-6 sm:px-8 py-4 sm:py-5 text-sm sm:text-base font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 w-full sm:w-auto relative overflow-hidden"
-          >
-            <a 
-              href="https://www.linkedin.com/in/shahzadasghar1/" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              aria-label="Connect with Shahzad on LinkedIn"
-            >
-              <span className="relative z-10">Connect with Me →</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-secondary/20 via-secondary-dark/20 to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            </a>
-          </Button>
-        </motion.div>
-      </motion.div>
     </section>
   );
 };
