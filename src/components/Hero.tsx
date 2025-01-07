@@ -35,7 +35,7 @@ const Hero = () => {
   ];
 
   return (
-    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-[#0B0F17]">
+    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-[#222222]">
       {/* Subtle Pattern Overlay */}
       <div 
         className="absolute inset-0 opacity-5"
@@ -73,7 +73,6 @@ const Hero = () => {
             </p>
           </motion.div>
 
-          {/* HashTags Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -127,24 +126,24 @@ const Hero = () => {
               </a>
             </Button>
           </motion.div>
+
+          {/* Cursor particles effect */}
+          {cursorParticles.map((particle) => (
+            <motion.div
+              key={particle.id}
+              className="fixed w-2 h-2 bg-[#60A5FA] rounded-full pointer-events-none"
+              initial={{ opacity: 0.8, scale: 1 }}
+              animate={{
+                opacity: 0,
+                scale: 0,
+                x: particle.x - 4,
+                y: particle.y - 4,
+              }}
+              transition={{ duration: 1 }}
+            />
+          ))}
         </motion.div>
       </div>
-
-      {/* Cursor particles effect */}
-      {cursorParticles.map((particle) => (
-        <motion.div
-          key={particle.id}
-          className="fixed w-2 h-2 bg-[#60A5FA] rounded-full pointer-events-none"
-          initial={{ opacity: 0.8, scale: 1 }}
-          animate={{
-            opacity: 0,
-            scale: 0,
-            x: particle.x - 4,
-            y: particle.y - 4,
-          }}
-          transition={{ duration: 1 }}
-        />
-      ))}
     </section>
   );
 };
