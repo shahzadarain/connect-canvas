@@ -6,6 +6,8 @@ import { BlogPostSkeleton } from '@/components/blog/BlogPostSkeleton';
 import { BlogPostError } from '@/components/blog/BlogPostError';
 import { BlogPostMeta } from '@/components/blog/BlogPostMeta';
 import { BlogPostLayout } from '@/components/blog/BlogPostLayout';
+import { PageTransition } from '@/components/ui/page-transition';
+import { toast } from 'sonner';
 
 const BlogPost = () => {
   const { slug } = useParams();
@@ -33,6 +35,7 @@ const BlogPost = () => {
       
       if (error) {
         console.error('Error fetching blog post:', error);
+        toast.error('Failed to load blog post');
         throw error;
       }
       console.log('Fetched blog post:', data);
@@ -41,20 +44,24 @@ const BlogPost = () => {
   });
 
   return (
-    <main className="min-h-screen pt-20 bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">
-      {isLoading ? (
-        <BlogPostSkeleton />
-      ) : error ? (
-        <BlogPostError message={error.message} />
-      ) : !post ? (
-        <BlogPostError />
-      ) : (
-        <>
-          <BlogPostMeta post={post} />
-          <BlogPostLayout post={post} />
-        </>
-      )}
-    </main>
+    <PageTransition>
+      <main className="min-h-screen pt-20 bg-gradient-to-b from-background to-muted dark:from-primary-dark dark:to-card-dark transition-colors duration-300">
+        {isLoading ? (
+          <div className="animate-fade-in">
+            <BlogPostSkeleton />
+          </div>
+        ) : error ? (
+          <BlogPostError message={error.message} />
+        ) : !post ? (
+          <BlogPostError />
+        ) : (
+          <>
+            <BlogPostMeta post={post} />
+            <BlogPostLayout post={post} />
+          </>
+        )}
+      </main>
+    </PageTransition>
   );
 };
 
