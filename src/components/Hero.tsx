@@ -63,10 +63,10 @@ const Hero = () => {
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-[#60A5FA] mb-4 tracking-tight">
               SHAHZAD ASGHAR
             </h1>
-            <p className="text-xl md:text-2xl text-gray-300 font-light mb-6">
+            <p className="text-xl md:text-2xl text-white font-light mb-6">
               ✨ Innovation is my passion ✨
             </p>
-            <p className="text-lg md:text-xl text-gray-400 max-w-4xl mx-auto leading-relaxed">
+            <p className="text-lg md:text-xl text-white/90 max-w-4xl mx-auto leading-relaxed">
               With two decades of experience, I've merged IT infrastructure, cloud services, AI, and analytics to support
               informed decisions and protect vulnerable communities. My work spans from integrating refugee data
               with national health systems to implementing AI-enabled communication solutions.
@@ -115,7 +115,7 @@ const Hero = () => {
             <Button
               asChild
               variant="outline"
-              className="border-2 border-[#60A5FA]/30 text-[#60A5FA] hover:bg-[#60A5FA]/10 px-8 py-6 text-lg font-semibold rounded-xl"
+              className="border-2 border-[#60A5FA]/30 text-white hover:bg-[#60A5FA]/10 px-8 py-6 text-lg font-semibold rounded-xl"
             >
               <a 
                 href="https://www.linkedin.com/in/shahzadasghar1/" 
