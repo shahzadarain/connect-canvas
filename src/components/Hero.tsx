@@ -1,8 +1,47 @@
 import { motion } from "framer-motion";
 import { Button } from "./ui/button";
 import { Smartphone, Globe } from "lucide-react";
+import { Skeleton } from "./ui/skeleton";
+import { useState, useEffect } from "react";
 
 const Hero = () => {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate content loading
+    const timer = setTimeout(() => setIsLoading(false), 1000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  console.log("Hero component loading state:", isLoading);
+
+  if (isLoading) {
+    return (
+      <div className="relative min-h-[90vh] flex items-center justify-center bg-[#1A1D24]">
+        <div className="max-w-4xl mx-auto p-8 rounded-3xl bg-[#1E2128]/50 backdrop-blur-sm">
+          <div className="flex justify-center items-center gap-4 mb-4">
+            <Skeleton className="w-8 h-8 rounded-full" />
+            <Skeleton className="h-12 w-64" />
+            <Skeleton className="w-8 h-8 rounded-full" />
+          </div>
+          <div className="text-center mb-8 space-y-4">
+            <Skeleton className="h-6 w-48 mx-auto" />
+            <Skeleton className="h-24 w-full" />
+          </div>
+          <div className="flex flex-wrap justify-center gap-3 mb-8">
+            {Array(5).fill(0).map((_, index) => (
+              <Skeleton key={index} className="h-8 w-32 rounded-full" />
+            ))}
+          </div>
+          <div className="flex flex-wrap justify-center gap-4">
+            <Skeleton className="h-10 w-32" />
+            <Skeleton className="h-10 w-32" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="relative min-h-[90vh] flex items-center justify-center bg-[#1A1D24]">
       <div className="max-w-4xl mx-auto p-8 rounded-3xl bg-[#1E2128]/50 backdrop-blur-sm">
@@ -62,7 +101,6 @@ const Hero = () => {
           <Button
             asChild
             className="bg-[#3B82F6] hover:bg-[#2563EB] text-white px-8"
-            onClick={() => window.open('https://www.linkedin.com/in/shahzadasghar1/', '_blank')}
           >
             <a href="https://www.linkedin.com/in/shahzadasghar1/" target="_blank" rel="noopener noreferrer">
               View Profile →
@@ -72,7 +110,6 @@ const Hero = () => {
             asChild
             variant="outline"
             className="bg-transparent border-[#3B82F6] text-[#3B82F6] hover:bg-[#3B82F6]/10 px-8"
-            onClick={() => window.open('https://www.linkedin.com/in/shahzadasghar1/', '_blank')}
           >
             <a href="https://www.linkedin.com/in/shahzadasghar1/" target="_blank" rel="noopener noreferrer">
               Connect with Me →
