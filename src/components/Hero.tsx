@@ -18,8 +18,8 @@ const Hero = () => {
 
   if (isLoading) {
     return (
-      <div className="relative min-h-[80vh] sm:min-h-[90vh] flex items-center justify-center bg-gradient-to-b from-[#1A1D24] to-[#2A2E37]">
-        <div className="max-w-5xl mx-auto p-6 sm:p-10 rounded-3xl bg-[#1E2128]/50 backdrop-blur-sm border border-gray-800/50">
+      <div className="relative min-h-[80vh] sm:min-h-[90vh] flex items-center justify-center bg-gradient-to-b from-primary to-primary-dark">
+        <div className="max-w-5xl mx-auto p-6 sm:p-10 rounded-3xl bg-card/50">
           <div className="flex justify-center items-center gap-6 mb-6">
             <Skeleton className="w-10 h-10 rounded-full" />
             <Skeleton className="h-14 w-72" />
@@ -45,11 +45,11 @@ const Hero = () => {
 
   return (
     <section 
-      className="relative min-h-[80vh] sm:min-h-[90vh] flex items-center justify-center bg-gradient-to-b from-[#1A1D24] to-[#2A2E37]"
+      className="relative min-h-[80vh] sm:min-h-[90vh] flex items-center justify-center bg-gradient-to-b from-primary to-primary-dark"
       aria-label="Introduction"
     >
       <motion.div 
-        className="max-w-5xl mx-auto p-4 sm:p-6 md:p-10 rounded-3xl bg-[#1E2128]/50 backdrop-blur-sm border border-gray-800/50 shadow-xl"
+        className="max-w-5xl mx-auto p-4 sm:p-6 md:p-10 rounded-3xl bg-card shadow-xl"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -62,13 +62,13 @@ const Hero = () => {
             whileHover={{ scale: 1.1 }}
             className="transition-transform"
           >
-            <Smartphone className="w-8 h-8 sm:w-10 sm:h-10 text-[#60A5FA]" aria-hidden="true" />
+            <Smartphone className="w-8 h-8 sm:w-10 sm:h-10 text-secondary" aria-hidden="true" />
           </motion.div>
           <motion.h1
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-[#60A5FA] to-[#818CF8] bg-clip-text text-transparent text-center sm:text-left"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-secondary text-center sm:text-left"
           >
             SHAHZAD ASGHAR
           </motion.h1>
@@ -79,7 +79,7 @@ const Hero = () => {
             whileHover={{ scale: 1.1 }}
             className="transition-transform"
           >
-            <Globe className="w-8 h-8 sm:w-10 sm:h-10 text-[#60A5FA]" aria-hidden="true" />
+            <Globe className="w-8 h-8 sm:w-10 sm:h-10 text-secondary" aria-hidden="true" />
           </motion.div>
         </div>
 
@@ -89,10 +89,10 @@ const Hero = () => {
           transition={{ delay: 0.3 }}
           className="text-center mb-8 sm:mb-10 max-w-3xl mx-auto"
         >
-          <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-[#60A5FA] mb-4 sm:mb-6 tracking-wide">
+          <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-secondary mb-4 sm:mb-6 tracking-wide">
             ✨ Innovation is my passion ✨
           </h2>
-          <p className="text-base sm:text-lg md:text-xl text-gray-300 leading-relaxed px-4 sm:px-0">
+          <p className="text-base sm:text-lg md:text-xl text-primary-foreground leading-relaxed px-4 sm:px-0">
             With two decades of experience, I've merged IT infrastructure, cloud services,
             AI, and analytics to support informed decisions and protect vulnerable
             communities. My work spans from integrating refugee data with national
@@ -114,7 +114,7 @@ const Hero = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.5 + index * 0.1 }}
                 whileHover={{ scale: 1.05 }}
-                className="px-3 sm:px-6 py-2 sm:py-3 rounded-full bg-[#2A2E37] text-[#60A5FA] text-sm sm:text-base font-medium border border-[#60A5FA]/20 hover:border-[#60A5FA]/50 transition-all duration-300 cursor-pointer"
+                className="px-3 sm:px-6 py-2 sm:py-3 rounded-full bg-secondary/10 text-secondary text-sm sm:text-base font-medium border border-secondary/20 hover:border-secondary/50 transition-all duration-300 cursor-pointer"
               >
                 {tag}
               </motion.span>
@@ -130,7 +130,7 @@ const Hero = () => {
         >
           <Button
             asChild
-            className="bg-[#3B82F6] hover:bg-[#2563EB] text-white px-6 sm:px-8 py-4 sm:py-5 text-sm sm:text-base font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 w-full sm:w-auto"
+            className="bg-secondary hover:bg-secondary-dark text-white px-6 sm:px-8 py-4 sm:py-5 text-sm sm:text-base font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 w-full sm:w-auto"
           >
             <a 
               href="https://www.linkedin.com/in/shahzadasghar1/" 
@@ -144,7 +144,7 @@ const Hero = () => {
           <Button
             asChild
             variant="outline"
-            className="bg-transparent border-2 border-[#3B82F6] text-[#3B82F6] hover:bg-[#3B82F6]/10 px-6 sm:px-8 py-4 sm:py-5 text-sm sm:text-base font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 w-full sm:w-auto"
+            className="bg-transparent border-2 border-secondary text-secondary hover:bg-secondary/10 px-6 sm:px-8 py-4 sm:py-5 text-sm sm:text-base font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 w-full sm:w-auto"
           >
             <a 
               href="https://www.linkedin.com/in/shahzadasghar1/" 
