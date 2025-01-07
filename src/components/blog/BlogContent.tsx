@@ -2,6 +2,7 @@ import React from 'react';
 import { CodeBlock } from './CodeBlock';
 import { BlogListItem } from './BlogListItem';
 import { BlogHeading } from './BlogHeading';
+import { BookOpen, Video } from 'lucide-react';
 
 interface BlogContentProps {
   content: string;
@@ -27,7 +28,18 @@ export const BlogContent = ({ content }: BlogContentProps) => {
       .replace(/&#39;/g, "'")
       .replace(/&#47;/g, "/");
 
-    const dayFormatted = decodedText.replace(
+    // Replace [Video] and [Reading] with icon spans
+    const withIcons = decodedText
+      .replace(
+        /\[Video\]/gi,
+        '<span class="inline-flex items-center gap-1 text-blue-500 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 px-2 py-1 rounded-md text-sm font-medium"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 8-6 4 6 4V8Z"/><rect x="2" y="6" width="14" height="12" rx="2" ry="2"/></svg>Video</span>'
+      )
+      .replace(
+        /\[Reading\]/gi,
+        '<span class="inline-flex items-center gap-1 text-purple-500 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/30 px-2 py-1 rounded-md text-sm font-medium"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>Reading</span>'
+      );
+
+    const dayFormatted = withIcons.replace(
       /(Day \d+:)/g,
       '<strong class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">$1</strong>'
     );
@@ -72,6 +84,11 @@ export const BlogContent = ({ content }: BlogContentProps) => {
           inList = false;
           listItems = [];
         }
+        continue;
+      }
+
+      // Skip lines that only contain "---"
+      if (line === '---') {
         continue;
       }
 
