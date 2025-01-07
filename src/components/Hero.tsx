@@ -1,55 +1,78 @@
 import { motion } from "framer-motion";
 import { Button } from "./ui/button";
 import { Smartphone, Globe } from "lucide-react";
-import { Skeleton } from "./ui/skeleton";
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls } from '@react-three/drei';
+import { StarField, FloatingOrbs } from "./hero/HeroBackground";
 import { useState, useEffect } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 const Hero = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [greeting, setGreeting] = useState("");
   const isMobile = useIsMobile();
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [cursorParticles, setCursorParticles] = useState([]);
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 1000);
-    return () => clearTimeout(timer);
+    const hour = new Date().getHours();
+    if (hour < 12) setGreeting("Good Morning");
+    else if (hour < 18) setGreeting("Good Afternoon");
+    else setGreeting("Good Evening");
   }, []);
 
-  console.log("Hero component loading state:", isLoading);
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+      
+      // Add particle effect
+      if (!isMobile) {
+        const particle = {
+          x: e.clientX,
+          y: e.clientY,
+          id: Date.now(),
+        };
+        setCursorParticles(prev => [...prev.slice(-20), particle]);
+      }
+    };
 
-  if (isLoading) {
-    return (
-      <div className="relative min-h-[80vh] sm:min-h-[90vh] flex items-center justify-center bg-gradient-to-b from-primary to-primary-dark">
-        <div className="max-w-5xl mx-auto p-6 sm:p-10 rounded-3xl bg-card/50">
-          <div className="flex justify-center items-center gap-6 mb-6">
-            <Skeleton className="w-10 h-10 rounded-full" />
-            <Skeleton className="h-14 w-72" />
-            <Skeleton className="w-10 h-10 rounded-full" />
-          </div>
-          <div className="text-center mb-10 space-y-6">
-            <Skeleton className="h-8 w-56 mx-auto" />
-            <Skeleton className="h-32 w-full max-w-2xl mx-auto" />
-          </div>
-          <div className="flex flex-wrap justify-center gap-4 mb-10">
-            {Array(5).fill(0).map((_, index) => (
-              <Skeleton key={index} className="h-10 w-36 rounded-full" />
-            ))}
-          </div>
-          <div className="flex flex-wrap justify-center gap-6">
-            <Skeleton className="h-12 w-40" />
-            <Skeleton className="h-12 w-40" />
-          </div>
-        </div>
-      </div>
-    );
-  }
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, [isMobile]);
 
   return (
     <section 
-      className="relative min-h-[80vh] sm:min-h-[90vh] flex items-center justify-center bg-gradient-to-b from-primary to-primary-dark"
+      className="relative min-h-[80vh] sm:min-h-[90vh] flex items-center justify-center overflow-hidden"
       aria-label="Introduction"
     >
+      {/* 3D Background */}
+      <div className="absolute inset-0 -z-10">
+        <Canvas camera={{ position: [0, 0, 2] }}>
+          <ambientLight intensity={0.5} />
+          <pointLight position={[10, 10, 10]} />
+          <StarField />
+          <FloatingOrbs />
+          <OrbitControls enableZoom={false} enablePan={false} />
+        </Canvas>
+      </div>
+
+      {/* Cursor particles */}
+      {cursorParticles.map((particle) => (
+        <motion.div
+          key={particle.id}
+          className="fixed w-2 h-2 bg-secondary rounded-full pointer-events-none"
+          initial={{ opacity: 0.8, scale: 1 }}
+          animate={{
+            opacity: 0,
+            scale: 0,
+            x: particle.x - 4,
+            y: particle.y - 4,
+          }}
+          transition={{ duration: 1 }}
+        />
+      ))}
+
       <motion.div 
-        className="max-w-5xl mx-auto p-4 sm:p-6 md:p-10 rounded-3xl bg-card shadow-xl"
+        className="relative max-w-5xl mx-auto p-4 sm:p-6 md:p-10 rounded-3xl bg-black/30 backdrop-blur-sm border border-white/10"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -68,9 +91,9 @@ const Hero = () => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-secondary text-center sm:text-left"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-secondary via-secondary-dark to-accent animate-gradient-x"
           >
-            SHAHZAD ASGHAR
+            {greeting}, I'm SHAHZAD ASGHAR
           </motion.h1>
           <motion.div
             initial={{ scale: 0.5, opacity: 0 }}
@@ -92,7 +115,7 @@ const Hero = () => {
           <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-secondary mb-4 sm:mb-6 tracking-wide">
             ✨ Innovation is my passion ✨
           </h2>
-          <p className="text-base sm:text-lg md:text-xl text-primary-foreground leading-relaxed px-4 sm:px-0">
+          <p className="text-base sm:text-lg md:text-xl text-white/90 leading-relaxed px-4 sm:px-0">
             With two decades of experience, I've merged IT infrastructure, cloud services,
             AI, and analytics to support informed decisions and protect vulnerable
             communities. My work spans from integrating refugee data with national
@@ -113,8 +136,8 @@ const Hero = () => {
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.5 + index * 0.1 }}
-                whileHover={{ scale: 1.05 }}
-                className="px-3 sm:px-6 py-2 sm:py-3 rounded-full bg-secondary/10 text-secondary text-sm sm:text-base font-medium border border-secondary/20 hover:border-secondary/50 transition-all duration-300 cursor-pointer"
+                whileHover={{ scale: 1.05, backgroundColor: "rgba(96, 165, 250, 0.2)" }}
+                className="px-3 sm:px-6 py-2 sm:py-3 rounded-full bg-white/5 text-secondary text-sm sm:text-base font-medium border border-secondary/20 hover:border-secondary/50 transition-all duration-300 cursor-pointer backdrop-blur-sm"
               >
                 {tag}
               </motion.span>
@@ -130,7 +153,7 @@ const Hero = () => {
         >
           <Button
             asChild
-            className="bg-secondary hover:bg-secondary-dark text-white px-6 sm:px-8 py-4 sm:py-5 text-sm sm:text-base font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 w-full sm:w-auto"
+            className="group bg-secondary hover:bg-secondary-dark text-white px-6 sm:px-8 py-4 sm:py-5 text-sm sm:text-base font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 w-full sm:w-auto relative overflow-hidden"
           >
             <a 
               href="https://www.linkedin.com/in/shahzadasghar1/" 
@@ -138,13 +161,14 @@ const Hero = () => {
               rel="noopener noreferrer"
               aria-label="View Shahzad's LinkedIn Profile"
             >
-              View Profile →
+              <span className="relative z-10">View Profile →</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-secondary via-secondary-dark to-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </a>
           </Button>
           <Button
             asChild
             variant="outline"
-            className="bg-transparent border-2 border-secondary text-secondary hover:bg-secondary/10 px-6 sm:px-8 py-4 sm:py-5 text-sm sm:text-base font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 w-full sm:w-auto"
+            className="group bg-transparent border-2 border-secondary text-secondary hover:bg-secondary/10 px-6 sm:px-8 py-4 sm:py-5 text-sm sm:text-base font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 w-full sm:w-auto relative overflow-hidden"
           >
             <a 
               href="https://www.linkedin.com/in/shahzadasghar1/" 
@@ -152,7 +176,8 @@ const Hero = () => {
               rel="noopener noreferrer"
               aria-label="Connect with Shahzad on LinkedIn"
             >
-              Connect with Me →
+              <span className="relative z-10">Connect with Me →</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-secondary/20 via-secondary-dark/20 to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </a>
           </Button>
         </motion.div>
