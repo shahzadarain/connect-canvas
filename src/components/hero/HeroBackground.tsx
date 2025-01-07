@@ -1,11 +1,12 @@
-import { useRef, useEffect } from 'react';
+import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Points, PointMaterial } from '@react-three/drei';
 import * as random from 'maath/random/dist/maath-random.esm';
 import { useSpring } from '@react-spring/three';
+import * as THREE from 'three';
 
 export function StarField({ count = 5000 }) {
-  const points = useRef();
+  const points = useRef<THREE.Points>(null);
   
   const sphere = random.inSphere(new Float32Array(count * 3), { radius: 1.5 });
 
@@ -37,7 +38,7 @@ export function StarField({ count = 5000 }) {
 }
 
 export function FloatingOrbs() {
-  const orbs = useRef([]);
+  const orbs = useRef<THREE.Mesh[]>([]);
   const [springs] = useSpring(() => ({
     scale: [1, 1, 1],
     position: [0, 0, 0],
@@ -60,7 +61,9 @@ export function FloatingOrbs() {
       {[...Array(5)].map((_, i) => (
         <mesh
           key={i}
-          ref={(el) => (orbs.current[i] = el)}
+          ref={(el) => {
+            if (el) orbs.current[i] = el;
+          }}
           position={[
             Math.cos((i / 5) * Math.PI * 2) * 0.8,
             0,

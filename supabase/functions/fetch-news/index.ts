@@ -88,12 +88,6 @@ serve(async (req) => {
 
     console.log('Generated articles:', generatedArticles)
 
-    // Delete old articles before inserting new ones
-    await supabaseClient
-      .from('news_articles')
-      .delete()
-      .lt('created_at', fiveMinutesAgo.toISOString())
-
     // Store the new articles in the database
     const { data: insertedArticles, error: insertError } = await supabaseClient
       .from('news_articles')
