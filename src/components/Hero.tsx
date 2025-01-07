@@ -35,8 +35,11 @@ const Hero = () => {
   ];
 
   return (
-    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-[#1A1F2C] via-[#2A2F3C] to-[#6E59A5]">
-      {/* Background Pattern */}
+    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
+      {/* Primary Background Gradient */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-[#334155]" />
+      
+      {/* Subtle Pattern Overlay */}
       <div 
         className="absolute inset-0 opacity-5"
         style={{
@@ -45,11 +48,11 @@ const Hero = () => {
         }}
       />
 
-      {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#1A1F2C] via-transparent to-transparent opacity-40" />
+      {/* Secondary Gradient Overlay for Depth */}
+      <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A] via-transparent to-[#1E293B]/50 opacity-60" />
 
-      {/* Main Content Container */}
-      <div className="relative container mx-auto px-4 py-16">
+      {/* Content Container */}
+      <div className="relative container mx-auto px-4 py-16 z-10">
         <motion.div 
           className="max-w-5xl mx-auto"
           initial={{ opacity: 0, y: 20 }}
@@ -63,29 +66,28 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-secondary to-accent animate-gradient-x mb-4">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-4 tracking-tight">
               SHAHZAD ASGHAR
             </h1>
-            <p className="text-xl md:text-2xl text-secondary/90 font-light mb-6">
+            <p className="text-xl md:text-2xl text-blue-200 font-light mb-6">
               Welcome to the Future of Technology
             </p>
-            <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto">
+            <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto">
               Bridging Innovation and Humanity through Digital Transformation
             </p>
           </motion.div>
 
-          {/* Main Content */}
+          {/* Main Content Grid */}
           <div className="grid md:grid-cols-2 gap-12 items-center mb-12">
             {/* Left Column - Abstract Illustration */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.4 }}
-              className="relative h-[300px] md:h-[400px] rounded-2xl overflow-hidden bg-gradient-to-br from-secondary/20 to-accent/20 border border-white/10"
+              className="relative h-[300px] md:h-[400px] rounded-2xl overflow-hidden bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-white/10"
             >
               <div className="absolute inset-0 backdrop-blur-sm">
-                {/* Add your 3D or abstract illustration here */}
-                <div className="absolute inset-0 bg-gradient-to-br from-secondary/30 to-accent/30 mix-blend-overlay" />
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 mix-blend-overlay" />
               </div>
             </motion.div>
 
@@ -94,7 +96,7 @@ const Hero = () => {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.6 }}
-              className="space-y-6 text-white/90"
+              className="space-y-6 text-gray-200"
             >
               <p className="text-lg leading-relaxed">
                 With two decades of experience, I've pioneered the integration of IT infrastructure,
@@ -110,7 +112,7 @@ const Hero = () => {
               <div className="flex flex-col sm:flex-row gap-4 pt-6">
                 <Button
                   asChild
-                  className="group bg-secondary hover:bg-secondary-dark text-white px-8 py-6 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden"
+                  className="group bg-blue-500 hover:bg-blue-600 text-white px-8 py-6 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden"
                 >
                   <a 
                     href="https://www.linkedin.com/in/shahzadasghar1/" 
@@ -118,13 +120,13 @@ const Hero = () => {
                     rel="noopener noreferrer"
                   >
                     <span className="relative z-10">View Profile →</span>
-                    <div className="absolute inset-0 bg-gradient-to-r from-secondary via-secondary-dark to-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-blue-600 to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </a>
                 </Button>
                 <Button
                   asChild
                   variant="outline"
-                  className="group bg-transparent border-2 border-secondary text-secondary hover:bg-secondary/10 px-8 py-6 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                  className="group bg-transparent border-2 border-blue-400 text-blue-300 hover:bg-blue-500/10 px-8 py-6 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
                 >
                   <a 
                     href="https://www.linkedin.com/in/shahzadasghar1/" 
@@ -151,7 +153,7 @@ const Hero = () => {
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.9 + index * 0.1 }}
-                className="group flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 text-secondary text-sm font-medium border border-secondary/20 hover:border-secondary/50 transition-all duration-300 cursor-pointer backdrop-blur-sm"
+                className="group flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 text-blue-200 text-sm font-medium border border-blue-400/20 hover:border-blue-400/50 transition-all duration-300 cursor-pointer backdrop-blur-sm"
               >
                 {item.icon}
                 <span>{item.tag}</span>
@@ -165,7 +167,7 @@ const Hero = () => {
       {cursorParticles.map((particle) => (
         <motion.div
           key={particle.id}
-          className="fixed w-2 h-2 bg-secondary rounded-full pointer-events-none"
+          className="fixed w-2 h-2 bg-blue-400 rounded-full pointer-events-none"
           initial={{ opacity: 0.8, scale: 1 }}
           animate={{
             opacity: 0,
