@@ -35,10 +35,7 @@ const Hero = () => {
   ];
 
   return (
-    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
-      {/* Primary Background - Now Dark Black */}
-      <div className="absolute inset-0 bg-black" />
-      
+    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-[#0B0F17]">
       {/* Subtle Pattern Overlay */}
       <div 
         className="absolute inset-0 opacity-5"
@@ -48,120 +45,87 @@ const Hero = () => {
         }}
       />
 
-      {/* Very Subtle Gradient Overlay for Depth */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/95 to-black/90 opacity-60" />
-
       {/* Content Container */}
       <div className="relative container mx-auto px-4 py-16 z-10">
         <motion.div 
-          className="max-w-5xl mx-auto"
+          className="max-w-5xl mx-auto text-center"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
           {/* Header Section */}
           <motion.div 
-            className="text-center mb-12"
+            className="mb-12"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-4 tracking-tight">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-[#60A5FA] mb-4 tracking-tight">
               SHAHZAD ASGHAR
             </h1>
-            <p className="text-xl md:text-2xl text-blue-200 font-light mb-6">
-              Welcome to the Future of Technology
+            <p className="text-xl md:text-2xl text-gray-300 font-light mb-6">
+              ✨ Innovation is my passion ✨
             </p>
-            <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto">
-              Bridging Innovation and Humanity through Digital Transformation
+            <p className="text-lg md:text-xl text-gray-400 max-w-4xl mx-auto leading-relaxed">
+              With two decades of experience, I've merged IT infrastructure, cloud services, AI, and analytics to support
+              informed decisions and protect vulnerable communities. My work spans from integrating refugee data
+              with national health systems to implementing AI-enabled communication solutions.
             </p>
           </motion.div>
-
-          {/* Main Content Grid */}
-          <div className="grid md:grid-cols-2 gap-12 items-center mb-12">
-            {/* Left Column - Profile Image */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.4 }}
-              className="relative h-[400px] md:h-[500px] rounded-2xl overflow-hidden bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-white/10"
-            >
-              <img 
-                src="/lovable-uploads/d2df6a7d-ce1e-4662-95f7-9d2b827dc804.png"
-                alt="Shahzad Asghar speaking at an event"
-                className="w-full h-full object-cover object-center rounded-2xl"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-            </motion.div>
-
-            {/* Right Column - Description */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.6 }}
-              className="space-y-6 text-gray-200"
-            >
-              <p className="text-lg leading-relaxed">
-                With two decades of experience, I've pioneered the integration of IT infrastructure,
-                cloud services, AI, and analytics to support informed decisions and protect vulnerable
-                communities.
-              </p>
-              <p className="text-lg leading-relaxed">
-                My work spans from integrating refugee data with national health systems to
-                implementing AI-enabled communication solutions.
-              </p>
-              
-              {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 pt-6">
-                <Button
-                  asChild
-                  className="group bg-blue-500 hover:bg-blue-600 text-white px-8 py-6 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden"
-                >
-                  <a 
-                    href="https://www.linkedin.com/in/shahzadasghar1/" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                  >
-                    <span className="relative z-10">View Profile →</span>
-                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-blue-600 to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  </a>
-                </Button>
-                <Button
-                  asChild
-                  variant="outline"
-                  className="group bg-transparent border-2 border-blue-400 text-blue-300 hover:bg-blue-500/10 px-8 py-6 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
-                >
-                  <a 
-                    href="https://www.linkedin.com/in/shahzadasghar1/" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                  >
-                    Connect with Me →
-                  </a>
-                </Button>
-              </div>
-            </motion.div>
-          </div>
 
           {/* HashTags Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8 }}
-            className="flex flex-wrap justify-center gap-3 mt-8"
+            transition={{ delay: 0.4 }}
+            className="flex flex-wrap justify-center gap-4 mt-12 mb-12"
           >
             {hashTags.map((item, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.9 + index * 0.1 }}
-                className="group flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 text-blue-200 text-sm font-medium border border-blue-400/20 hover:border-blue-400/50 transition-all duration-300 cursor-pointer backdrop-blur-sm"
+                transition={{ delay: 0.5 + index * 0.1 }}
+                className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#1A1F2C]/50 text-[#60A5FA] text-sm font-medium border border-[#60A5FA]/20 hover:border-[#60A5FA]/50 transition-all duration-300"
               >
                 {item.icon}
                 <span>{item.tag}</span>
               </motion.div>
             ))}
+          </motion.div>
+          
+          {/* CTA Buttons */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6 }}
+            className="flex flex-col sm:flex-row gap-4 justify-center mt-8"
+          >
+            <Button
+              asChild
+              className="bg-[#60A5FA] hover:bg-[#60A5FA]/90 text-white px-8 py-6 text-lg font-semibold rounded-xl"
+            >
+              <a 
+                href="https://www.linkedin.com/in/shahzadasghar1/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+              >
+                View Profile →
+              </a>
+            </Button>
+            <Button
+              asChild
+              variant="outline"
+              className="border-2 border-[#60A5FA]/30 text-[#60A5FA] hover:bg-[#60A5FA]/10 px-8 py-6 text-lg font-semibold rounded-xl"
+            >
+              <a 
+                href="https://www.linkedin.com/in/shahzadasghar1/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+              >
+                Connect with Me →
+              </a>
+            </Button>
           </motion.div>
         </motion.div>
       </div>
@@ -170,7 +134,7 @@ const Hero = () => {
       {cursorParticles.map((particle) => (
         <motion.div
           key={particle.id}
-          className="fixed w-2 h-2 bg-blue-400 rounded-full pointer-events-none"
+          className="fixed w-2 h-2 bg-[#60A5FA] rounded-full pointer-events-none"
           initial={{ opacity: 0.8, scale: 1 }}
           animate={{
             opacity: 0,
