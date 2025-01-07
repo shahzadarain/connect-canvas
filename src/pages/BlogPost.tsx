@@ -9,6 +9,7 @@ import { ShareButtons } from '@/components/blog/ShareButtons';
 import { generateTableOfContents } from '@/utils/blogUtils';
 import { BlogHeader } from '@/components/blog/BlogHeader';
 import { BlogContent } from '@/components/blog/BlogContent';
+import { BlogSidebar } from '@/components/blog/BlogSidebar';
 
 const BlogPost = () => {
   const { slug } = useParams();
@@ -47,7 +48,7 @@ const BlogPost = () => {
     <>
       <main className="min-h-screen pt-20 bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">
         {isLoading ? (
-          <div className="container mx-auto px-4 py-8 max-w-4xl">
+          <div className="container mx-auto px-4 py-8 max-w-6xl">
             <Skeleton className="h-12 w-3/4 mb-4" />
             <Skeleton className="h-6 w-1/2 mb-8" />
             <div className="space-y-4">
@@ -57,7 +58,7 @@ const BlogPost = () => {
             </div>
           </div>
         ) : !post ? (
-          <div className="container mx-auto px-4 py-8 max-w-4xl">
+          <div className="container mx-auto px-4 py-8 max-w-6xl">
             <h1 className="text-4xl font-bold mb-4">Post not found</h1>
             <p>The blog post you're looking for doesn't exist or has been removed.</p>
           </div>
@@ -75,23 +76,25 @@ const BlogPost = () => {
                 <meta property="og:image" content={post.featured_image} />
               )}
             </Helmet>
-            <article className="container mx-auto px-4 py-12 max-w-4xl">
-              <BlogHeader post={post} />
-
-              <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl p-8 mb-8">
-                <TableOfContents items={generateTableOfContents(post.content)} />
-                
-                <BlogContent 
-                  content={post.content} 
-                  featuredImage={post.featured_image}
-                />
-
-                <ShareButtons 
-                  url={window.location.href} 
-                  title={post.title} 
-                />
+            <div className="container mx-auto px-4 py-12 max-w-6xl">
+              <div className="flex flex-col lg:flex-row gap-12">
+                <article className="flex-1">
+                  <BlogHeader post={post} />
+                  <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl p-8 mb-8">
+                    <TableOfContents items={generateTableOfContents(post.content)} />
+                    <BlogContent 
+                      content={post.content} 
+                      featuredImage={post.featured_image}
+                    />
+                    <ShareButtons 
+                      url={window.location.href} 
+                      title={post.title} 
+                    />
+                  </div>
+                </article>
+                <BlogSidebar currentPostId={post.id} />
               </div>
-            </article>
+            </div>
           </>
         )}
       </main>
