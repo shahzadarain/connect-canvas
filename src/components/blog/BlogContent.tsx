@@ -2,7 +2,7 @@ import React from 'react';
 import { CodeBlock } from './CodeBlock';
 import { BlogListItem } from './BlogListItem';
 import { BlogHeading } from './BlogHeading';
-import { BookOpen, Video } from 'lucide-react';
+import { BookOpen, Video, Quote } from 'lucide-react';
 
 interface BlogContentProps {
   content: string;
