@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { CodeBlock } from './CodeBlock';
 import { BlogListItem } from './BlogListItem';
 import { BlogHeading } from './BlogHeading';
-import { BookOpen, Video, Quote, BookOpen as Book } from 'lucide-react';
+import { BookOpen } from 'lucide-react';
 import { ReadingProgress } from './ReadingProgress';
 import { useTheme } from 'next-themes';
+import { BookPage } from './BookPage';
+import { BlogParagraph } from './BlogParagraph';
 
 interface BlogContentProps {
   content: string;
@@ -12,7 +14,6 @@ interface BlogContentProps {
 
 export const BlogContent = ({ content }: BlogContentProps) => {
   const [readingProgress, setReadingProgress] = useState(0);
-  const { theme } = useTheme();
   
   useEffect(() => {
     const updateReadingProgress = () => {
@@ -102,11 +103,6 @@ export const BlogContent = ({ content }: BlogContentProps) => {
         continue;
       }
 
-      // Skip lines that only contain "---"
-      if (line === '---') {
-        continue;
-      }
-
       if (line.startsWith('```')) {
         if (!inCodeBlock) {
           inCodeBlock = true;
@@ -155,14 +151,12 @@ export const BlogContent = ({ content }: BlogContentProps) => {
         continue;
       }
 
-      const formattedText = formatLinks(formatInlineText(line));
       formattedContent.push(
-        <p
+        <BlogParagraph
           key={currentIndex}
-          className="text-xl leading-relaxed mb-6 text-gray-700 dark:text-gray-300 font-serif tracking-wide first-letter:text-3xl first-letter:font-bold first-letter:mr-1 first-letter:float-left first-letter:text-blue-600 dark:first-letter:text-blue-400 animate-fade-in"
-        >
-          <span dangerouslySetInnerHTML={{ __html: formattedText }} />
-        </p>
+          content={line}
+          formatContent={(text) => formatLinks(formatInlineText(text))}
+        />
       );
       currentIndex++;
     }
@@ -186,27 +180,18 @@ export const BlogContent = ({ content }: BlogContentProps) => {
   };
 
   return (
-    <article className="relative max-w-[65ch] mx-auto px-4 md:px-0">
+    <article className="relative max-w-4xl mx-auto px-4 md:px-0">
       <ReadingProgress progress={readingProgress} />
       
-      <div className="prose prose-xl max-w-none dark:prose-invert 
-        prose-headings:font-serif prose-p:text-gray-700 dark:prose-p:text-gray-300 
-        prose-a:text-blue-600 dark:prose-a:text-blue-400 hover:prose-a:text-blue-800 
-        dark:hover:prose-a:text-blue-300 prose-img:rounded-xl prose-img:shadow-lg
-        prose-p:font-serif prose-p:leading-relaxed prose-p:tracking-wide
-        before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-b 
-        before:from-white/50 before:to-white/0 dark:before:from-gray-900/50 
-        dark:before:to-gray-900/0 before:pointer-events-none
-        relative bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm rounded-lg 
-        shadow-xl dark:shadow-2xl border border-gray-100 dark:border-gray-800
-        p-8 md:p-12 transition-all duration-300">
-        
+      <BookPage>
         <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-          <Book className="w-8 h-8 text-blue-500 dark:text-blue-400" />
+          <BookOpen className="w-8 h-8 text-blue-500 dark:text-blue-400" />
         </div>
         
-        {formatContent(content)}
-      </div>
+        <div className="prose prose-xl max-w-none dark:prose-invert">
+          {formatContent(content)}
+        </div>
+      </BookPage>
     </article>
   );
 };
