@@ -37,7 +37,13 @@ export const BlogContent = ({ content }: BlogContentProps) => {
         .replace(/&#39;/g, "'")
         .replace(/&#47;/g, "/");
 
-      return decodedText
+      // Format day information to be bold
+      const dayFormatted = decodedText.replace(
+        /(Day \d+:)/g,
+        '<strong class="text-xl font-bold text-blue-600 dark:text-blue-400">$1</strong>'
+      );
+
+      return dayFormatted
         .replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-gray-900 dark:text-gray-100">$1</strong>')
         .replace(
           /`(.*?)`/g,
@@ -51,14 +57,35 @@ export const BlogContent = ({ content }: BlogContentProps) => {
       if (line === '') {
         if (inList) {
           formattedContent.push(
-            <ul key={currentIndex} className="space-y-3 my-8 list-none pl-0">
+            <ul key={currentIndex} className="space-y-4 my-8 list-none pl-0">
               {listItems.map((item, idx) => (
                 <li
                   key={idx}
-                  className="flex items-start space-x-4 text-lg leading-relaxed text-gray-700 dark:text-gray-300 font-serif"
+                  className="flex items-start space-x-4 text-lg leading-relaxed text-gray-700 dark:text-gray-300 font-serif group animate-fade-in"
+                  style={{ animationDelay: `${idx * 100}ms` }}
                 >
-                  <span className="flex-shrink-0 w-2 h-2 mt-2.5 rounded-full bg-blue-500 dark:bg-blue-400" />
-                  <span className="flex-1" dangerouslySetInnerHTML={{ __html: formatLinks(formatInlineText(item)) }} />
+                  <span className="flex-shrink-0 w-6 h-6 mt-1.5 relative">
+                    <svg
+                      className="absolute inset-0 w-6 h-6 text-blue-500 dark:text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                    <span className="absolute inset-0 w-2 h-2 m-2 bg-blue-500 dark:bg-blue-400 rounded-full group-hover:opacity-0 transition-opacity duration-200" />
+                  </span>
+                  <span 
+                    className="flex-1 font-serif text-xl leading-relaxed"
+                    dangerouslySetInnerHTML={{ 
+                      __html: formatLinks(formatInlineText(item)) 
+                    }} 
+                  />
                 </li>
               ))}
             </ul>
@@ -139,14 +166,35 @@ export const BlogContent = ({ content }: BlogContentProps) => {
 
     if (inList && listItems.length > 0) {
       formattedContent.push(
-        <ul key={currentIndex} className="space-y-3 my-8 list-none pl-0">
+        <ul key={currentIndex} className="space-y-4 my-8 list-none pl-0">
           {listItems.map((item, idx) => (
             <li
               key={idx}
-              className="flex items-start space-x-4 text-lg leading-relaxed text-gray-700 dark:text-gray-300 font-serif"
+              className="flex items-start space-x-4 text-lg leading-relaxed text-gray-700 dark:text-gray-300 font-serif group animate-fade-in"
+              style={{ animationDelay: `${idx * 100}ms` }}
             >
-              <span className="flex-shrink-0 w-2 h-2 mt-2.5 rounded-full bg-blue-500 dark:bg-blue-400" />
-              <span className="flex-1" dangerouslySetInnerHTML={{ __html: formatLinks(formatInlineText(item)) }} />
+              <span className="flex-shrink-0 w-6 h-6 mt-1.5 relative">
+                <svg
+                  className="absolute inset-0 w-6 h-6 text-blue-500 dark:text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+                <span className="absolute inset-0 w-2 h-2 m-2 bg-blue-500 dark:bg-blue-400 rounded-full group-hover:opacity-0 transition-opacity duration-200" />
+              </span>
+              <span 
+                className="flex-1 font-serif text-xl leading-relaxed"
+                dangerouslySetInnerHTML={{ 
+                  __html: formatLinks(formatInlineText(item)) 
+                }} 
+              />
             </li>
           ))}
         </ul>
