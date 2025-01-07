@@ -1,21 +1,13 @@
 import { motion } from "framer-motion";
 import { Button } from "./ui/button";
-import { Shield, Cloud, Globe, Brain, Database, Smartphone } from "lucide-react";
+import { Shield, Cloud, Globe, Brain, Database } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 const Hero = () => {
-  const [greeting, setGreeting] = useState("");
   const isMobile = useIsMobile();
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [cursorParticles, setCursorParticles] = useState([]);
-
-  useEffect(() => {
-    const hour = new Date().getHours();
-    if (hour < 12) setGreeting("Good Morning");
-    else if (hour < 18) setGreeting("Good Afternoon");
-    else setGreeting("Good Evening");
-  }, []);
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -43,7 +35,7 @@ const Hero = () => {
   ];
 
   return (
-    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-primary via-primary/95 to-primary/90">
+    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-[#1A1F2C] via-[#1A1F2C]/95 to-[#1A1F2C]/90">
       {/* Background Pattern */}
       <div 
         className="absolute inset-0 opacity-5"
@@ -72,7 +64,7 @@ const Hero = () => {
               SHAHZAD ASGHAR
             </h1>
             <p className="text-xl md:text-2xl text-secondary/90 font-light mb-6">
-              {greeting}, Welcome to the Future of Technology
+              Welcome to the Future of Technology
             </p>
             <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto">
               Bridging Innovation and Humanity through Digital Transformation
