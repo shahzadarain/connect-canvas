@@ -1,6 +1,7 @@
 import React from 'react';
 import { ProjectSectionType } from './types';
 import { Card } from "@/components/ui/card";
+import { motion } from "framer-motion";
 
 interface ProjectSectionProps {
   section: ProjectSectionType;
@@ -10,31 +11,68 @@ const ProjectSection: React.FC<ProjectSectionProps> = ({ section }) => {
   const Icon = section.icon;
   
   return (
-    <div className="mb-12">
+    <motion.div 
+      className="mb-12"
+      initial={{ y: 20, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      role="region"
+      aria-labelledby={`section-${section.title.toLowerCase().replace(/\s+/g, '-')}`}
+    >
       <div className="flex items-center gap-3 mb-6">
-        <div className="p-2 bg-blue-50 rounded-lg">
-          <Icon className="w-6 h-6 text-blue-500" />
+        <div 
+          className="p-2 bg-blue-50 dark:bg-blue-900 rounded-lg"
+          role="presentation"
+        >
+          <Icon className="w-6 h-6 text-blue-500 dark:text-blue-300" aria-hidden="true" />
         </div>
-        <h2 className="text-2xl font-bold">{section.title}</h2>
+        <h2 
+          id={`section-${section.title.toLowerCase().replace(/\s+/g, '-')}`}
+          className="text-2xl font-bold"
+        >
+          {section.title}
+        </h2>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div 
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        role="list"
+        aria-label={`${section.title} projects`}
+      >
         {section.projects.map((project, index) => (
           <Card 
             key={index}
-            className="p-6 hover:shadow-lg transition-shadow"
+            className="p-6 hover:shadow-lg transition-shadow focus-visible:ring-2 focus-visible:ring-primary"
             tabIndex={0}
             role="article"
+            aria-labelledby={`project-${index}-title`}
           >
-            <h3 className="text-xl font-semibold mb-3">{project.title}</h3>
-            <p className="text-gray-600 mb-4">{project.description}</p>
+            <h3 
+              id={`project-${index}-title`}
+              className="text-xl font-semibold mb-3"
+            >
+              {project.title}
+            </h3>
+            <p className="text-gray-600 dark:text-gray-300 mb-4">
+              {project.description}
+            </p>
             <div>
-              <strong className="text-sm text-gray-700">Tags:</strong>
-              <div className="flex flex-wrap gap-2 mt-1">
+              <strong 
+                className="text-sm text-gray-700 dark:text-gray-200"
+                id={`tags-${index}-label`}
+              >
+                Tags:
+              </strong>
+              <div 
+                className="flex flex-wrap gap-2 mt-1"
+                role="list"
+                aria-labelledby={`tags-${index}-label`}
+              >
                 {project.tags.map((tag, tagIndex) => (
                   <span
                     key={tagIndex}
-                    className="px-2 py-1 bg-blue-50 text-blue-700 text-xs rounded-full"
+                    className="px-2 py-1 bg-blue-50 dark:bg-blue-900 text-blue-700 dark:text-blue-200 text-xs rounded-full"
+                    role="listitem"
                   >
                     {tag}
                   </span>
@@ -44,7 +82,7 @@ const ProjectSection: React.FC<ProjectSectionProps> = ({ section }) => {
           </Card>
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 };
 
