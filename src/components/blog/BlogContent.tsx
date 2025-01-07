@@ -17,6 +17,19 @@ export const BlogContent = ({ content }: BlogContentProps) => {
 
     const lines = content.split('\n');
 
+    const formatLinks = (text: string) => {
+      return text.replace(
+        /\[([^\]]+)\]\(([^)]+)\)/g,
+        '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 underline">$1</a>'
+      );
+    };
+
+    const formatInlineText = (text: string) => {
+      return text
+        .replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold">$1</strong>')
+        .replace(/`(.*?)`/g, '<code class="px-1.5 py-0.5 rounded bg-gray-100 dark:bg-gray-800 font-mono text-sm">$1</code>');
+    };
+
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
 
@@ -28,7 +41,6 @@ export const BlogContent = ({ content }: BlogContentProps) => {
           currentCode = '';
           continue;
         } else {
-          // End of code block
           inCodeBlock = false;
           formattedContent.push(
             <CodeBlock 
@@ -55,7 +67,7 @@ export const BlogContent = ({ content }: BlogContentProps) => {
             <ul key={currentIndex} className="space-y-3 my-6 list-disc list-inside ml-6">
               {listItems.map((item, idx) => (
                 <li key={idx} className="text-lg leading-relaxed text-gray-700 dark:text-gray-300">
-                  <span dangerouslySetInnerHTML={{ __html: item }} />
+                  <span dangerouslySetInnerHTML={{ __html: formatLinks(formatInlineText(item)) }} />
                 </li>
               ))}
             </ul>
@@ -73,7 +85,7 @@ export const BlogContent = ({ content }: BlogContentProps) => {
         const text = line.replace(/^#+\s/, '');
         const id = text.toLowerCase().replace(/[^a-z0-9]+/g, '-');
         const headingClasses = {
-          1: 'text-4xl font-bold mb-8 mt-16 leading-tight scroll-mt-20 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent font-serif tracking-tight',
+          1: 'text-4xl font-bold mb-8 mt-16 leading-tight scroll-mt-20 text-gray-900 dark:text-white font-serif tracking-tight',
           2: 'text-3xl font-bold mb-6 mt-12 leading-tight scroll-mt-20 text-gray-800 dark:text-gray-100 font-serif tracking-tight',
           3: 'text-2xl font-bold mb-4 mt-8 leading-tight scroll-mt-20 text-gray-800 dark:text-gray-100 font-serif tracking-tight',
           4: 'text-xl font-bold mb-3 mt-6 leading-tight scroll-mt-20 text-gray-700 dark:text-gray-200',
@@ -81,7 +93,7 @@ export const BlogContent = ({ content }: BlogContentProps) => {
         
         formattedContent.push(
           <h1 key={currentIndex} id={id} className={`${headingClasses} animate-fade-in`}>
-            {text}
+            <span dangerouslySetInnerHTML={{ __html: formatLinks(formatInlineText(text)) }} />
           </h1>
         );
         currentIndex++;
@@ -91,17 +103,13 @@ export const BlogContent = ({ content }: BlogContentProps) => {
       // Handle lists
       if (line.trim().startsWith('- ') || line.trim().startsWith('* ') || line.trim().match(/^\d+\./)) {
         inList = true;
-        const itemContent = line.replace(/^[-*]\s|^\d+\.\s/, '')
-          .replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold">$1</strong>')
-          .replace(/`(.*?)`/g, '<code class="px-1.5 py-0.5 rounded bg-gray-100 dark:bg-gray-800 font-mono text-sm">$1</code>');
+        const itemContent = line.replace(/^[-*]\s|^\d+\.\s/, '');
         listItems.push(itemContent);
         continue;
       }
 
-      // Handle paragraphs with inline formatting
-      const formattedText = line
-        .replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold">$1</strong>')
-        .replace(/`(.*?)`/g, '<code class="px-1.5 py-0.5 rounded bg-gray-100 dark:bg-gray-800 font-mono text-sm">$1</code>');
+      // Handle paragraphs with inline formatting and links
+      const formattedText = formatLinks(formatInlineText(line));
 
       formattedContent.push(
         <p key={currentIndex} className="text-lg leading-relaxed mb-6 text-gray-700 dark:text-gray-300 font-serif hover:text-gray-900 dark:hover:text-white transition-colors animate-fade-in">
@@ -117,7 +125,7 @@ export const BlogContent = ({ content }: BlogContentProps) => {
         <ul key={currentIndex} className="space-y-3 my-6 list-disc list-inside ml-6">
           {listItems.map((item, idx) => (
             <li key={idx} className="text-lg leading-relaxed text-gray-700 dark:text-gray-300">
-              <span dangerouslySetInnerHTML={{ __html: item }} />
+              <span dangerouslySetInnerHTML={{ __html: formatLinks(formatInlineText(item)) }} />
             </li>
           ))}
         </ul>
