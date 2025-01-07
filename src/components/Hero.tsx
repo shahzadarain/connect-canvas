@@ -79,16 +79,19 @@ const Hero = () => {
 
           {/* Main Content Grid */}
           <div className="grid md:grid-cols-2 gap-12 items-center mb-12">
-            {/* Left Column - Abstract Illustration */}
+            {/* Left Column - Profile Image */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.4 }}
-              className="relative h-[300px] md:h-[400px] rounded-2xl overflow-hidden bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-white/10"
+              className="relative h-[400px] md:h-[500px] rounded-2xl overflow-hidden bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-white/10"
             >
-              <div className="absolute inset-0 backdrop-blur-sm">
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 mix-blend-overlay" />
-              </div>
+              <img 
+                src="/lovable-uploads/d2df6a7d-ce1e-4662-95f7-9d2b827dc804.png"
+                alt="Shahzad Asghar speaking at an event"
+                className="w-full h-full object-cover object-center rounded-2xl"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A]/80 via-transparent to-transparent" />
             </motion.div>
 
             {/* Right Column - Description */}
