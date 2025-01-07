@@ -65,7 +65,7 @@ const Hero = () => {
                 SHAHZAD ASGHAR
               </span>
             </h1>
-            <p className="text-xl md:text-2xl text-white font-light mb-6">
+            <p className="text-xl md:text-2xl text-white font-black mb-6 font-serif">
               ✨ Innovation is my passion ✨
             </p>
             <p className="text-lg md:text-xl text-white/90 max-w-4xl mx-auto leading-relaxed">
