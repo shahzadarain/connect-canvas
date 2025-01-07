@@ -8,7 +8,6 @@ const Hero = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate content loading
     const timer = setTimeout(() => setIsLoading(false), 1000);
     return () => clearTimeout(timer);
   }, []);
@@ -43,21 +42,29 @@ const Hero = () => {
   }
 
   return (
-    <div className="relative min-h-[90vh] flex items-center justify-center bg-gradient-to-b from-[#1A1D24] to-[#2A2E37]">
-      <div className="max-w-5xl mx-auto p-10 rounded-3xl bg-[#1E2128]/50 backdrop-blur-sm border border-gray-800/50">
-        <div className="flex justify-center items-center gap-6 mb-8">
+    <section 
+      className="relative min-h-[90vh] flex items-center justify-center bg-gradient-to-b from-[#1A1D24] to-[#2A2E37]"
+      aria-label="Introduction"
+    >
+      <motion.div 
+        className="max-w-5xl mx-auto p-6 sm:p-10 rounded-3xl bg-[#1E2128]/50 backdrop-blur-sm border border-gray-800/50 shadow-xl"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-6 mb-8">
           <motion.div
             initial={{ scale: 0.5, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.5 }}
           >
-            <Smartphone className="w-10 h-10 text-[#60A5FA]" />
+            <Smartphone className="w-8 h-8 sm:w-10 sm:h-10 text-[#60A5FA]" aria-hidden="true" />
           </motion.div>
           <motion.h1
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
-            className="text-6xl font-bold bg-gradient-to-r from-[#60A5FA] to-[#818CF8] bg-clip-text text-transparent"
+            className="text-4xl sm:text-5xl md:text-6xl font-bold bg-gradient-to-r from-[#60A5FA] to-[#818CF8] bg-clip-text text-transparent"
           >
             SHAHZAD ASGHAR
           </motion.h1>
@@ -66,7 +73,7 @@ const Hero = () => {
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.5 }}
           >
-            <Globe className="w-10 h-10 text-[#60A5FA]" />
+            <Globe className="w-8 h-8 sm:w-10 sm:h-10 text-[#60A5FA]" aria-hidden="true" />
           </motion.div>
         </div>
 
@@ -76,10 +83,10 @@ const Hero = () => {
           transition={{ delay: 0.3 }}
           className="text-center mb-10 max-w-3xl mx-auto"
         >
-          <h2 className="text-2xl font-semibold text-[#60A5FA] mb-6 tracking-wide">
+          <h2 className="text-xl sm:text-2xl font-semibold text-[#60A5FA] mb-6 tracking-wide">
             ✨ Innovation is my passion ✨
           </h2>
-          <p className="text-xl text-gray-300 leading-relaxed">
+          <p className="text-lg sm:text-xl text-gray-300 leading-relaxed">
             With two decades of experience, I've merged IT infrastructure, cloud services,
             AI, and analytics to support informed decisions and protect vulnerable
             communities. My work spans from integrating refugee data with national
@@ -100,7 +107,7 @@ const Hero = () => {
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.5 + index * 0.1 }}
-                className="px-6 py-3 rounded-full bg-[#2A2E37] text-[#60A5FA] text-lg font-medium border border-[#60A5FA]/20 hover:border-[#60A5FA]/50 transition-colors"
+                className="px-4 sm:px-6 py-2 sm:py-3 rounded-full bg-[#2A2E37] text-[#60A5FA] text-base sm:text-lg font-medium border border-[#60A5FA]/20 hover:border-[#60A5FA]/50 transition-colors"
               >
                 {tag}
               </motion.span>
@@ -116,24 +123,34 @@ const Hero = () => {
         >
           <Button
             asChild
-            className="bg-[#3B82F6] hover:bg-[#2563EB] text-white px-10 py-6 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+            className="bg-[#3B82F6] hover:bg-[#2563EB] text-white px-8 sm:px-10 py-5 sm:py-6 text-base sm:text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
           >
-            <a href="https://www.linkedin.com/in/shahzadasghar1/" target="_blank" rel="noopener noreferrer">
+            <a 
+              href="https://www.linkedin.com/in/shahzadasghar1/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              aria-label="View Shahzad's LinkedIn Profile"
+            >
               View Profile →
             </a>
           </Button>
           <Button
             asChild
             variant="outline"
-            className="bg-transparent border-2 border-[#3B82F6] text-[#3B82F6] hover:bg-[#3B82F6]/10 px-10 py-6 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+            className="bg-transparent border-2 border-[#3B82F6] text-[#3B82F6] hover:bg-[#3B82F6]/10 px-8 sm:px-10 py-5 sm:py-6 text-base sm:text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
           >
-            <a href="https://www.linkedin.com/in/shahzadasghar1/" target="_blank" rel="noopener noreferrer">
+            <a 
+              href="https://www.linkedin.com/in/shahzadasghar1/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              aria-label="Connect with Shahzad on LinkedIn"
+            >
               Connect with Me →
             </a>
           </Button>
         </motion.div>
-      </div>
-    </div>
+      </motion.div>
+    </section>
   );
 };
 
