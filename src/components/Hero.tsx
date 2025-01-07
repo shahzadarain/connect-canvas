@@ -60,8 +60,10 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-[#60A5FA] mb-4 tracking-tight">
-              SHAHZAD ASGHAR
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 tracking-tight">
+              <span className="bg-gradient-to-r from-[#9b87f5] via-[#D946EF] to-[#0EA5E9] bg-clip-text text-transparent animate-gradient-x">
+                SHAHZAD ASGHAR
+              </span>
             </h1>
             <p className="text-xl md:text-2xl text-white font-light mb-6">
               ✨ Innovation is my passion ✨
