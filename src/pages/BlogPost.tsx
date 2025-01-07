@@ -78,20 +78,13 @@ const BlogPost = () => {
             <article className="container mx-auto px-4 py-12 max-w-4xl">
               <BlogHeader post={post} />
 
-              {post.featured_image && (
-                <div className="mb-16 animate-fade-in">
-                  <img
-                    src={post.featured_image}
-                    alt={post.title}
-                    className="w-full h-[500px] object-cover rounded-xl shadow-xl hover:shadow-2xl transition-shadow duration-300"
-                  />
-                </div>
-              )}
-
               <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl p-8 mb-8">
                 <TableOfContents items={generateTableOfContents(post.content)} />
                 
-                <BlogContent content={post.content} />
+                <BlogContent 
+                  content={post.content} 
+                  featuredImage={post.featured_image}
+                />
 
                 <ShareButtons 
                   url={window.location.href} 

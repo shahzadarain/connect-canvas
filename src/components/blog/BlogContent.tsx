@@ -8,12 +8,27 @@ import { useTheme } from 'next-themes';
 import { BookPage } from './BookPage';
 import { BlogParagraph } from './BlogParagraph';
 
+const PLACEHOLDER_IMAGES = [
+  'photo-1486718448742-163732cd1544', // minimalist brown wavy structure
+  'photo-1439337153520-7082a56a81f4', // glass roof
+  'photo-1497604401993-f2e922e5cb0a', // glass building
+  'photo-1473177104440-ffee2f376098', // cathedral interior
+  'photo-1494891848038-7bd202a2afeb', // black and red building
+  'photo-1551038247-3d9af20df552', // blue and white building
+  'photo-1433832597046-4f10e10ac764', // white high rise
+  'photo-1493397212122-2b85dda8106b', // wavy lines building
+  'photo-1466442929976-97f336a657be', // mosque buildings
+  'photo-1492321936769-b49830bc1d1e', // white building under stars
+];
+
 interface BlogContentProps {
   content: string;
+  featuredImage?: string | null;
 }
 
-export const BlogContent = ({ content }: BlogContentProps) => {
+export const BlogContent = ({ content, featuredImage }: BlogContentProps) => {
   const [readingProgress, setReadingProgress] = useState(0);
+  const { theme } = useTheme();
   
   useEffect(() => {
     const updateReadingProgress = () => {
@@ -25,6 +40,14 @@ export const BlogContent = ({ content }: BlogContentProps) => {
     window.addEventListener('scroll', updateReadingProgress);
     return () => window.removeEventListener('scroll', updateReadingProgress);
   }, []);
+
+  const getRandomPlaceholderImage = () => {
+    const randomIndex = Math.floor(Math.random() * PLACEHOLDER_IMAGES.length);
+    const imageId = PLACEHOLDER_IMAGES[randomIndex];
+    return `https://images.unsplash.com/${imageId}?auto=format&fit=crop&w=2000&q=80`;
+  };
+
+  const coverImage = featuredImage || getRandomPlaceholderImage();
 
   const formatLinks = (text: string) => {
     return text.replace(
@@ -182,6 +205,18 @@ export const BlogContent = ({ content }: BlogContentProps) => {
   return (
     <article className="relative max-w-4xl mx-auto px-4 md:px-0">
       <ReadingProgress progress={readingProgress} />
+      
+      <div className="mb-12 rounded-xl overflow-hidden shadow-2xl">
+        <img
+          src={coverImage}
+          alt="Blog post cover"
+          className="w-full h-[400px] object-cover transition-transform duration-700 hover:scale-105"
+          onError={(e) => {
+            console.error('Error loading image:', e);
+            e.currentTarget.src = getRandomPlaceholderImage();
+          }}
+        />
+      </div>
       
       <BookPage>
         <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
