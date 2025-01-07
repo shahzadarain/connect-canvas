@@ -13,7 +13,7 @@ export const BookPage = ({ children, className }: BookPageProps) => {
   return (
     <div 
       className={cn(
-        "relative max-w-[65ch] mx-auto px-8 md:px-12 py-10",
+        "relative max-w-[75ch] mx-auto px-8 md:px-12 py-10", // Increased from 65ch to 75ch
         "transition-colors duration-300 ease-in-out",
         // Light theme styles
         theme === 'light' && "bg-[#F8F5F0] text-gray-800",
