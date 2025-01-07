@@ -252,6 +252,74 @@ export type Database = {
         }
         Relationships: []
       }
+      project_sections: {
+        Row: {
+          category: string
+          created_at: string | null
+          display_order: number | null
+          icon: string
+          id: number
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          category: string
+          created_at?: string | null
+          display_order?: number | null
+          icon: string
+          id?: number
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string | null
+          display_order?: number | null
+          icon?: string
+          id?: number
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      projects: {
+        Row: {
+          category: string
+          created_at: string | null
+          description: string | null
+          id: number
+          tags: string[] | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          category: string
+          created_at?: string | null
+          description?: string | null
+          id?: number
+          tags?: string[] | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string | null
+          description?: string | null
+          id?: number
+          tags?: string[] | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_category"
+            columns: ["category"]
+            isOneToOne: false
+            referencedRelation: "project_sections"
+            referencedColumns: ["category"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
