@@ -36,8 +36,8 @@ const Hero = () => {
 
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
-      {/* Primary Background Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-[#334155]" />
+      {/* Primary Background - Now Dark Black */}
+      <div className="absolute inset-0 bg-black" />
       
       {/* Subtle Pattern Overlay */}
       <div 
@@ -48,8 +48,8 @@ const Hero = () => {
         }}
       />
 
-      {/* Secondary Gradient Overlay for Depth */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A] via-transparent to-[#1E293B]/50 opacity-60" />
+      {/* Very Subtle Gradient Overlay for Depth */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/95 to-black/90 opacity-60" />
 
       {/* Content Container */}
       <div className="relative container mx-auto px-4 py-16 z-10">
@@ -91,7 +91,7 @@ const Hero = () => {
                 alt="Shahzad Asghar speaking at an event"
                 className="w-full h-full object-cover object-center rounded-2xl"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A]/80 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
             </motion.div>
 
             {/* Right Column - Description */}
