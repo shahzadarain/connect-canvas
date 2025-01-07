@@ -70,7 +70,7 @@ const Hero = () => {
                 ✨ Innovation is my passion ✨
               </span>
             </p>
-            <p className="text-lg md:text-xl text-white/90 max-w-4xl mx-auto leading-relaxed">
+            <p className="text-lg md:text-xl text-white/90 max-w-4xl mx-auto leading-relaxed font-serif">
               With two decades of experience, I've merged IT infrastructure, cloud services, AI, and analytics to support
               informed decisions and protect vulnerable communities. My work spans from integrating refugee data
               with national health systems to implementing AI-enabled communication solutions.
