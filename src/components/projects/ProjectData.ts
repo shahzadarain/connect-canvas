@@ -1,10 +1,14 @@
-import { Brain, Server, BarChart3, Cog, Shield, Cloud, Users } from "lucide-react";
 import { ProjectSectionType } from './types';
 
 export const projectSections: ProjectSectionType[] = [
   {
     title: "AI-Based Projects",
-    icon: Brain,
+    icon: "brain",
+    category: "ai",
+    display_order: 1,
+    id: 1,
+    created_at: null,
+    updated_at: null,
     projects: [
       {
         title: "AI-Powered IVR for Refugee Support",
@@ -20,7 +24,12 @@ export const projectSections: ProjectSectionType[] = [
   },
   {
     title: "Digital Transformation Projects",
-    icon: Server,
+    icon: "server",
+    category: "digital",
+    display_order: 2,
+    id: 2,
+    created_at: null,
+    updated_at: null,
     projects: [
       {
         title: "UNHCR Jordan Digital Transformation",
@@ -31,17 +40,17 @@ export const projectSections: ProjectSectionType[] = [
         title: "Self-Renewal System",
         description: "Introduced kiosks for refugees to update personal data using iris scans, reducing manual interviews.",
         tags: ["Automation", "SelfService", "DigitalIdentity"]
-      },
-      {
-        title: "AI-Enhanced Appointment System",
-        description: "Automated IVR system for refugees to book appointments with real-time confirmation.",
-        tags: ["AI", "AppointmentBooking", "Automation"]
       }
     ]
   },
   {
     title: "Data Analysis and Dashboards",
-    icon: BarChart3,
+    icon: "bar-chart-3",
+    category: "data",
+    display_order: 3,
+    id: 3,
+    created_at: null,
+    updated_at: null,
     projects: [
       {
         title: "COVID-19 Vaccine Data Highway",
@@ -52,17 +61,17 @@ export const projectSections: ProjectSectionType[] = [
         title: "Operational Dashboards",
         description: "Developed 50+ dashboards for real-time insights on program metrics and refugee status.",
         tags: ["DataVisualization", "Dashboards", "RealTimeAnalytics"]
-      },
-      {
-        title: "Big Data Platform",
-        description: "Unified multiple data sources for comprehensive analysis and reporting.",
-        tags: ["BigData", "DataIntegration", "Analytics"]
       }
     ]
   },
   {
     title: "Automation Initiatives",
-    icon: Cog,
+    icon: "cog",
+    category: "automation",
+    display_order: 4,
+    id: 4,
+    created_at: null,
+    updated_at: null,
     projects: [
       {
         title: "Digital Petition System",
@@ -73,17 +82,17 @@ export const projectSections: ProjectSectionType[] = [
         title: "Electricity Subsidy Tool",
         description: "Digitized process for refugees to apply for government utility subsidies.",
         tags: ["Automation", "SubsidyManagement"]
-      },
-      {
-        title: "Departure and Overtime Tracking Apps",
-        description: "Automated workflows for staff clearance and overtime approval.",
-        tags: ["Automation", "HRTools"]
       }
     ]
   },
   {
     title: "Cybersecurity Efforts",
-    icon: Shield,
+    icon: "shield",
+    category: "security",
+    display_order: 5,
+    id: 5,
+    created_at: null,
+    updated_at: null,
     projects: [
       {
         title: "Penetration Testing and Security Audits",
@@ -99,7 +108,12 @@ export const projectSections: ProjectSectionType[] = [
   },
   {
     title: "Cloud Integration Projects",
-    icon: Cloud,
+    icon: "cloud",
+    category: "cloud",
+    display_order: 6,
+    id: 6,
+    created_at: null,
+    updated_at: null,
     projects: [
       {
         title: "Azure Cloud Migration",
@@ -115,7 +129,12 @@ export const projectSections: ProjectSectionType[] = [
   },
   {
     title: "Capacity Building and Collaboration",
-    icon: Users,
+    icon: "users",
+    category: "capacity",
+    display_order: 7,
+    id: 7,
+    created_at: null,
+    updated_at: null,
     projects: [
       {
         title: "Building Refugee Capacity with Tech Giants",
