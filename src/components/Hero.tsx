@@ -66,7 +66,9 @@ const Hero = () => {
               </span>
             </h1>
             <p className="text-xl md:text-2xl text-white font-black mb-6 font-serif">
-              ✨ Innovation is my passion ✨
+              <span className="bg-[#0047AB] px-4 py-2 inline-block">
+                ✨ Innovation is my passion ✨
+              </span>
             </p>
             <p className="text-lg md:text-xl text-white/90 max-w-4xl mx-auto leading-relaxed">
               With two decades of experience, I've merged IT infrastructure, cloud services, AI, and analytics to support
