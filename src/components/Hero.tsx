@@ -87,7 +87,7 @@ const Hero = () => {
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.5 + index * 0.1 }}
-                className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#1A1F2C]/50 text-[#60A5FA] text-sm font-medium border border-[#60A5FA]/20 hover:border-[#60A5FA]/50 transition-all duration-300"
+                className="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[#2A2D3E] to-[#1F2937] text-[#7DD3FC] text-sm font-medium border border-[#7DD3FC]/20 hover:border-[#7DD3FC]/50 transition-all duration-300 shadow-lg hover:shadow-[#7DD3FC]/10"
               >
                 {item.icon}
                 <span>{item.tag}</span>
