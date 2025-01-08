@@ -17,7 +17,10 @@ const WorldMap = () => {
       
       map.current = new mapboxgl.Map({
         container: mapContainer.current,
-        ...mapConfig
+        style: mapConfig.style,
+        center: mapConfig.center as [number, number],
+        zoom: mapConfig.zoom,
+        projection: mapConfig.projection as mapboxgl.ProjectionSpecification
       });
 
       map.current.addControl(new mapboxgl.NavigationControl({
@@ -30,9 +33,18 @@ const WorldMap = () => {
         createPulsingDot(map.current);
         addMarkers(map.current, locations);
         addAnimatedPaths(map.current, locations);
-      });
 
-      console.log('Map initialized with location markers and animated paths');
+        // Add atmospheric effects
+        map.current.setFog({
+          'color': 'rgb(186, 210, 235)',
+          'high-color': 'rgb(36, 92, 223)',
+          'horizon-blend': 0.4,
+          'space-color': 'rgb(11, 11, 25)',
+          'star-intensity': 0.8
+        });
+
+        console.log('Map initialized with location markers and animated paths');
+      });
     } catch (error) {
       console.error('Error initializing map:', error);
     }
