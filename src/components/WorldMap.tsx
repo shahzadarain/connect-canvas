@@ -1,13 +1,40 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import Map, { NavigationControl } from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { mapConfig, workLocations, missionLocations } from './map/MapConfig';
 import MapMarkers from './map/MapMarkers';
 import MapPaths from './map/MapPaths';
-
-const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
+import { supabase } from "@/integrations/supabase/client";
 
 const WorldMap = () => {
+  const [mapboxToken, setMapboxToken] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchMapboxToken = async () => {
+      try {
+        console.log('Fetching Mapbox token from Supabase...');
+        const { data, error } = await supabase.functions.invoke('get-mapbox-token');
+        
+        if (error) {
+          console.error('Error fetching Mapbox token:', error);
+          return;
+        }
+
+        if (data?.token) {
+          console.log('Successfully retrieved Mapbox token');
+          setMapboxToken(data.token);
+        }
+      } catch (error) {
+        console.error('Error in fetchMapboxToken:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchMapboxToken();
+  }, []);
+
   const markers = useMemo(() => {
     return [
       ...workLocations.map(location => ({ location, type: 'work' as const })),
@@ -39,10 +66,18 @@ const WorldMap = () => {
     console.log('Map loaded successfully');
   }, []);
 
-  if (!MAPBOX_TOKEN) {
+  if (isLoading) {
     return (
       <div className="w-full h-[600px] flex items-center justify-center bg-gray-100 rounded-lg">
-        <p className="text-gray-500">Please add your Mapbox token to the environment variables.</p>
+        <p className="text-gray-500">Loading map...</p>
+      </div>
+    );
+  }
+
+  if (!mapboxToken) {
+    return (
+      <div className="w-full h-[600px] flex items-center justify-center bg-gray-100 rounded-lg">
+        <p className="text-gray-500">Unable to load Mapbox token. Please check your configuration.</p>
       </div>
     );
   }
@@ -50,7 +85,7 @@ const WorldMap = () => {
   return (
     <div className="w-full h-[600px] relative">
       <Map
-        mapboxAccessToken={MAPBOX_TOKEN}
+        mapboxAccessToken={mapboxToken}
         onLoad={onMapLoad}
         attributionControl={false}
         mapStyle="mapbox://styles/mapbox/dark-v11"
