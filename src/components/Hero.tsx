@@ -27,9 +27,11 @@ const Hero = () => {
   }, [isMobile]);
 
   const hashTags = [
-    { tag: "Earn a globally recognized certification", icon: <ArrowRight className="w-5 h-5" /> },
-    { tag: "Stay at the top of your field", icon: <ArrowRight className="w-5 h-5" /> },
-    { tag: "Fast-track your career", icon: <ArrowRight className="w-5 h-5" /> }
+    { tag: "#DigitalTransformation", icon: <ArrowRight className="w-5 h-5" /> },
+    { tag: "#HumanitarianTech", icon: <ArrowRight className="w-5 h-5" /> },
+    { tag: "#AIInnovation", icon: <ArrowRight className="w-5 h-5" /> },
+    { tag: "#CloudComputing", icon: <ArrowRight className="w-5 h-5" /> },
+    { tag: "#Cybersecurity", icon: <ArrowRight className="w-5 h-5" /> }
   ];
 
   return (
