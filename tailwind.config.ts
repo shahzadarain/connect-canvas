@@ -44,6 +44,10 @@ export default {
           foreground: "#0F172A",
           dark: "#403E43",
         },
+        tag: {
+          DEFAULT: "#E5F6F1",
+          foreground: "#047857",
+        },
         code: {
           DEFAULT: "hsl(var(--code-bg))",
           foreground: "hsl(var(--code-fg))",

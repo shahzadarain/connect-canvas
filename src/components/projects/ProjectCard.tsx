@@ -1,6 +1,5 @@
 import { Project } from "./types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 
 interface ProjectCardProps {
@@ -26,13 +25,12 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
           </p>
           <div className="flex flex-wrap gap-2">
             {project.tags?.map((tag, index) => (
-              <Badge 
-                key={index} 
-                variant="secondary"
-                className="bg-secondary/10 text-secondary-foreground hover:bg-secondary/20 transition-colors"
+              <span
+                key={index}
+                className="px-4 py-2 text-sm font-medium rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-300 transition-colors hover:bg-emerald-100 dark:hover:bg-emerald-900/30"
               >
-                #{tag}
-              </Badge>
+                {tag}
+              </span>
             ))}
           </div>
         </CardContent>
