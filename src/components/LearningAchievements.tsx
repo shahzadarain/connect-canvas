@@ -1,130 +1,209 @@
-import React from 'react';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Badge } from "@/components/ui/badge";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { GraduationCap, BookOpen, Star, Calendar, User, Award } from 'lucide-react';
-import { courses } from "@/data/coursesData";
+import React, { useState } from 'react';
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Search, Award, GraduationCap, Calendar } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+
+interface Achievement {
+  id: number;
+  title: string;
+  issuer: string;
+  date: string;
+  about_learning: string;
+}
 
 const LearningAchievements = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedYear, setSelectedYear] = useState<string | null>(null);
+
+  const { data: achievements, isLoading } = useQuery({
+    queryKey: ["achievements"],
+    queryFn: async () => {
+      console.log("Fetching achievements");
+      const { data, error } = await supabase
+        .from("achievements")
+        .select("*")
+        .order('date', { ascending: false });
+
+      if (error) {
+        console.error("Error fetching achievements:", error);
+        throw error;
+      }
+      
+      console.log("Fetched achievements:", data);
+      return data as Achievement[];
+    },
+  });
+
+  const categories = [
+    { id: 'ai', label: 'AI & ML', icon: '🧠' },
+    { id: 'security', label: 'Cybersecurity', icon: '🔒' },
+    { id: 'data', label: 'Data Science', icon: '📊' },
+    { id: 'cloud', label: 'Cloud', icon: '☁️' },
+  ];
+
+  const years = [...new Set(achievements?.map(a => a.date.split('-')[0]))].sort().reverse();
+
+  const getCategoryFromTitle = (title: string): string => {
+    const lowerTitle = title.toLowerCase();
+    if (lowerTitle.includes('ai') || lowerTitle.includes('machine learning')) return 'ai';
+    if (lowerTitle.includes('security') || lowerTitle.includes('gdpr')) return 'security';
+    if (lowerTitle.includes('data') || lowerTitle.includes('analytics')) return 'data';
+    if (lowerTitle.includes('cloud')) return 'cloud';
+    return 'other';
+  };
+
+  const filteredAchievements = achievements?.filter(achievement => {
+    const matchesSearch = searchQuery === "" || 
+      achievement.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      achievement.about_learning.toLowerCase().includes(searchQuery.toLowerCase());
+
+    const matchesCategory = !selectedCategory || 
+      getCategoryFromTitle(achievement.title) === selectedCategory;
+
+    const matchesYear = !selectedYear || 
+      achievement.date.startsWith(selectedYear);
+
+    return matchesSearch && matchesCategory && matchesYear;
+  });
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#1A1F2C] via-[#2A2F3C] to-[#1A1F2C]">
-      {/* Hero Section */}
-      <div className="relative overflow-hidden">
-        {/* Animated Background Pattern */}
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(155,135,245,0.15)_50%,transparent_75%,transparent_100%)] bg-[length:20px_20px] animate-[slide_20s_linear_infinite] opacity-30" />
-        </div>
-        
-        {/* Hero Content */}
-        <div className="container mx-auto px-4 pt-20 pb-32 relative z-10">
-          <div className="text-center max-w-3xl mx-auto animate-fade-in">
-            <div className="inline-block p-4 bg-[#9b87f5]/20 rounded-2xl mb-8 backdrop-blur-sm">
-              <Award className="w-16 h-16 text-[#9b87f5]" />
-            </div>
-            <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 tracking-tight">
-              Learning Journey
-            </h1>
-            <p className="text-xl text-[#9b87f5]/90 leading-relaxed">
-              Explore my continuous learning path through professional certifications and achievements
-            </p>
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
+      <div className="container mx-auto px-4 py-16">
+        {/* Header */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-16"
+        >
+          <div className="inline-block p-4 bg-primary/10 rounded-2xl mb-8">
+            <GraduationCap className="w-16 h-16 text-primary" />
+          </div>
+          <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-accent">
+            Learning Journey
+          </h1>
+          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+            Explore my continuous learning path through professional certifications and achievements
+          </p>
+          
+          {/* Achievement Counter */}
+          <div className="mt-8 flex items-center justify-center gap-2 text-lg font-medium">
+            <Award className="w-6 h-6 text-primary" />
+            <span>{achievements?.length || 0} Achievements Completed</span>
+          </div>
+        </motion.div>
+
+        {/* Search and Filters */}
+        <div className="mb-12 space-y-6">
+          <div className="relative max-w-xl mx-auto">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <Input
+              type="text"
+              placeholder="Search achievements..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm"
+            />
+          </div>
+
+          {/* Category Filters */}
+          <div className="flex flex-wrap gap-3 justify-center">
+            <Button
+              variant={selectedCategory === null ? "default" : "outline"}
+              onClick={() => setSelectedCategory(null)}
+              className="min-w-[100px]"
+            >
+              All
+            </Button>
+            {categories.map((category) => (
+              <Button
+                key={category.id}
+                variant={selectedCategory === category.id ? "default" : "outline"}
+                onClick={() => setSelectedCategory(category.id)}
+                className="min-w-[120px]"
+              >
+                <span className="mr-2">{category.icon}</span>
+                {category.label}
+              </Button>
+            ))}
+          </div>
+
+          {/* Year Filters */}
+          <div className="flex flex-wrap gap-3 justify-center">
+            {years.map((year) => (
+              <Button
+                key={year}
+                variant={selectedYear === year ? "default" : "outline"}
+                onClick={() => setSelectedYear(selectedYear === year ? null : year)}
+                className="min-w-[100px]"
+              >
+                <Calendar className="w-4 h-4 mr-2" />
+                {year}
+              </Button>
+            ))}
           </div>
         </div>
-        
-        {/* Decorative Elements */}
-        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#1A1F2C] to-transparent" />
-      </div>
 
-      {/* Main Content */}
-      <section className="py-20 relative">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <ScrollArea className="h-[600px] rounded-2xl border border-[#9b87f5]/30 bg-white/[0.03] backdrop-blur-xl shadow-2xl">
-              <div className="p-6">
-                <Accordion type="single" collapsible className="w-full space-y-4">
-                  {courses.map((category, index) => (
-                    <AccordionItem 
-                      key={index} 
-                      value={`item-${index}`}
-                      className="group border border-[#9b87f5]/30 rounded-xl px-4 transition-all duration-300 hover:border-[#9b87f5]/50 data-[state=open]:bg-[#9b87f5]/[0.15] backdrop-blur-sm"
-                    >
-                      <AccordionTrigger className="py-6 hover:no-underline">
-                        <div className="flex items-center gap-4">
-                          <div className="p-2.5 rounded-lg bg-[#9b87f5]/20 group-hover:bg-[#9b87f5]/30 transition-colors duration-300">
-                            <BookOpen className="w-5 h-5 text-[#9b87f5]" />
-                          </div>
-                          <span className="text-xl font-semibold text-white group-hover:text-[#9b87f5] transition-colors duration-300">
-                            {category.category}
+        {/* Achievements Grid */}
+        <AnimatePresence mode="popLayout">
+          <motion.div 
+            layout
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          >
+            {filteredAchievements?.map((achievement) => (
+              <motion.div
+                key={achievement.id}
+                layout
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.3 }}
+                className="group"
+              >
+                <Card className="h-full overflow-hidden transition-all duration-300 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 hover:shadow-lg group-hover:scale-[1.02]">
+                  <CardHeader className="pb-4">
+                    <CardTitle className="text-xl font-bold text-primary dark:text-primary-foreground line-clamp-2">
+                      {achievement.title}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
+                        <span className="flex items-center gap-1">
+                          <GraduationCap className="w-4 h-4" />
+                          {achievement.issuer}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <Calendar className="w-4 h-4" />
+                          {achievement.date}
+                        </span>
+                      </div>
+                      
+                      <p className="text-gray-600 dark:text-gray-300 line-clamp-3 group-hover:line-clamp-none transition-all duration-300">
+                        {achievement.about_learning}
+                      </p>
+                      
+                      <div className="pt-2">
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary-foreground">
+                          {categories.find(c => c.id === getCategoryFromTitle(achievement.title))?.icon}
+                          <span className="ml-1">
+                            {categories.find(c => c.id === getCategoryFromTitle(achievement.title))?.label}
                           </span>
-                        </div>
-                      </AccordionTrigger>
-                      <AccordionContent>
-                        <div className="space-y-4 py-2">
-                          {category.items.map((course, courseIndex) => (
-                            <div
-                              key={courseIndex}
-                              className="group bg-[#9b87f5]/[0.08] hover:bg-[#9b87f5]/[0.15] rounded-xl p-5 transition-all duration-300 border border-[#9b87f5]/20 hover:border-[#9b87f5]/40"
-                            >
-                              <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-                                <div className="flex-1 space-y-3">
-                                  <div className="flex items-start gap-2">
-                                    {course.featured && (
-                                      <Star className="w-5 h-5 text-yellow-400 shrink-0 mt-1 animate-pulse" />
-                                    )}
-                                    <h3 className="text-lg font-medium text-white group-hover:text-[#9b87f5] transition-colors">
-                                      {course.title}
-                                    </h3>
-                                  </div>
-                                  
-                                  <div className="flex flex-wrap gap-4 text-sm text-[#9b87f5]/80">
-                                    <div className="flex items-center gap-1.5">
-                                      <User className="w-4 h-4" />
-                                      <span>{course.platform}</span>
-                                      {course.instructor && (
-                                        <>
-                                          <span className="text-[#9b87f5]/40 mx-2">•</span>
-                                          <span>{course.instructor}</span>
-                                        </>
-                                      )}
-                                    </div>
-                                  </div>
-
-                                  {course.description && (
-                                    <p className="text-sm text-[#9b87f5]/70 leading-relaxed">
-                                      {course.description}
-                                    </p>
-                                  )}
-                                </div>
-                                
-                                <div className="flex items-center gap-3">
-                                  <div className="flex items-center gap-1.5 text-sm text-[#9b87f5]/80">
-                                    <Calendar className="w-4 h-4" />
-                                    <span>{course.completed}</span>
-                                  </div>
-                                  <Badge 
-                                    variant="secondary"
-                                    className="bg-[#9b87f5]/20 text-white hover:bg-[#9b87f5]/30 transition-all duration-300 whitespace-nowrap"
-                                  >
-                                    Completed
-                                  </Badge>
-                                </div>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </AccordionContent>
-                    </AccordionItem>
-                  ))}
-                </Accordion>
-              </div>
-            </ScrollArea>
-          </div>
-        </div>
-      </section>
+                        </span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </motion.div>
+        </AnimatePresence>
+      </div>
     </div>
   );
 };
