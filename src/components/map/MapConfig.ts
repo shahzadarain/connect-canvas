@@ -11,11 +11,6 @@ export const mapConfig = {
     bearing: 0,
     pitch: 30,
   },
-  mapStyle: {
-    version: 8,
-    sources: {},
-    layers: [],
-  },
 };
 
 export const workLocations: MapLocation[] = [

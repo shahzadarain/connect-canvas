@@ -1,5 +1,5 @@
 import mapboxgl from 'mapbox-gl';
-import { type Location } from './types';
+import { MapLocation } from './types';
 
 export const createCustomMarker = (coordinates: [number, number]) => {
   const el = document.createElement('div');
@@ -12,8 +12,8 @@ export const createCustomMarker = (coordinates: [number, number]) => {
   return new mapboxgl.Marker(el);
 };
 
-export const addMarkersToMap = (map: mapboxgl.Map, locations: Location[]) => {
-  locations.forEach(([name, coordinates]) => {
+export const addMarkersToMap = (map: mapboxgl.Map, locations: MapLocation[]) => {
+  locations.forEach((location) => {
     const popup = new mapboxgl.Popup({
       closeButton: false,
       closeOnClick: false,
@@ -22,12 +22,12 @@ export const addMarkersToMap = (map: mapboxgl.Map, locations: Location[]) => {
     }).setHTML(`
       <div class="bg-[#1A1F2C]/90 backdrop-blur-md px-4 py-2.5 rounded-lg shadow-xl border border-purple-500/20
                   transform transition-all duration-300 hover:scale-105">
-        <h3 class="text-sm font-bold text-white">${name}</h3>
+        <h3 class="text-sm font-bold text-white">${location.name}</h3>
       </div>
     `);
 
-    const marker = createCustomMarker(coordinates)
-      .setLngLat(coordinates)
+    const marker = createCustomMarker(location.coordinates)
+      .setLngLat(location.coordinates)
       .setPopup(popup)
       .addTo(map);
 
