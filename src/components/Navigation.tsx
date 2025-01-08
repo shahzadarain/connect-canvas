@@ -33,9 +33,9 @@ const Navigation = () => {
             <NavigationLink to="/ideas">Ideas</NavigationLink>
             <NavigationLink to="/journey">Journey</NavigationLink>
             <NavigationLink to="/learning">Learning</NavigationLink>
+            <NavigationLink to="/reading">Reading</NavigationLink>
             {session && (
               <>
-                <NavigationLink to="/reading">Reading</NavigationLink>
                 <NavigationLink to="/book-discussions">
                   Book Discussions
                 </NavigationLink>
@@ -80,11 +80,11 @@ const Navigation = () => {
             <NavigationLink to="/learning" mobile onClick={closeMenu}>
               Learning
             </NavigationLink>
+            <NavigationLink to="/reading" mobile onClick={closeMenu}>
+              Reading
+            </NavigationLink>
             {session && (
               <>
-                <NavigationLink to="/reading" mobile onClick={closeMenu}>
-                  Reading
-                </NavigationLink>
                 <NavigationLink to="/book-discussions" mobile onClick={closeMenu}>
                   Book Discussions
                 </NavigationLink>
