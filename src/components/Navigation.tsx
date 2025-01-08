@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
-import NavigationLink from "./navigation/NavigationLink";
-import MobileMenuButton from "./navigation/MobileMenuButton";
+import { useLocation } from "react-router-dom";
 import ScrollButton from "./navigation/ScrollButton";
 import { Progress } from "./ui/progress";
 import { motion, AnimatePresence } from "framer-motion";
+import NavigationHeader from "./navigation/NavigationHeader";
+import TimelineNavigation from "./navigation/TimelineNavigation";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,10 +26,8 @@ const Navigation = () => {
     const handleTouchMove = (e: TouchEvent) => {
       touchEnd = e.touches[0].clientY;
       
-      // Only trigger refresh when at top of page and pulling down
       if (window.scrollY === 0 && touchEnd - touchStart > 100 && !isRefreshing) {
         setIsRefreshing(true);
-        // Refresh the page after animation
         setTimeout(() => {
           window.location.reload();
         }, 1000);
@@ -64,6 +62,8 @@ const Navigation = () => {
     setIsOpen(!isOpen);
   };
 
+  const isActive = (path: string) => location.pathname === path;
+
   return (
     <>
       {/* Pull to refresh indicator */}
@@ -95,106 +95,46 @@ const Navigation = () => {
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex">
-              <div className="flex-shrink-0 flex items-center">
-                <Link 
-                  to="/" 
-                  className="text-xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent hover:opacity-80 transition-opacity"
-                >
-                  Shahzad Asghar
-                </Link>
+          <NavigationHeader isOpen={isOpen} toggleMenu={toggleMenu} />
+          
+          {/* Desktop menu */}
+          <div className="hidden sm:block py-4">
+            {isHomePage && (
+              <div className="flex space-x-4 mb-4">
+                <ScrollButton to="hero">Home</ScrollButton>
+                <ScrollButton to="contact">Contact</ScrollButton>
               </div>
-            </div>
-
-            {/* Desktop menu */}
-            <div className="hidden sm:flex sm:items-center">
-              {isHomePage ? (
-                <>
-                  <ScrollButton to="hero">Home</ScrollButton>
-                  <ScrollButton to="contact">Contact</ScrollButton>
-                </>
-              ) : null}
-              <NavigationLink to="/achievements" isActive={location.pathname === '/achievements'}>
-                Achievements
-              </NavigationLink>
-              <NavigationLink to="/ai-tools" isActive={location.pathname === '/ai-tools'}>
-                AI Tools
-              </NavigationLink>
-              <NavigationLink to="/ai-news" isActive={location.pathname === '/ai-news'}>
-                AI News
-              </NavigationLink>
-              <NavigationLink to="/ai-humanitarian" isActive={location.pathname === '/ai-humanitarian'}>
-                AI Humanitarian
-              </NavigationLink>
-              <NavigationLink to="/blog" isActive={location.pathname === '/blog'}>
-                Blog
-              </NavigationLink>
-              <NavigationLink to="/reading" isActive={location.pathname === '/reading'}>
-                Reading List
-              </NavigationLink>
-              <NavigationLink to="/projects" isActive={location.pathname === '/projects'}>
-                Projects
-              </NavigationLink>
-              <NavigationLink to="/ideas" isActive={location.pathname === '/ideas'}>
-                Ideas
-              </NavigationLink>
-            </div>
-
-            {/* Mobile menu button */}
-            <MobileMenuButton isOpen={isOpen} toggleMenu={toggleMenu} />
+            )}
+            <TimelineNavigation isActive={isActive} />
           </div>
-        </div>
 
-        {/* Mobile menu */}
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.2 }}
-              className="sm:hidden bg-white/95 dark:bg-gray-900/95 backdrop-blur-md"
-            >
-              <div className="pt-2 pb-3 space-y-1">
-                {isHomePage ? (
-                  <>
-                    <ScrollButton to="hero" mobile>Home</ScrollButton>
-                    <ScrollButton to="contact" mobile>Contact</ScrollButton>
-                  </>
-                ) : null}
-                <NavigationLink to="/achievements" mobile isActive={location.pathname === '/achievements'}>
-                  Achievements
-                </NavigationLink>
-                <NavigationLink to="/ai-tools" mobile isActive={location.pathname === '/ai-tools'}>
-                  AI Tools
-                </NavigationLink>
-                <NavigationLink to="/ai-news" mobile isActive={location.pathname === '/ai-news'}>
-                  AI News
-                </NavigationLink>
-                <NavigationLink to="/ai-humanitarian" mobile isActive={location.pathname === '/ai-humanitarian'}>
-                  AI Humanitarian
-                </NavigationLink>
-                <NavigationLink to="/blog" mobile isActive={location.pathname === '/blog'}>
-                  Blog
-                </NavigationLink>
-                <NavigationLink to="/reading" mobile isActive={location.pathname === '/reading'}>
-                  Reading List
-                </NavigationLink>
-                <NavigationLink to="/projects" mobile isActive={location.pathname === '/projects'}>
-                  Projects
-                </NavigationLink>
-                <NavigationLink to="/ideas" mobile isActive={location.pathname === '/ideas'}>
-                  Ideas
-                </NavigationLink>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+          {/* Mobile menu */}
+          <AnimatePresence>
+            {isOpen && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.2 }}
+                className="sm:hidden bg-white/95 dark:bg-gray-900/95 backdrop-blur-md"
+              >
+                <div className="pt-2 pb-3 space-y-1">
+                  {isHomePage && (
+                    <>
+                      <ScrollButton to="hero" mobile>Home</ScrollButton>
+                      <ScrollButton to="contact" mobile>Contact</ScrollButton>
+                    </>
+                  )}
+                  <TimelineNavigation isMobile isActive={isActive} />
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
-        {/* Scroll Progress Indicator */}
-        <div className="absolute bottom-0 left-0 w-full h-0.5">
-          <Progress value={scrollProgress} className="rounded-none" />
+          {/* Scroll Progress Indicator */}
+          <div className="absolute bottom-0 left-0 w-full h-0.5">
+            <Progress value={scrollProgress} className="rounded-none" />
+          </div>
         </div>
       </nav>
       {/* Spacer to prevent content from hiding under fixed nav */}
