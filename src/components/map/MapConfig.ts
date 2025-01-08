@@ -38,14 +38,7 @@ export const missionLocations: MapLocation[] = [
 
 // Map configuration
 export const mapConfig: Partial<MapProps> = {
-  initialViewState: {
-    longitude: -100,
-    latitude: 40,
-    zoom: 1.5,
-    pitch: 0,
-    bearing: 0,
-  },
-  minZoom: 0.5,
+  minZoom: 1,
   maxZoom: 20,
   dragRotate: true,
   projection: { name: 'globe' }
@@ -53,6 +46,8 @@ export const mapConfig: Partial<MapProps> = {
 
 // Helper function to generate curved paths between points
 export const generateCurvedPath = (start: [number, number], end: [number, number]): [number, number][] => {
+  if (!start || !end) return [];
+  
   const points: [number, number][] = [];
   const segments = 50;
 
@@ -64,7 +59,7 @@ export const generateCurvedPath = (start: [number, number], end: [number, number
     const lng = start[0] * (1 - t) + end[0] * t;
     
     // Add some curvature by modifying the latitude
-    const curveHeight = 0.2; // Adjust this value to change the curve height
+    const curveHeight = 0.2;
     const curve = Math.sin(t * Math.PI) * curveHeight;
     
     points.push([lng, lat + curve]);

@@ -1,5 +1,6 @@
-import React, { useCallback, useMemo } from 'react';
-import Map from 'react-map-gl';
+import React, { useCallback, useMemo, useEffect } from 'react';
+import Map, { NavigationControl } from 'react-map-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
 import { mapConfig, workLocations, missionLocations } from './map/MapConfig';
 import MapMarkers from './map/MapMarkers';
 import MapPaths from './map/MapPaths';
@@ -38,6 +39,14 @@ const WorldMap = () => {
     console.log('Map loaded successfully');
   }, []);
 
+  if (!MAPBOX_TOKEN) {
+    return (
+      <div className="w-full h-[600px] flex items-center justify-center bg-gray-100 rounded-lg">
+        <p className="text-gray-500">Please add your Mapbox token to the environment variables.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full h-[600px] relative">
       <Map
@@ -45,8 +54,16 @@ const WorldMap = () => {
         onLoad={onMapLoad}
         attributionControl={false}
         mapStyle="mapbox://styles/mapbox/dark-v11"
-        {...mapConfig}
+        initialViewState={{
+          longitude: 0,
+          latitude: 20,
+          zoom: 1.5,
+          pitch: 0,
+          bearing: 0,
+        }}
+        projection="globe"
       >
+        <NavigationControl position="top-right" />
         <MapPaths paths={paths} />
         <MapMarkers markers={markers} />
       </Map>
