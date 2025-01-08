@@ -11,40 +11,34 @@ export type Database = {
     Tables: {
       achievements: {
         Row: {
-          About_Learning: string | null
+          about_learning: string
           alt_text: string | null
-          created_at: string | null
           date: string
           id: number
           image_url: string | null
           issuer: string
           link: string | null
           title: string
-          updated_at: string | null
         }
         Insert: {
-          About_Learning?: string | null
+          about_learning: string
           alt_text?: string | null
-          created_at?: string | null
           date: string
           id?: number
           image_url?: string | null
           issuer: string
           link?: string | null
           title: string
-          updated_at?: string | null
         }
         Update: {
-          About_Learning?: string | null
+          about_learning?: string
           alt_text?: string | null
-          created_at?: string | null
           date?: string
           id?: number
           image_url?: string | null
           issuer?: string
           link?: string | null
           title?: string
-          updated_at?: string | null
         }
         Relationships: []
       }

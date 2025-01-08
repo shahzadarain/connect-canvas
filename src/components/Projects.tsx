@@ -1,62 +1,174 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { Input } from "@/components/ui/input";
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { Search, Award } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+interface Project {
+  id: number;
+  title: string;
+  description: string | null;
+  category: string;
+  tags: string[] | null;
+  created_at: string | null;
+}
 
 const Projects = () => {
-  const projects = [
-    {
-      title: 'AI for Humanitarian Aid',
-      description: 'Leveraging artificial intelligence to enhance humanitarian aid delivery and impact assessment.',
-      link: '/ai-humanitarian',
-      tags: ['AI', 'Humanitarian', 'Innovation']
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
+  const { data: projects, isLoading } = useQuery({
+    queryKey: ["projects"],
+    queryFn: async () => {
+      console.log("Fetching projects");
+      const { data, error } = await supabase
+        .from("projects")
+        .select("*")
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error("Error fetching projects:", error);
+        throw error;
+      }
+      
+      console.log("Fetched projects:", data);
+      return data as Project[];
     },
-    {
-      title: 'Digital Transformation',
-      description: 'Leading digital transformation initiatives for organizations to improve efficiency and effectiveness.',
-      link: '/ai-tools',
-      tags: ['Digital', 'Technology', 'Transformation']
-    },
-    {
-      title: 'Data Analytics',
-      description: 'Implementing advanced analytics solutions to drive data-informed decision making.',
-      link: '/ai-news',
-      tags: ['Analytics', 'Data', 'Intelligence']
-    }
+  });
+
+  const categories = [
+    { id: 'ai', label: 'AI & ML', icon: '🧠' },
+    { id: 'security', label: 'Security', icon: '🔒' },
+    { id: 'data', label: 'Data Science', icon: '📊' },
+    { id: 'cloud', label: 'Cloud', icon: '☁️' },
   ];
 
+  const filteredProjects = projects?.filter(project => {
+    const matchesSearch = searchQuery === "" || 
+      project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      project.description?.toLowerCase().includes(searchQuery.toLowerCase());
+
+    const matchesCategory = !selectedCategory || project.category === selectedCategory;
+
+    return matchesSearch && matchesCategory;
+  });
+
   return (
-    <section id="projects" className="py-20 bg-gray-50 dark:bg-gray-900">
-      <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold text-center mb-12">Featured Projects</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project, index) => (
-            <div 
-              key={index}
-              className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300"
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
+      <div className="container mx-auto px-4 py-16">
+        {/* Header */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-16"
+        >
+          <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-accent">
+            Project Portfolio
+          </h1>
+          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+            Explore my projects across different domains and technologies
+          </p>
+          
+          {/* Project Counter */}
+          <div className="mt-8 flex items-center justify-center gap-2 text-lg font-medium">
+            <Award className="w-6 h-6 text-primary" />
+            <span>{projects?.length || 0} Projects Completed</span>
+          </div>
+        </motion.div>
+
+        {/* Search and Filters */}
+        <div className="mb-12 space-y-6">
+          <div className="relative max-w-xl mx-auto">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <Input
+              type="text"
+              placeholder="Search projects..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm"
+            />
+          </div>
+
+          <div className="flex flex-wrap gap-3 justify-center">
+            <Button
+              variant={selectedCategory === null ? "default" : "outline"}
+              onClick={() => setSelectedCategory(null)}
+              className="min-w-[100px]"
             >
-              <h3 className="text-xl font-semibold mb-3">{project.title}</h3>
-              <p className="text-gray-600 dark:text-gray-300 mb-4">{project.description}</p>
-              <div className="flex flex-wrap gap-2 mb-4">
-                {project.tags.map((tag) => (
-                  <span 
-                    key={tag}
-                    className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-100 rounded-full text-sm"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-              <Link to={project.link}>
-                <Button variant="outline" className="w-full">
-                  Learn More <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </Link>
-            </div>
-          ))}
+              All
+            </Button>
+            {categories.map((category) => (
+              <Button
+                key={category.id}
+                variant={selectedCategory === category.id ? "default" : "outline"}
+                onClick={() => setSelectedCategory(category.id)}
+                className="min-w-[120px]"
+              >
+                <span className="mr-2">{category.icon}</span>
+                {category.label}
+              </Button>
+            ))}
+          </div>
         </div>
+
+        {/* Projects Grid */}
+        <AnimatePresence mode="popLayout">
+          <motion.div 
+            layout
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          >
+            {filteredProjects?.map((project) => (
+              <motion.div
+                key={project.id}
+                layout
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.3 }}
+                className="group"
+              >
+                <Card className="h-full overflow-hidden transition-all duration-300 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 hover:shadow-lg group-hover:scale-[1.02]">
+                  <CardHeader className="pb-4">
+                    <CardTitle className="text-xl font-bold text-primary dark:text-primary-foreground line-clamp-2">
+                      {project.title}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-6">
+                      <p className="text-gray-600 dark:text-gray-300 line-clamp-3 group-hover:line-clamp-none transition-all duration-300">
+                        {project.description}
+                      </p>
+                      
+                      <div className="flex flex-wrap gap-2">
+                        {project.tags?.map((tag, index) => (
+                          <span
+                            key={index}
+                            className="px-3 py-1 text-sm font-medium rounded-full bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary-foreground"
+                          >
+                            #{tag}
+                          </span>
+                        ))}
+                      </div>
+
+                      <div className="text-sm text-gray-500 dark:text-gray-400">
+                        {new Date(project.created_at || '').toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: 'long'
+                        })}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </motion.div>
+        </AnimatePresence>
       </div>
-    </section>
+    </div>
   );
 };
 
