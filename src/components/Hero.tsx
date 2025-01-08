@@ -35,7 +35,14 @@ const Hero = () => {
   ];
 
   return (
-    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-[#222222]">
+    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-[#001524]">
+      {/* Large Number Background */}
+      <div className="absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-20 pointer-events-none">
+        <div className="text-[20rem] font-bold bg-gradient-to-b from-[#0FA0CE] to-[#0047AB] bg-clip-text text-transparent">
+          18
+        </div>
+      </div>
+
       {/* Subtle Pattern Overlay */}
       <div 
         className="absolute inset-0 opacity-5"
@@ -72,14 +79,14 @@ const Hero = () => {
             </p>
             <p className="text-lg md:text-xl text-white/90 max-w-4xl mx-auto leading-relaxed font-serif">
               With two decades of experience, I've merged{' '}
-              <span className="bg-[#0047AB]/20 px-1">IT infrastructure</span>,{' '}
-              <span className="bg-[#0047AB]/20 px-1">cloud services</span>,{' '}
-              <span className="bg-[#0047AB]/20 px-1">AI</span>, and{' '}
-              <span className="bg-[#0047AB]/20 px-1">analytics</span> to support
+              <span className="bg-[#0FA0CE]/20 px-1">IT infrastructure</span>,{' '}
+              <span className="bg-[#0FA0CE]/20 px-1">cloud services</span>,{' '}
+              <span className="bg-[#0FA0CE]/20 px-1">AI</span>, and{' '}
+              <span className="bg-[#0FA0CE]/20 px-1">analytics</span> to support
               informed decisions and protect vulnerable communities. My work spans from integrating{' '}
-              <span className="bg-[#0047AB]/20 px-1">refugee data</span> with{' '}
-              <span className="bg-[#0047AB]/20 px-1">national health systems</span> to implementing{' '}
-              <span className="bg-[#0047AB]/20 px-1">AI-enabled communication solutions</span>.
+              <span className="bg-[#0FA0CE]/20 px-1">refugee data</span> with{' '}
+              <span className="bg-[#0FA0CE]/20 px-1">national health systems</span> to implementing{' '}
+              <span className="bg-[#0FA0CE]/20 px-1">AI-enabled communication solutions</span>.
             </p>
           </motion.div>
 
@@ -95,7 +102,7 @@ const Hero = () => {
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.5 + index * 0.1 }}
-                className="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[#2A2D3E] to-[#1F2937] text-[#7DD3FC] text-sm font-medium border border-[#7DD3FC]/20 hover:border-[#7DD3FC]/50 transition-all duration-300 shadow-lg hover:shadow-[#7DD3FC]/10"
+                className="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[#0FA0CE] to-[#0047AB] text-white text-sm font-medium border border-[#0FA0CE]/20 hover:border-[#0FA0CE]/50 transition-all duration-300 shadow-lg hover:shadow-[#0FA0CE]/10"
               >
                 {item.icon}
                 <span>{item.tag}</span>
@@ -112,7 +119,7 @@ const Hero = () => {
           >
             <Button
               asChild
-              className="bg-gradient-to-r from-[#4F46E5] via-[#7C3AED] to-[#9333EA] hover:from-[#4338CA] hover:via-[#6D28D9] hover:to-[#7E22CE] text-white px-12 py-7 text-lg font-semibold rounded-2xl shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 border border-purple-500/20"
+              className="bg-gradient-to-r from-[#0FA0CE] to-[#0047AB] hover:from-[#0D8BAF] hover:to-[#003D94] text-white px-12 py-7 text-lg font-semibold rounded-2xl shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 border border-[#0FA0CE]/20"
             >
               <a 
                 href="https://www.linkedin.com/in/shahzadasghar1/" 
@@ -128,7 +135,7 @@ const Hero = () => {
           {cursorParticles.map((particle) => (
             <motion.div
               key={particle.id}
-              className="fixed w-2 h-2 bg-[#60A5FA] rounded-full pointer-events-none"
+              className="fixed w-2 h-2 bg-[#0FA0CE] rounded-full pointer-events-none"
               initial={{ opacity: 0.8, scale: 1 }}
               animate={{
                 opacity: 0,
