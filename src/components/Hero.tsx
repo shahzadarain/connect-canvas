@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Button } from "./ui/button";
-import { Shield, Cloud, Globe, Brain, Database } from "lucide-react";
+import { Shield, Cloud, Globe, Brain, Database, ArrowRight } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -27,11 +27,9 @@ const Hero = () => {
   }, [isMobile]);
 
   const hashTags = [
-    { tag: "#DigitalTransformation", icon: <Database className="w-4 h-4" /> },
-    { tag: "#HumanitarianTech", icon: <Globe className="w-4 h-4" /> },
-    { tag: "#AIInnovation", icon: <Brain className="w-4 h-4" /> },
-    { tag: "#CloudComputing", icon: <Cloud className="w-4 h-4" /> },
-    { tag: "#Cybersecurity", icon: <Shield className="w-4 h-4" /> }
+    { tag: "Earn a globally recognized certification", icon: <ArrowRight className="w-5 h-5" /> },
+    { tag: "Stay at the top of your field", icon: <ArrowRight className="w-5 h-5" /> },
+    { tag: "Fast-track your career", icon: <ArrowRight className="w-5 h-5" /> }
   ];
 
   return (
@@ -94,18 +92,18 @@ const Hero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="flex flex-wrap justify-center gap-4 mt-12 mb-12"
+            className="flex flex-col gap-6 mt-12 mb-12 max-w-3xl mx-auto"
           >
             {hashTags.map((item, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.5 + index * 0.1 }}
-                className="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[#0FA0CE] to-[#0047AB] text-white text-sm font-medium border border-[#0FA0CE]/20 hover:border-[#0FA0CE]/50 transition-all duration-300 shadow-lg hover:shadow-[#0FA0CE]/10"
+                className="flex items-center justify-between px-6 py-4 bg-white border-2 border-[#FF4500] text-[#FF4500] text-xl md:text-2xl font-bold hover:bg-[#FF4500] hover:text-white transition-all duration-300"
               >
-                {item.icon}
                 <span>{item.tag}</span>
+                {item.icon}
               </motion.div>
             ))}
           </motion.div>
