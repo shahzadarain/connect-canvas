@@ -5,14 +5,14 @@ import { Progress } from "./ui/progress";
 import { motion, AnimatePresence } from "framer-motion";
 import NavigationHeader from "./navigation/NavigationHeader";
 import NavigationLink from "./navigation/NavigationLink";
-import { useToast } from "./ui/use-toast";
+import { Search } from "lucide-react";
+import { Input } from "./ui/input";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
-  const { toast } = useToast();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -43,21 +43,16 @@ const Navigation = () => {
         transition={{ duration: 0.5 }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled 
-            ? "bg-primary/90 backdrop-blur-xl shadow-lg" 
-            : "bg-primary/75 backdrop-blur-lg"
+            ? "bg-primary/95 backdrop-blur-xl shadow-lg" 
+            : "bg-primary/90 backdrop-blur-lg"
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <NavigationHeader isOpen={isOpen} toggleMenu={toggleMenu} />
-          
-          {/* Desktop menu - iOS style */}
-          <div className="hidden sm:block">
-            <div className="flex justify-center space-x-1 py-3">
+          <div className="flex items-center justify-between h-16">
+            {/* Desktop menu */}
+            <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-center space-x-1">
               <NavigationLink to="/" isActive={isActive("/")}>
                 Home
-              </NavigationLink>
-              <NavigationLink to="/contact" isActive={isActive("/contact")}>
-                Contact
               </NavigationLink>
               <NavigationLink to="/achievements" isActive={isActive("/achievements")}>
                 Achievements
@@ -75,7 +70,7 @@ const Navigation = () => {
                 Blog
               </NavigationLink>
               <NavigationLink to="/reading" isActive={isActive("/reading")}>
-                Reading List
+                Reading
               </NavigationLink>
               <NavigationLink to="/projects" isActive={isActive("/projects")}>
                 Projects
@@ -84,24 +79,36 @@ const Navigation = () => {
                 Ideas
               </NavigationLink>
             </div>
+
+            {/* Search bar */}
+            <div className="hidden sm:flex items-center ml-4 relative">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                <Input 
+                  type="search"
+                  placeholder="Search..."
+                  className="pl-10 pr-4 py-2 w-[200px] bg-white/10 border-0 text-white placeholder:text-gray-400 focus:ring-2 focus:ring-white/20"
+                />
+              </div>
+            </div>
+
+            {/* Mobile menu button */}
+            <NavigationHeader isOpen={isOpen} toggleMenu={toggleMenu} />
           </div>
 
-          {/* Mobile menu with iOS-style animations */}
+          {/* Mobile menu */}
           <AnimatePresence>
             {isOpen && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.2, ease: "easeInOut" }}
+                transition={{ duration: 0.2 }}
                 className="sm:hidden bg-primary/95 backdrop-blur-xl rounded-b-xl"
               >
                 <div className="px-2 pt-2 pb-3 space-y-1">
                   <NavigationLink to="/" isActive={isActive("/")} mobile>
                     Home
-                  </NavigationLink>
-                  <NavigationLink to="/contact" isActive={isActive("/contact")} mobile>
-                    Contact
                   </NavigationLink>
                   <NavigationLink to="/achievements" isActive={isActive("/achievements")} mobile>
                     Achievements
@@ -119,7 +126,7 @@ const Navigation = () => {
                     Blog
                   </NavigationLink>
                   <NavigationLink to="/reading" isActive={isActive("/reading")} mobile>
-                    Reading List
+                    Reading
                   </NavigationLink>
                   <NavigationLink to="/projects" isActive={isActive("/projects")} mobile>
                     Projects
@@ -132,7 +139,7 @@ const Navigation = () => {
             )}
           </AnimatePresence>
 
-          {/* iOS-style progress indicator */}
+          {/* Progress bar */}
           <div className="absolute bottom-0 left-0 w-full h-[2px]">
             <Progress value={scrollProgress} className="rounded-none bg-white/10" />
           </div>
@@ -140,7 +147,7 @@ const Navigation = () => {
       </motion.nav>
 
       {/* Minimal spacer */}
-      <div className="h-12" />
+      <div className="h-16" />
     </>
   );
 };
