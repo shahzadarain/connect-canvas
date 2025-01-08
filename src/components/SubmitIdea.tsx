@@ -78,85 +78,72 @@ const SubmitIdea = () => {
   };
 
   return (
-    <section id="submit" className="py-24 bg-gradient-to-b from-[#F2FCE2] to-white relative overflow-hidden">
-      <div className="absolute inset-0 bg-grid-black/[0.02] -z-10" />
-      <div className="container mx-auto px-4 relative">
-        <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-12">
-            <div className="inline-block p-2 bg-[#E5DEFF] rounded-full mb-4">
-              <Sparkles className="w-6 h-6 text-[#8B5CF6]" />
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold text-[#1A1F2C] mb-4 tracking-tight">
-              Submit Your Innovative Idea
-            </h2>
-            <p className="text-lg text-[#403E43] md:text-xl max-w-2xl mx-auto">
-              Share your ideas for AI and data-driven solutions in the humanitarian sector
-            </p>
+    <section className="min-h-screen bg-gradient-to-b from-blue-50 to-white py-20">
+      <div className="container max-w-4xl mx-auto px-4">
+        <div className="text-center mb-12">
+          <div className="inline-block p-2 bg-blue-100 rounded-full mb-4">
+            <Sparkles className="w-6 h-6 text-blue-600" />
           </div>
-          
-          <Card className="p-8 md:p-10 shadow-xl backdrop-blur-sm bg-white/95 rounded-2xl border border-[#E5DEFF]">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="space-y-2">
-                <label htmlFor="name" className="block text-lg font-medium text-[#1A1F2C]">
-                  Your Name
-                </label>
-                <Input
-                  id="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                  placeholder="Enter your name"
-                  className="text-lg h-12 transition-all duration-300 border-[#E5DEFF] focus:border-[#8B5CF6] focus:ring-2 focus:ring-[#8B5CF6]/20"
-                />
-              </div>
-              
-              <div className="space-y-2">
-                <label htmlFor="email" className="block text-lg font-medium text-[#1A1F2C]">
-                  Email
-                </label>
-                <Input
-                  type="email"
-                  id="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  placeholder="your@email.com"
-                  className="text-lg h-12 transition-all duration-300 border-[#E5DEFF] focus:border-[#8B5CF6] focus:ring-2 focus:ring-[#8B5CF6]/20"
-                />
-              </div>
-              
-              <div className="space-y-2">
-                <label htmlFor="idea" className="block text-lg font-medium text-[#1A1F2C]">
-                  Your Idea
-                </label>
-                <Textarea
-                  id="idea"
-                  value={formData.idea}
-                  onChange={handleChange}
-                  required
-                  rows={6}
-                  placeholder="Describe your idea for using AI and data in humanitarian projects..."
-                  className="text-lg resize-none transition-all duration-300 border-[#E5DEFF] focus:border-[#8B5CF6] focus:ring-2 focus:ring-[#8B5CF6]/20"
-                />
-              </div>
-              
-              <Button 
-                type="submit" 
-                className="w-full text-lg py-6 bg-gradient-to-r from-[#8B5CF6] to-[#9b87f5] hover:from-[#9b87f5] hover:to-[#8B5CF6] text-white transition-all duration-300 transform hover:scale-[1.02] shadow-lg hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed h-auto"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? (
-                  <>
-                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                    Submitting...
-                  </>
-                ) : (
-                  'Share Your Idea'
-                )}
-              </Button>
-            </form>
-          </Card>
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            Share Your Innovative Idea
+          </h2>
+          <p className="text-lg text-gray-600">
+            We'd love to hear your thoughts on using AI for social impact
+          </p>
         </div>
+
+        <Card className="overflow-hidden shadow-xl rounded-2xl bg-white/95 backdrop-blur-sm">
+          <form onSubmit={handleSubmit} className="p-8 space-y-6">
+            <div className="space-y-2">
+              <Input
+                id="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                placeholder="Your name"
+                className="h-14 px-6 text-lg bg-white rounded-xl border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Input
+                type="email"
+                id="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                placeholder="Your email"
+                className="h-14 px-6 text-lg bg-white rounded-xl border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Textarea
+                id="idea"
+                value={formData.idea}
+                onChange={handleChange}
+                required
+                placeholder="Share your idea here..."
+                className="min-h-[150px] p-6 text-lg bg-white rounded-xl border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 resize-none"
+              />
+            </div>
+
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full h-14 text-lg font-medium bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100"
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                  Submitting...
+                </>
+              ) : (
+                'Share Idea'
+              )}
+            </Button>
+          </form>
+        </Card>
       </div>
     </section>
   );
