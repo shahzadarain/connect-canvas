@@ -44,6 +44,7 @@ const WorldMap = () => {
         mapboxAccessToken={MAPBOX_TOKEN}
         onLoad={onMapLoad}
         attributionControl={false}
+        mapStyle="mapbox://styles/mapbox/dark-v11"
         {...mapConfig}
       >
         <MapPaths paths={paths} />

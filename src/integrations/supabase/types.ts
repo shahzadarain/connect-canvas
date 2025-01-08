@@ -11,6 +11,7 @@ export type Database = {
     Tables: {
       achievements: {
         Row: {
+          About_Learning: string | null
           alt_text: string | null
           created_at: string | null
           date: string
@@ -22,6 +23,7 @@ export type Database = {
           updated_at: string | null
         }
         Insert: {
+          About_Learning?: string | null
           alt_text?: string | null
           created_at?: string | null
           date: string
@@ -33,6 +35,7 @@ export type Database = {
           updated_at?: string | null
         }
         Update: {
+          About_Learning?: string | null
           alt_text?: string | null
           created_at?: string | null
           date?: string

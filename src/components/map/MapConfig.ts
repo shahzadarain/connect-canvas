@@ -2,7 +2,14 @@ import { ProjectionSpecification } from 'mapbox-gl';
 import { MapLocation } from './types';
 
 export const mapConfig = {
-  style: 'mapbox://styles/mapbox/dark-v11',
+  style: {
+    version: 8,
+    sources: {},
+    layers: [],
+    glyphs: "mapbox://fonts/mapbox/{fontstack}/{range}.pbf",
+    sprite: "mapbox://sprites/mapbox/dark-v11",
+    name: "dark"
+  },
   projection: { name: 'mercator' } as ProjectionSpecification,
   initialViewState: {
     longitude: 20,
