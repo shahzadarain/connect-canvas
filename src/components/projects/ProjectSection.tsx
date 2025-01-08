@@ -4,7 +4,13 @@ import { Project } from "./types";
 import ProjectCard from "./ProjectCard";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const ProjectSection = ({ category }: { category: string }) => {
+interface ProjectSectionProps {
+  category: string;
+  searchQuery: string;
+  selectedTags: string[];
+}
+
+const ProjectSection = ({ category, searchQuery, selectedTags }: ProjectSectionProps) => {
   console.log("Rendering ProjectSection for category:", category);
 
   const { data: projects, isLoading, error } = useQuery({
@@ -24,6 +30,17 @@ const ProjectSection = ({ category }: { category: string }) => {
     staleTime: 1000 * 60 * 2,
   });
 
+  const filteredProjects = projects?.filter(project => {
+    const matchesSearch = searchQuery === "" || 
+      project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      project.description?.toLowerCase().includes(searchQuery.toLowerCase());
+
+    const matchesTags = selectedTags.length === 0 || 
+      selectedTags.some(tag => project.tags?.includes(tag.replace('#', '')));
+
+    return matchesSearch && matchesTags;
+  });
+
   if (error) {
     console.error("Error fetching projects:", error);
     return <div>Error loading projects</div>;
@@ -41,7 +58,7 @@ const ProjectSection = ({ category }: { category: string }) => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {projects?.map((project) => (
+      {filteredProjects?.map((project) => (
         <ProjectCard key={project.id} project={project} />
       ))}
     </div>
