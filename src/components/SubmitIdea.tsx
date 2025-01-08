@@ -34,10 +34,11 @@ const SubmitIdea = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
+    console.log('Starting idea submission...');
     
     try {
       const { name, email, idea } = formData;
-      console.log('Submitting idea to Supabase:', { name, email, idea });
+      console.log('Submitting idea with data:', { name, email, idea });
       
       const { data, error } = await supabase
         .from('ideas')
@@ -50,10 +51,10 @@ const SubmitIdea = () => {
             created_at: new Date().toISOString()
           }
         ])
-        .select();
+        .select('*');
 
       if (error) {
-        console.error('Error submitting idea:', error);
+        console.error('Supabase error when submitting idea:', error);
         throw error;
       }
 
