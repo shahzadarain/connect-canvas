@@ -1,35 +1,41 @@
-import { cn } from '@/lib/utils';
-import { Link } from 'react-router-dom';
+import { NavLink } from "react-router-dom";
+import { cn } from "@/lib/utils";
 
-interface NavigationLinkProps {
+type NavigationLinkProps = {
   to: string;
   children: React.ReactNode;
-  isActive?: boolean;
-  mobile?: boolean;
-}
+  className?: string;
+};
 
-const NavigationLink = ({ to, children, isActive, mobile }: NavigationLinkProps) => {
+const NavigationLink = ({ to, children, className }: NavigationLinkProps) => {
+  const links = [
+    { path: "/", label: "Home" },
+    { path: "/journey", label: "Journey" },
+    { path: "/ai-tools", label: "AI Tools" },
+    { path: "/ai-news", label: "AI News" },
+    { path: "/ai-humanitarian", label: "AI Humanitarian" },
+    { path: "/blog", label: "Blog" },
+    { path: "/achievements", label: "Achievements" },
+    { path: "/projects", label: "Projects" },
+    { path: "/ideas", label: "Ideas" },
+  ];
+
+  const isMainLink = links.some(link => link.path === to);
+
   return (
-    <Link 
+    <NavLink
       to={to}
-      className={cn(
-        "relative transition-all duration-300",
-        mobile 
-          ? "block w-full px-4 py-3 text-base touch-manipulation" 
-          : "mx-4 py-2 text-sm font-medium",
-        isActive
-          ? 'text-accent'
-          : 'text-primary/80 hover:text-accent dark:text-white/80 dark:hover:text-accent',
-        !mobile && "after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-accent after:transform after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100",
-        // Add touch target padding for mobile
-        mobile && "touch-manipulation min-h-[44px] flex items-center"
-      )}
+      className={({ isActive }) =>
+        cn(
+          "transition-colors hover:text-white/90",
+          isMainLink ? "font-semibold" : "font-normal",
+          isActive ? "text-white" : "text-white/75",
+          className
+        )
+      }
     >
       {children}
-      {isActive && !mobile && (
-        <span className="absolute bottom-0 left-0 w-full h-0.5 bg-accent transform scale-x-100 transition-transform duration-300" />
-      )}
-    </Link>
+    </NavLink>
   );
 };
 

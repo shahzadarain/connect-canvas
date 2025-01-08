@@ -16,6 +16,7 @@ import AIHumanitarianTraining from "@/pages/AIHumanitarianTraining";
 import Achievements from "@/pages/Achievements";
 import Projects from "@/pages/Projects";
 import IdeasList from "@/pages/IdeasList";
+import Journey from "@/pages/Journey";
 import NotFound from "@/pages/NotFound";
 import ProtectedRoute from "@/components/ProtectedRoute";
 
@@ -48,6 +49,7 @@ function App() {
                 <Route path="/achievements" element={<Achievements />} />
                 <Route path="/projects" element={<Projects />} />
                 <Route path="/ideas" element={<IdeasList />} />
+                <Route path="/journey" element={<Journey />} />
                 <Route
                   path="/reading"
                   element={

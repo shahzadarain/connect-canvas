@@ -1,19 +1,18 @@
-export type Location = [string, [number, number], string];
+export type Location = [string, [number, number], string, string[], string[]];
 
-export type MapConfig = {
-  container: HTMLDivElement;
-  style: string;
-  center: [number, number];
-  zoom: number;
-  projection: string;
-};
-
-// Add the missing RouteFeature type
 export type RouteFeature = {
   type: 'Feature';
-  properties: Record<string, unknown>;
+  properties: Record<string, any>;
   geometry: {
     type: 'LineString';
     coordinates: [number, number][];
   };
+};
+
+export type LocationData = {
+  name: string;
+  coordinates: [number, number];
+  roles: string[];
+  contributions: string[];
+  organization: string;
 };
