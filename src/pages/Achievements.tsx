@@ -11,12 +11,18 @@ const Achievements = () => {
   const { data: achievements, isLoading } = useQuery({
     queryKey: ["achievements"],
     queryFn: async () => {
+      console.log("Fetching achievements from Supabase...");
       const { data, error } = await supabase
         .from("achievements")
         .select("*")
-        .order("date", { ascending: false });
+        .order('date', { ascending: false });
       
-      if (error) throw error;
+      if (error) {
+        console.error("Error fetching achievements:", error);
+        throw error;
+      }
+      
+      console.log("Fetched achievements:", data);
       return data;
     },
   });
