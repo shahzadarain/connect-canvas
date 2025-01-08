@@ -4,44 +4,16 @@ import ScrollButton from "./navigation/ScrollButton";
 import { Progress } from "./ui/progress";
 import { motion, AnimatePresence } from "framer-motion";
 import NavigationHeader from "./navigation/NavigationHeader";
-import TimelineNavigation from "./navigation/TimelineNavigation";
+import NavigationLink from "./navigation/NavigationLink";
+import { useToast } from "./ui/use-toast";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isRefreshing, setIsRefreshing] = useState(false);
   const location = useLocation();
   const isHomePage = location.pathname === "/";
-
-  // Pull to refresh functionality
-  useEffect(() => {
-    let touchStart = 0;
-    let touchEnd = 0;
-
-    const handleTouchStart = (e: TouchEvent) => {
-      touchStart = e.touches[0].clientY;
-    };
-
-    const handleTouchMove = (e: TouchEvent) => {
-      touchEnd = e.touches[0].clientY;
-      
-      if (window.scrollY === 0 && touchEnd - touchStart > 100 && !isRefreshing) {
-        setIsRefreshing(true);
-        setTimeout(() => {
-          window.location.reload();
-        }, 1000);
-      }
-    };
-
-    window.addEventListener('touchstart', handleTouchStart);
-    window.addEventListener('touchmove', handleTouchMove);
-
-    return () => {
-      window.removeEventListener('touchstart', handleTouchStart);
-      window.removeEventListener('touchmove', handleTouchMove);
-    };
-  }, [isRefreshing]);
+  const { toast } = useToast();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -51,7 +23,7 @@ const Navigation = () => {
         document.documentElement.clientHeight;
       const scrolled = (winScroll / height) * 100;
       setScrollProgress(scrolled);
-      setIsScrolled(window.scrollY > 0);
+      setIsScrolled(window.scrollY > 50);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -66,32 +38,14 @@ const Navigation = () => {
 
   return (
     <>
-      {/* Pull to refresh indicator */}
-      <AnimatePresence>
-        {isRefreshing && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="fixed top-0 left-0 w-full flex justify-center z-50 bg-background/80 backdrop-blur-sm py-2"
-          >
-            <div className="flex items-center gap-2">
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full"
-              />
-              <span className="text-sm font-medium">Refreshing...</span>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <nav 
-        className={`fixed w-full z-40 transition-all duration-300 ${
+      <motion.nav 
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.5 }}
+        className={`fixed w-full z-50 transition-all duration-300 ${
           isScrolled 
-            ? "bg-white/80 backdrop-blur-md shadow-lg dark:bg-gray-900/80" 
-            : "bg-white/50 backdrop-blur-sm dark:bg-gray-900/50"
+            ? "bg-primary/90 backdrop-blur-md shadow-lg" 
+            : "bg-transparent"
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -99,13 +53,32 @@ const Navigation = () => {
           
           {/* Desktop menu */}
           <div className="hidden sm:block py-4">
-            {isHomePage && (
-              <div className="flex space-x-4 mb-4">
-                <ScrollButton to="hero">Home</ScrollButton>
-                <ScrollButton to="contact">Contact</ScrollButton>
-              </div>
-            )}
-            <TimelineNavigation isActive={isActive} />
+            <div className="flex justify-center space-x-6">
+              <NavigationLink to="/" isActive={isActive("/")}>
+                Home
+              </NavigationLink>
+              <NavigationLink to="/journey" isActive={isActive("/journey")}>
+                Journey
+              </NavigationLink>
+              <NavigationLink to="/ai-tools" isActive={isActive("/ai-tools")}>
+                AI Tools
+              </NavigationLink>
+              <NavigationLink to="/ai-humanitarian" isActive={isActive("/ai-humanitarian")}>
+                AI Humanitarian
+              </NavigationLink>
+              <NavigationLink to="/blog" isActive={isActive("/blog")}>
+                Blog
+              </NavigationLink>
+              <NavigationLink to="/reading" isActive={isActive("/reading")}>
+                Reading
+              </NavigationLink>
+              <NavigationLink to="/projects" isActive={isActive("/projects")}>
+                Projects
+              </NavigationLink>
+              <NavigationLink to="/ideas" isActive={isActive("/ideas")}>
+                Ideas
+              </NavigationLink>
+            </div>
           </div>
 
           {/* Mobile menu */}
@@ -116,16 +89,33 @@ const Navigation = () => {
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
                 transition={{ duration: 0.2 }}
-                className="sm:hidden bg-white/95 dark:bg-gray-900/95 backdrop-blur-md"
+                className="sm:hidden bg-primary/95 backdrop-blur-md rounded-b-lg"
               >
-                <div className="pt-2 pb-3 space-y-1">
-                  {isHomePage && (
-                    <>
-                      <ScrollButton to="hero" mobile>Home</ScrollButton>
-                      <ScrollButton to="contact" mobile>Contact</ScrollButton>
-                    </>
-                  )}
-                  <TimelineNavigation isMobile isActive={isActive} />
+                <div className="px-2 pt-2 pb-3 space-y-1">
+                  <NavigationLink to="/" isActive={isActive("/")} mobile>
+                    Home
+                  </NavigationLink>
+                  <NavigationLink to="/journey" isActive={isActive("/journey")} mobile>
+                    Journey
+                  </NavigationLink>
+                  <NavigationLink to="/ai-tools" isActive={isActive("/ai-tools")} mobile>
+                    AI Tools
+                  </NavigationLink>
+                  <NavigationLink to="/ai-humanitarian" isActive={isActive("/ai-humanitarian")} mobile>
+                    AI Humanitarian
+                  </NavigationLink>
+                  <NavigationLink to="/blog" isActive={isActive("/blog")} mobile>
+                    Blog
+                  </NavigationLink>
+                  <NavigationLink to="/reading" isActive={isActive("/reading")} mobile>
+                    Reading
+                  </NavigationLink>
+                  <NavigationLink to="/projects" isActive={isActive("/projects")} mobile>
+                    Projects
+                  </NavigationLink>
+                  <NavigationLink to="/ideas" isActive={isActive("/ideas")} mobile>
+                    Ideas
+                  </NavigationLink>
                 </div>
               </motion.div>
             )}
@@ -136,9 +126,10 @@ const Navigation = () => {
             <Progress value={scrollProgress} className="rounded-none" />
           </div>
         </div>
-      </nav>
+      </motion.nav>
+
       {/* Spacer to prevent content from hiding under fixed nav */}
-      <div className="h-16"></div>
+      <div className="h-20" />
     </>
   );
 };

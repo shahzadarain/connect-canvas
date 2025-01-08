@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import MobileMenuButton from "./MobileMenuButton";
 
 interface NavigationHeaderProps {
@@ -10,14 +11,14 @@ const NavigationHeader = ({ isOpen, toggleMenu }: NavigationHeaderProps) => {
   return (
     <div className="flex justify-between h-16">
       <div className="flex">
-        <div className="flex-shrink-0 flex items-center">
-          <Link 
-            to="/" 
-            className="text-xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent hover:opacity-80 transition-opacity"
+        <Link to="/" className="flex items-center">
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            className="text-xl font-bold text-white hover:text-secondary transition-colors duration-300"
           >
             Shahzad Asghar
-          </Link>
-        </div>
+          </motion.div>
+        </Link>
       </div>
       <MobileMenuButton isOpen={isOpen} toggleMenu={toggleMenu} />
     </div>

@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 type NavigationLinkProps = {
@@ -10,36 +11,62 @@ type NavigationLinkProps = {
 };
 
 const NavigationLink = ({ to, children, className, mobile, isActive }: NavigationLinkProps) => {
-  const links = [
-    { path: "/", label: "Home" },
-    { path: "/journey", label: "Journey" },
-    { path: "/ai-tools", label: "AI Tools" },
-    { path: "/ai-news", label: "AI News" },
-    { path: "/ai-humanitarian", label: "AI Humanitarian" },
-    { path: "/blog", label: "Blog" },
-    { path: "/achievements", label: "Achievements" },
-    { path: "/projects", label: "Projects" },
-    { path: "/ideas", label: "Ideas" },
-  ];
-
-  const isMainLink = links.some(link => link.path === to);
-
   return (
     <NavLink
       to={to}
       className={({ isActive: routeActive }) =>
         cn(
-          "transition-all duration-300 px-4 py-2 rounded-lg",
-          "hover:text-white hover:shadow-lg hover:shadow-white/10",
-          isMainLink ? "font-semibold" : "font-normal",
+          "relative group px-4 py-2 rounded-lg transition-all duration-300",
+          "hover:text-white",
           routeActive || isActive ? "text-white bg-white/10" : "text-white/75",
-          mobile ? "block text-base" : "text-sm",
-          "relative overflow-hidden",
+          mobile ? "block text-base w-full" : "text-sm inline-flex items-center",
+          "overflow-hidden",
           className
         )
       }
     >
-      {children}
+      <motion.span
+        className="relative z-10"
+        whileHover={{ scale: 1.05 }}
+        transition={{ duration: 0.2 }}
+      >
+        {children}
+      </motion.span>
+      
+      {/* Hover effect background */}
+      <motion.div
+        className="absolute inset-0 bg-gradient-to-r from-secondary to-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        initial={false}
+        whileHover={{
+          scale: 1.2,
+          opacity: 0.15,
+        }}
+      />
+      
+      {/* Particle-like dots effect */}
+      <motion.div
+        className="absolute inset-0 pointer-events-none"
+        initial={{ opacity: 0 }}
+        whileHover={{ opacity: 1 }}
+      >
+        {[...Array(3)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 bg-white rounded-full"
+            initial={{ scale: 0, x: "50%", y: "50%" }}
+            animate={{
+              scale: [0, 1, 0],
+              x: ["50%", `${Math.random() * 100}%`, "50%"],
+              y: ["50%", `${Math.random() * 100}%`, "50%"],
+            }}
+            transition={{
+              duration: 1.5,
+              repeat: Infinity,
+              delay: i * 0.2,
+            }}
+          />
+        ))}
+      </motion.div>
     </NavLink>
   );
 };
