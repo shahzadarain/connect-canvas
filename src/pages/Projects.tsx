@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { ProjectSectionType } from "@/components/projects/types";
 import ProjectSection from "@/components/projects/ProjectSection";
 import { Skeleton } from "@/components/ui/skeleton";
+import IconComponent from "@/components/projects/IconComponent";
 
 const Projects = () => {
   const { data: sections, isLoading, error } = useQuery({
@@ -29,10 +30,12 @@ const Projects = () => {
 
   if (isLoading) {
     return (
-      <div className="space-y-8">
-        {[1, 2, 3].map((i) => (
-          <Skeleton key={i} className="h-[400px] rounded-xl" />
-        ))}
+      <div className="container mx-auto px-4 py-12">
+        <div className="space-y-8">
+          {[1, 2, 3].map((i) => (
+            <Skeleton key={i} className="h-[400px] rounded-xl" />
+          ))}
+        </div>
       </div>
     );
   }
@@ -42,8 +45,11 @@ const Projects = () => {
       <h1 className="text-4xl font-bold mb-12 text-center">Projects</h1>
       <div className="space-y-16">
         {sections?.map((section) => (
-          <div key={section.id}>
-            <h2 className="text-2xl font-semibold mb-6">{section.title}</h2>
+          <div key={section.id} className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg">
+            <div className="flex items-center gap-3 mb-6">
+              <IconComponent name={section.icon} className="w-6 h-6 text-primary" />
+              <h2 className="text-2xl font-semibold">{section.title}</h2>
+            </div>
             <ProjectSection category={section.category} />
           </div>
         ))}
