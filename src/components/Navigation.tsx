@@ -4,7 +4,7 @@ import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Menu, X } from "lucide-react";
 import NavigationLink from "./navigation/NavigationLink";
 import MobileMenuButton from "./navigation/MobileMenuButton";
-import UserMenu from "./navigation/UserMenu";
+import { UserMenu } from "./navigation/UserMenu";
 import NavigationHeader from "./navigation/NavigationHeader";
 
 const Navigation = () => {
@@ -20,7 +20,7 @@ const Navigation = () => {
     <nav className="bg-red-600 shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
-          <NavigationHeader />
+          <NavigationHeader isOpen={isOpen} toggleMenu={toggleMenu} />
 
           {/* Desktop menu */}
           <div className="hidden md:flex md:items-center md:space-x-1">
@@ -41,7 +41,7 @@ const Navigation = () => {
                 </NavigationLink>
               </>
             )}
-            <UserMenu session={session} supabase={supabase} />
+            <UserMenu />
           </div>
 
           {/* Mobile menu button */}

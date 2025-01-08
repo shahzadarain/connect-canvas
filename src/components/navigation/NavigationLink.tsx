@@ -7,12 +7,14 @@ type NavigationLinkProps = {
   className?: string;
   isActive?: boolean;
   mobile?: boolean;
+  onClick?: () => void;
 };
 
-const NavigationLink = ({ to, children, className, mobile, isActive }: NavigationLinkProps) => {
+const NavigationLink = ({ to, children, className, mobile, isActive, onClick }: NavigationLinkProps) => {
   return (
     <NavLink
       to={to}
+      onClick={onClick}
       className={({ isActive: routeActive }) =>
         cn(
           "relative px-4 py-2 transition-all duration-200",
