@@ -1,27 +1,17 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import ScrollButton from "./navigation/ScrollButton";
-import { Progress } from "./ui/progress";
-import { motion, AnimatePresence } from "framer-motion";
-import NavigationHeader from "./navigation/NavigationHeader";
-import NavigationLink from "./navigation/NavigationLink";
 import { Search } from "lucide-react";
 import { Input } from "./ui/input";
+import NavigationLink from "./navigation/NavigationLink";
+import NavigationHeader from "./navigation/NavigationHeader";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
-      const winScroll = document.documentElement.scrollTop;
-      const height = 
-        document.documentElement.scrollHeight - 
-        document.documentElement.clientHeight;
-      const scrolled = (winScroll / height) * 100;
-      setScrollProgress(scrolled);
       setIsScrolled(window.scrollY > 10);
     };
 
@@ -37,57 +27,41 @@ const Navigation = () => {
 
   return (
     <>
-      <motion.nav 
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.5 }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled 
-            ? "bg-primary/95 backdrop-blur-xl shadow-lg" 
-            : "bg-primary/90 backdrop-blur-lg"
-        }`}
-      >
+      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        isScrolled ? "bg-red-700/95" : "bg-red-600"
+      }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Desktop menu */}
-            <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-center space-x-1">
-              <NavigationLink to="/" isActive={isActive("/")}>
-                Home
-              </NavigationLink>
-              <NavigationLink to="/achievements" isActive={isActive("/achievements")}>
-                Achievements
-              </NavigationLink>
-              <NavigationLink to="/ai-tools" isActive={isActive("/ai-tools")}>
-                AI Tools
-              </NavigationLink>
-              <NavigationLink to="/ai-news" isActive={isActive("/ai-news")}>
-                AI News
-              </NavigationLink>
-              <NavigationLink to="/ai-humanitarian" isActive={isActive("/ai-humanitarian")}>
-                AI Humanitarian
-              </NavigationLink>
+            <div className="hidden sm:flex sm:items-center space-x-1">
               <NavigationLink to="/blog" isActive={isActive("/blog")}>
-                Blog
+                Articles
               </NavigationLink>
               <NavigationLink to="/reading" isActive={isActive("/reading")}>
-                Reading
+                Books
               </NavigationLink>
-              <NavigationLink to="/projects" isActive={isActive("/projects")}>
-                Projects
+              <NavigationLink to="/events" isActive={isActive("/events")}>
+                Events
               </NavigationLink>
-              <NavigationLink to="/ideas" isActive={isActive("/ideas")}>
-                Ideas
+              <NavigationLink to="/membership" isActive={isActive("/membership")}>
+                Membership
+              </NavigationLink>
+              <NavigationLink to="/newsletter" isActive={isActive("/newsletter")}>
+                Newsletter
+              </NavigationLink>
+              <NavigationLink to="/more" isActive={isActive("/more")}>
+                More
               </NavigationLink>
             </div>
 
             {/* Search bar */}
-            <div className="hidden sm:flex items-center ml-4 relative">
-              <div className="relative">
+            <div className="hidden sm:flex items-center ml-4 flex-1 justify-end max-w-xl">
+              <div className="relative w-full max-w-md">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                 <Input 
                   type="search"
-                  placeholder="Search..."
-                  className="pl-10 pr-4 py-2 w-[200px] bg-white/10 border-0 text-white placeholder:text-gray-400 focus:ring-2 focus:ring-white/20"
+                  placeholder="Search articles..."
+                  className="pl-10 pr-4 py-2 w-full bg-white rounded-full border-2 border-dashed border-red-300/50 text-gray-800 placeholder:text-gray-500 focus:ring-2 focus:ring-red-400 focus:border-transparent"
                 />
               </div>
             </div>
@@ -97,54 +71,32 @@ const Navigation = () => {
           </div>
 
           {/* Mobile menu */}
-          <AnimatePresence>
-            {isOpen && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.2 }}
-                className="sm:hidden bg-primary/95 backdrop-blur-xl rounded-b-xl"
-              >
-                <div className="px-2 pt-2 pb-3 space-y-1">
-                  <NavigationLink to="/" isActive={isActive("/")} mobile>
-                    Home
-                  </NavigationLink>
-                  <NavigationLink to="/achievements" isActive={isActive("/achievements")} mobile>
-                    Achievements
-                  </NavigationLink>
-                  <NavigationLink to="/ai-tools" isActive={isActive("/ai-tools")} mobile>
-                    AI Tools
-                  </NavigationLink>
-                  <NavigationLink to="/ai-news" isActive={isActive("/ai-news")} mobile>
-                    AI News
-                  </NavigationLink>
-                  <NavigationLink to="/ai-humanitarian" isActive={isActive("/ai-humanitarian")} mobile>
-                    AI Humanitarian
-                  </NavigationLink>
-                  <NavigationLink to="/blog" isActive={isActive("/blog")} mobile>
-                    Blog
-                  </NavigationLink>
-                  <NavigationLink to="/reading" isActive={isActive("/reading")} mobile>
-                    Reading
-                  </NavigationLink>
-                  <NavigationLink to="/projects" isActive={isActive("/projects")} mobile>
-                    Projects
-                  </NavigationLink>
-                  <NavigationLink to="/ideas" isActive={isActive("/ideas")} mobile>
-                    Ideas
-                  </NavigationLink>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* Progress bar */}
-          <div className="absolute bottom-0 left-0 w-full h-[2px]">
-            <Progress value={scrollProgress} className="rounded-none bg-white/10" />
-          </div>
+          {isOpen && (
+            <div className="sm:hidden bg-red-700 rounded-b-xl">
+              <div className="px-2 pt-2 pb-3 space-y-1">
+                <NavigationLink to="/blog" isActive={isActive("/blog")} mobile>
+                  Articles
+                </NavigationLink>
+                <NavigationLink to="/reading" isActive={isActive("/reading")} mobile>
+                  Books
+                </NavigationLink>
+                <NavigationLink to="/events" isActive={isActive("/events")} mobile>
+                  Events
+                </NavigationLink>
+                <NavigationLink to="/membership" isActive={isActive("/membership")} mobile>
+                  Membership
+                </NavigationLink>
+                <NavigationLink to="/newsletter" isActive={isActive("/newsletter")} mobile>
+                  Newsletter
+                </NavigationLink>
+                <NavigationLink to="/more" isActive={isActive("/more")} mobile>
+                  More
+                </NavigationLink>
+              </div>
+            </div>
+          )}
         </div>
-      </motion.nav>
+      </nav>
 
       {/* Minimal spacer */}
       <div className="h-16" />

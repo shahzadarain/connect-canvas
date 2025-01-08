@@ -1,5 +1,4 @@
 import { NavLink } from "react-router-dom";
-import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 type NavigationLinkProps = {
@@ -16,22 +15,15 @@ const NavigationLink = ({ to, children, className, mobile, isActive }: Navigatio
       to={to}
       className={({ isActive: routeActive }) =>
         cn(
-          "relative px-6 py-2.5 rounded-full transition-all duration-200",
-          "text-white/90 hover:text-white",
-          routeActive || isActive ? "bg-white/20 shadow-sm" : "hover:bg-white/10",
-          mobile ? "block text-base w-full" : "text-base font-medium",
-          "backdrop-blur-sm",
+          "relative px-4 py-2 transition-all duration-200",
+          "text-white/90 hover:text-white font-medium",
+          routeActive || isActive ? "bg-red-700/50" : "hover:bg-red-500/30",
+          mobile ? "block text-base w-full rounded-lg" : "text-base rounded-md",
           className
         )
       }
     >
-      <motion.span
-        className="relative z-10"
-        whileHover={{ scale: 1.02 }}
-        transition={{ duration: 0.2 }}
-      >
-        {children}
-      </motion.span>
+      {children}
     </NavLink>
   );
 };

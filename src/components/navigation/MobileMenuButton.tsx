@@ -9,7 +9,7 @@ const MobileMenuButton = ({ isOpen, toggleMenu }: MobileMenuButtonProps) => {
   return (
     <motion.button 
       onClick={toggleMenu}
-      className="sm:hidden p-3 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-300 touch-manipulation min-h-[44px] min-w-[44px] flex items-center justify-center"
+      className="sm:hidden p-2 rounded-md hover:bg-red-500/30 transition-colors duration-300 touch-manipulation min-h-[44px] min-w-[44px] flex items-center justify-center"
       whileTap={{ scale: 0.95 }}
       aria-label="Toggle mobile menu"
     >
@@ -18,7 +18,7 @@ const MobileMenuButton = ({ isOpen, toggleMenu }: MobileMenuButtonProps) => {
         animate={isOpen ? "open" : "closed"}
       >
         <motion.span
-          className="absolute w-6 h-0.5 bg-current transform-gpu"
+          className="absolute w-6 h-0.5 bg-white transform-gpu"
           variants={{
             open: { rotate: 45, y: 6 },
             closed: { rotate: 0, y: 0 }
@@ -26,7 +26,7 @@ const MobileMenuButton = ({ isOpen, toggleMenu }: MobileMenuButtonProps) => {
           transition={{ duration: 0.2 }}
         />
         <motion.span
-          className="absolute w-6 h-0.5 bg-current transform-gpu"
+          className="absolute w-6 h-0.5 bg-white transform-gpu"
           variants={{
             open: { opacity: 0 },
             closed: { opacity: 1 }
@@ -35,7 +35,7 @@ const MobileMenuButton = ({ isOpen, toggleMenu }: MobileMenuButtonProps) => {
           style={{ top: "50%", marginTop: "-1px" }}
         />
         <motion.span
-          className="absolute w-6 h-0.5 bg-current transform-gpu"
+          className="absolute w-6 h-0.5 bg-white transform-gpu"
           variants={{
             open: { rotate: -45, y: -6 },
             closed: { rotate: 0, y: 0 }
