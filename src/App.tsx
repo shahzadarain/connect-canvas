@@ -17,10 +17,10 @@ import Achievements from "@/pages/Achievements";
 import Projects from "@/pages/Projects";
 import IdeasList from "@/pages/IdeasList";
 import Journey from "@/pages/Journey";
+import Learning from "@/pages/Learning";
 import NotFound from "@/pages/NotFound";
 import ProtectedRoute from "@/components/ProtectedRoute";
 
-// Create a client
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -50,6 +50,7 @@ function App() {
                 <Route path="/projects" element={<Projects />} />
                 <Route path="/ideas" element={<IdeasList />} />
                 <Route path="/journey" element={<Journey />} />
+                <Route path="/learning" element={<Learning />} />
                 <Route
                   path="/reading"
                   element={

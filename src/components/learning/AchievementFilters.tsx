@@ -1,4 +1,3 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import { Brain, Shield, BarChart3, Calendar, Search } from 'lucide-react';
 import { Button } from "@/components/ui/button";
