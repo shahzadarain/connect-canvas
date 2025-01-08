@@ -1,18 +1,19 @@
-export type Location = [string, [number, number], string, string[], string[]];
-
-export type RouteFeature = {
-  type: 'Feature';
-  properties: Record<string, any>;
-  geometry: {
-    type: 'LineString';
-    coordinates: [number, number][];
-  };
-};
-
-export type LocationData = {
+export interface MapLocation {
+  id: string;
   name: string;
   coordinates: [number, number];
-  roles: string[];
-  contributions: string[];
-  organization: string;
-};
+  roles?: string[];
+  timePeriod?: string;
+  contributions?: string[];
+}
+
+export interface MapMarkerProps {
+  location: MapLocation;
+  type: 'work' | 'mission';
+}
+
+export interface MapPathProps {
+  start: [number, number];
+  end: [number, number];
+  type: 'work' | 'mission';
+}
