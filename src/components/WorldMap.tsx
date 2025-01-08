@@ -61,7 +61,7 @@ const WorldMap = () => {
           pitch: 0,
           bearing: 0,
         }}
-        projection="globe"
+        projection={{ name: 'globe' as const }}
       >
         <NavigationControl position="top-right" />
         <MapPaths paths={paths} />
