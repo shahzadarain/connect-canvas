@@ -8,6 +8,8 @@ const Hero = () => {
   const isMobile = useIsMobile();
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [cursorParticles, setCursorParticles] = useState([]);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isClicked, setIsClicked] = useState(false);
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -34,6 +36,15 @@ const Hero = () => {
     { tag: "#Cybersecurity" }
   ];
 
+  const handleProfileClick = () => {
+    setIsClicked(true);
+    // Delay the navigation to allow the animation to play
+    setTimeout(() => {
+      window.open('https://www.linkedin.com/in/shahzadasghar1/', '_blank');
+      setIsClicked(false);
+    }, 1000);
+  };
+
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-[#001524]">
       {/* Large Number Background */}
@@ -52,7 +63,6 @@ const Hero = () => {
         }}
       />
 
-      {/* Content Container */}
       <div className="relative container mx-auto px-4 py-16 z-10">
         <motion.div 
           className="max-w-5xl mx-auto text-center"
@@ -60,7 +70,6 @@ const Hero = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          {/* Header Section */}
           <motion.div 
             className="mb-12"
             initial={{ opacity: 0, y: -20 }}
@@ -89,7 +98,7 @@ const Hero = () => {
               <span className="bg-[#0FA0CE]/20 px-1">AI-enabled communication solutions</span>.
             </p>
           </motion.div>
-
+          
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -109,25 +118,71 @@ const Hero = () => {
             ))}
           </motion.div>
           
-          {/* CTA Button */}
+          {/* Holographic Portal Button */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
             className="flex justify-center mt-8"
           >
-            <Button
-              asChild
-              className="bg-gradient-to-r from-[#0FA0CE] to-[#0047AB] hover:from-[#0D8BAF] hover:to-[#003D94] text-white px-12 py-7 text-lg font-semibold rounded-2xl shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 border border-[#0FA0CE]/20"
+            <motion.button
+              onClick={handleProfileClick}
+              onHoverStart={() => setIsHovered(true)}
+              onHoverEnd={() => setIsHovered(false)}
+              animate={{
+                scale: isClicked ? 20 : 1,
+                opacity: isClicked ? 0 : 1,
+              }}
+              transition={{
+                duration: isClicked ? 0.8 : 0.3,
+                ease: "easeInOut"
+              }}
+              className={`
+                relative group
+                px-12 py-7 rounded-2xl
+                bg-transparent
+                overflow-hidden
+                transition-all duration-300
+                border-2 border-cyan-500
+                hover:border-cyan-400
+                ${isHovered ? 'shadow-[0_0_30px_rgba(34,211,238,0.5)]' : ''}
+              `}
             >
-              <a 
-                href="https://www.linkedin.com/in/shahzadasghar1/" 
-                target="_blank" 
-                rel="noopener noreferrer"
-              >
-                View Profile →
-              </a>
-            </Button>
+              {/* Holographic background effects */}
+              <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 opacity-50" />
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(34,211,238,0.3),transparent_70%)]" />
+              
+              {/* Animated border glow */}
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 opacity-30"
+                animate={{
+                  backgroundPosition: isHovered ? ["0% 50%", "100% 50%"] : "0% 50%",
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  repeatType: "reverse",
+                }}
+              />
+              
+              {/* Button content */}
+              <span className="relative z-10 text-lg font-semibold text-white group-hover:text-cyan-100">
+                Enter Portal →
+              </span>
+
+              {/* Ripple effect on hover */}
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-blue-500/20"
+                animate={{
+                  scale: isHovered ? [1, 1.2] : 1,
+                  opacity: isHovered ? [0.5, 0] : 0,
+                }}
+                transition={{
+                  duration: 1,
+                  repeat: Infinity,
+                }}
+              />
+            </motion.button>
           </motion.div>
 
           {/* Cursor particles effect */}
