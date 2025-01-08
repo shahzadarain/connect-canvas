@@ -22,7 +22,7 @@ const Navigation = () => {
         document.documentElement.clientHeight;
       const scrolled = (winScroll / height) * 100;
       setScrollProgress(scrolled);
-      setIsScrolled(window.scrollY > 20);
+      setIsScrolled(window.scrollY > 10);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -43,16 +43,16 @@ const Navigation = () => {
         transition={{ duration: 0.5 }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled 
-            ? "bg-primary/95 backdrop-blur-md shadow-lg" 
-            : "bg-primary/80 backdrop-blur-sm"
+            ? "bg-primary/90 backdrop-blur-xl shadow-lg" 
+            : "bg-primary/75 backdrop-blur-lg"
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <NavigationHeader isOpen={isOpen} toggleMenu={toggleMenu} />
           
-          {/* Desktop menu */}
-          <div className="hidden sm:block py-2">
-            <div className="flex justify-center space-x-4">
+          {/* Desktop menu - iOS style */}
+          <div className="hidden sm:block">
+            <div className="flex justify-center space-x-1 py-3">
               <NavigationLink to="/" isActive={isActive("/")}>
                 Home
               </NavigationLink>
@@ -86,15 +86,15 @@ const Navigation = () => {
             </div>
           </div>
 
-          {/* Mobile menu */}
+          {/* Mobile menu with iOS-style animations */}
           <AnimatePresence>
             {isOpen && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.2 }}
-                className="sm:hidden bg-primary/95 backdrop-blur-md rounded-b-lg"
+                transition={{ duration: 0.2, ease: "easeInOut" }}
+                className="sm:hidden bg-primary/95 backdrop-blur-xl rounded-b-xl"
               >
                 <div className="px-2 pt-2 pb-3 space-y-1">
                   <NavigationLink to="/" isActive={isActive("/")} mobile>
@@ -132,15 +132,15 @@ const Navigation = () => {
             )}
           </AnimatePresence>
 
-          {/* Scroll Progress Indicator */}
-          <div className="absolute bottom-0 left-0 w-full h-0.5">
-            <Progress value={scrollProgress} className="rounded-none" />
+          {/* iOS-style progress indicator */}
+          <div className="absolute bottom-0 left-0 w-full h-[2px]">
+            <Progress value={scrollProgress} className="rounded-none bg-white/10" />
           </div>
         </div>
       </motion.nav>
 
-      {/* Reduced spacer to prevent content from hiding under fixed nav */}
-      <div className="h-14" />
+      {/* Minimal spacer */}
+      <div className="h-12" />
     </>
   );
 };

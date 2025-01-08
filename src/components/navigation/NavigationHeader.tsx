@@ -9,18 +9,7 @@ interface NavigationHeaderProps {
 
 const NavigationHeader = ({ isOpen, toggleMenu }: NavigationHeaderProps) => {
   return (
-    <div className="flex justify-between h-14">
-      <div className="flex">
-        <Link to="/" className="flex items-center">
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            className="text-xl font-bold"
-          >
-            <span className="text-white">Shahzad</span>{" "}
-            <span className="text-purple-400">Asghar</span>
-          </motion.div>
-        </Link>
-      </div>
+    <div className="flex justify-end h-12 items-center sm:hidden">
       <MobileMenuButton isOpen={isOpen} toggleMenu={toggleMenu} />
     </div>
   );
