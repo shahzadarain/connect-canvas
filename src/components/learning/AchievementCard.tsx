@@ -22,6 +22,32 @@ const getCategoryIcon = (title: string) => {
   return <Award className="w-4 h-4" />;
 };
 
+const getCategoryStyles = (title: string): { bg: string; text: string } => {
+  const lowerTitle = title.toLowerCase();
+  if (lowerTitle.includes('ai') || lowerTitle.includes('machine learning')) {
+    return {
+      bg: 'bg-purple-100 dark:bg-purple-900/30',
+      text: 'text-purple-700 dark:text-purple-300'
+    };
+  }
+  if (lowerTitle.includes('security') || lowerTitle.includes('gdpr')) {
+    return {
+      bg: 'bg-red-100 dark:bg-red-900/30',
+      text: 'text-red-700 dark:text-red-300'
+    };
+  }
+  if (lowerTitle.includes('data') || lowerTitle.includes('analytics')) {
+    return {
+      bg: 'bg-blue-100 dark:bg-blue-900/30',
+      text: 'text-blue-700 dark:text-blue-300'
+    };
+  }
+  return {
+    bg: 'bg-emerald-100 dark:bg-emerald-900/30',
+    text: 'text-emerald-700 dark:text-emerald-300'
+  };
+};
+
 const getCategoryName = (title: string): string => {
   const lowerTitle = title.toLowerCase();
   if (lowerTitle.includes('ai') || lowerTitle.includes('machine learning')) return 'AI & ML';
@@ -31,6 +57,8 @@ const getCategoryName = (title: string): string => {
 };
 
 const AchievementCard = ({ achievement }: AchievementCardProps) => {
+  const categoryStyles = getCategoryStyles(achievement.title);
+
   return (
     <motion.div
       layout
@@ -65,7 +93,7 @@ const AchievementCard = ({ achievement }: AchievementCardProps) => {
             </p>
             
             <div className="pt-2">
-              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary-foreground">
+              <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${categoryStyles.bg} ${categoryStyles.text}`}>
                 {getCategoryIcon(achievement.title)}
                 <span className="ml-1">{getCategoryName(achievement.title)}</span>
               </span>
