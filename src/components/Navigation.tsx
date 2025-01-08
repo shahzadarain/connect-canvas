@@ -12,7 +12,6 @@ const Navigation = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
-  const isHomePage = location.pathname === "/";
   const { toast } = useToast();
 
   useEffect(() => {
@@ -42,7 +41,7 @@ const Navigation = () => {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.5 }}
-        className={`fixed w-full z-50 transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled 
             ? "bg-primary/90 backdrop-blur-md shadow-lg" 
             : "bg-transparent"
@@ -57,11 +56,17 @@ const Navigation = () => {
               <NavigationLink to="/" isActive={isActive("/")}>
                 Home
               </NavigationLink>
-              <NavigationLink to="/journey" isActive={isActive("/journey")}>
-                Journey
+              <NavigationLink to="/contact" isActive={isActive("/contact")}>
+                Contact
+              </NavigationLink>
+              <NavigationLink to="/achievements" isActive={isActive("/achievements")}>
+                Achievements
               </NavigationLink>
               <NavigationLink to="/ai-tools" isActive={isActive("/ai-tools")}>
                 AI Tools
+              </NavigationLink>
+              <NavigationLink to="/ai-news" isActive={isActive("/ai-news")}>
+                AI News
               </NavigationLink>
               <NavigationLink to="/ai-humanitarian" isActive={isActive("/ai-humanitarian")}>
                 AI Humanitarian
@@ -70,7 +75,7 @@ const Navigation = () => {
                 Blog
               </NavigationLink>
               <NavigationLink to="/reading" isActive={isActive("/reading")}>
-                Reading
+                Reading List
               </NavigationLink>
               <NavigationLink to="/projects" isActive={isActive("/projects")}>
                 Projects
@@ -95,11 +100,17 @@ const Navigation = () => {
                   <NavigationLink to="/" isActive={isActive("/")} mobile>
                     Home
                   </NavigationLink>
-                  <NavigationLink to="/journey" isActive={isActive("/journey")} mobile>
-                    Journey
+                  <NavigationLink to="/contact" isActive={isActive("/contact")} mobile>
+                    Contact
+                  </NavigationLink>
+                  <NavigationLink to="/achievements" isActive={isActive("/achievements")} mobile>
+                    Achievements
                   </NavigationLink>
                   <NavigationLink to="/ai-tools" isActive={isActive("/ai-tools")} mobile>
                     AI Tools
+                  </NavigationLink>
+                  <NavigationLink to="/ai-news" isActive={isActive("/ai-news")} mobile>
+                    AI News
                   </NavigationLink>
                   <NavigationLink to="/ai-humanitarian" isActive={isActive("/ai-humanitarian")} mobile>
                     AI Humanitarian
@@ -108,7 +119,7 @@ const Navigation = () => {
                     Blog
                   </NavigationLink>
                   <NavigationLink to="/reading" isActive={isActive("/reading")} mobile>
-                    Reading
+                    Reading List
                   </NavigationLink>
                   <NavigationLink to="/projects" isActive={isActive("/projects")} mobile>
                     Projects

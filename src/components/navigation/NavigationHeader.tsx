@@ -14,9 +14,10 @@ const NavigationHeader = ({ isOpen, toggleMenu }: NavigationHeaderProps) => {
         <Link to="/" className="flex items-center">
           <motion.div
             whileHover={{ scale: 1.05 }}
-            className="text-xl font-bold text-white hover:text-secondary transition-colors duration-300"
+            className="text-xl font-bold"
           >
-            Shahzad Asghar
+            <span className="text-white">Shahzad</span>{" "}
+            <span className="text-purple-400">Asghar</span>
           </motion.div>
         </Link>
       </div>

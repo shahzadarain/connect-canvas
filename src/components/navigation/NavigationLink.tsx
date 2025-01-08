@@ -35,38 +35,13 @@ const NavigationLink = ({ to, children, className, mobile, isActive }: Navigatio
       
       {/* Hover effect background */}
       <motion.div
-        className="absolute inset-0 bg-gradient-to-r from-secondary to-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        className="absolute inset-0 bg-gradient-to-r from-purple-500/50 to-blue-500/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
         initial={false}
         whileHover={{
           scale: 1.2,
           opacity: 0.15,
         }}
       />
-      
-      {/* Particle-like dots effect */}
-      <motion.div
-        className="absolute inset-0 pointer-events-none"
-        initial={{ opacity: 0 }}
-        whileHover={{ opacity: 1 }}
-      >
-        {[...Array(3)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-white rounded-full"
-            initial={{ scale: 0, x: "50%", y: "50%" }}
-            animate={{
-              scale: [0, 1, 0],
-              x: ["50%", `${Math.random() * 100}%`, "50%"],
-              y: ["50%", `${Math.random() * 100}%`, "50%"],
-            }}
-            transition={{
-              duration: 1.5,
-              repeat: Infinity,
-              delay: i * 0.2,
-            }}
-          />
-        ))}
-      </motion.div>
     </NavLink>
   );
 };
