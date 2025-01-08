@@ -5,7 +5,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { Loader2, Search, MessageSquare } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
+import { Loader2, Search, MessageSquare, Send } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 
 interface Book {
@@ -26,6 +27,15 @@ interface Discussion {
   author: string | null;
   cover_url: string | null;
   created_at: string;
+  messages?: Message[];
+}
+
+interface Message {
+  id: number;
+  content: string;
+  user_id: string;
+  created_at: string;
+  discussion_id: number;
 }
 
 const BookDiscussions = () => {
@@ -34,17 +44,43 @@ const BookDiscussions = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<Book[]>([]);
   const [isSearching, setIsSearching] = useState(false);
+  const [selectedDiscussion, setSelectedDiscussion] = useState<Discussion | null>(null);
+  const [newMessage, setNewMessage] = useState("");
 
-  const { data: discussions, isLoading: isLoadingDiscussions } = useQuery({
+  // Fetch discussions with messages
+  const { data: discussions, isLoading: isLoadingDiscussions, refetch: refetchDiscussions } = useQuery({
     queryKey: ["discussions"],
     queryFn: async () => {
-      const { data, error } = await supabase
+      console.log('Fetching discussions and messages...');
+      const { data: discussionsData, error: discussionsError } = await supabase
         .from("book_discussions")
         .select("*")
         .order("created_at", { ascending: false });
 
-      if (error) throw error;
-      return data as Discussion[];
+      if (discussionsError) throw discussionsError;
+
+      // Fetch messages for each discussion
+      const discussionsWithMessages = await Promise.all(
+        discussionsData.map(async (discussion) => {
+          const { data: messages, error: messagesError } = await supabase
+            .from("discussion_messages")
+            .select("*")
+            .eq("discussion_id", discussion.id)
+            .order("created_at", { ascending: true });
+
+          if (messagesError) {
+            console.error('Error fetching messages:', messagesError);
+            return discussion;
+          }
+
+          return {
+            ...discussion,
+            messages: messages || [],
+          };
+        })
+      );
+
+      return discussionsWithMessages as Discussion[];
     },
   });
 
@@ -112,11 +148,38 @@ const BookDiscussions = () => {
       });
       setSearchQuery("");
       setSearchResults([]);
+      refetchDiscussions();
     } catch (error) {
       console.error("Error creating discussion:", error);
       toast({
         title: "Error",
         description: "Failed to create discussion room. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleSendMessage = async () => {
+    if (!session?.user?.id || !selectedDiscussion || !newMessage.trim()) {
+      return;
+    }
+
+    try {
+      const { error } = await supabase.from("discussion_messages").insert({
+        discussion_id: selectedDiscussion.id,
+        user_id: session.user.id,
+        content: newMessage.trim(),
+      });
+
+      if (error) throw error;
+
+      setNewMessage("");
+      refetchDiscussions();
+    } catch (error) {
+      console.error("Error sending message:", error);
+      toast({
+        title: "Error",
+        description: "Failed to send message. Please try again.",
         variant: "destructive",
       });
     }
@@ -172,35 +235,93 @@ const BookDiscussions = () => {
         )}
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {isLoadingDiscussions ? (
-          <div className="col-span-full flex justify-center p-8">
-            <Loader2 className="h-8 w-8 animate-spin" />
-          </div>
-        ) : (
-          discussions?.map((discussion) => (
-            <Card key={discussion.id} className="p-4">
-              <div className="flex gap-4">
-                {discussion.cover_url && (
-                  <img
-                    src={discussion.cover_url}
-                    alt={discussion.title}
-                    className="w-20 h-28 object-cover"
-                  />
-                )}
-                <div>
-                  <h3 className="font-semibold">{discussion.title}</h3>
-                  {discussion.author && (
-                    <p className="text-sm text-gray-600">by {discussion.author}</p>
+      <div className="grid gap-6 md:grid-cols-2">
+        <div className="space-y-4">
+          <h2 className="text-2xl font-semibold mb-4">Active Discussions</h2>
+          {isLoadingDiscussions ? (
+            <div className="flex justify-center p-8">
+              <Loader2 className="h-8 w-8 animate-spin" />
+            </div>
+          ) : (
+            discussions?.map((discussion) => (
+              <Card
+                key={discussion.id}
+                className={`p-4 cursor-pointer transition-colors ${
+                  selectedDiscussion?.id === discussion.id
+                    ? "border-blue-500"
+                    : "hover:border-gray-300"
+                }`}
+                onClick={() => setSelectedDiscussion(discussion)}
+              >
+                <div className="flex gap-4">
+                  {discussion.cover_url && (
+                    <img
+                      src={discussion.cover_url}
+                      alt={discussion.title}
+                      className="w-20 h-28 object-cover"
+                    />
                   )}
-                  <div className="mt-2 flex items-center gap-2 text-sm text-gray-500">
-                    <MessageSquare className="h-4 w-4" />
-                    <span>Join discussion</span>
+                  <div>
+                    <h3 className="font-semibold">{discussion.title}</h3>
+                    {discussion.author && (
+                      <p className="text-sm text-gray-600">by {discussion.author}</p>
+                    )}
+                    <div className="mt-2 flex items-center gap-2 text-sm text-gray-500">
+                      <MessageSquare className="h-4 w-4" />
+                      <span>{discussion.messages?.length || 0} messages</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Card>
-          ))
+              </Card>
+            ))
+          )}
+        </div>
+
+        {selectedDiscussion && (
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 flex flex-col h-[600px]">
+            <div className="mb-4">
+              <h3 className="text-xl font-semibold">{selectedDiscussion.title}</h3>
+              {selectedDiscussion.author && (
+                <p className="text-sm text-gray-600">by {selectedDiscussion.author}</p>
+              )}
+            </div>
+
+            <div className="flex-1 overflow-y-auto space-y-4 mb-4">
+              {selectedDiscussion.messages?.map((message) => (
+                <div
+                  key={message.id}
+                  className={`p-3 rounded-lg ${
+                    message.user_id === session?.user?.id
+                      ? "bg-blue-500 text-white ml-auto"
+                      : "bg-gray-100 dark:bg-gray-700"
+                  } max-w-[80%]`}
+                >
+                  <p>{message.content}</p>
+                  <span className="text-xs opacity-70">
+                    {new Date(message.created_at).toLocaleString()}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex gap-2">
+              <Textarea
+                value={newMessage}
+                onChange={(e) => setNewMessage(e.target.value)}
+                placeholder="Type your message..."
+                className="flex-1"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSendMessage();
+                  }
+                }}
+              />
+              <Button onClick={handleSendMessage}>
+                <Send className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
         )}
       </div>
     </div>
