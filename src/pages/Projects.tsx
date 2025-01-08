@@ -58,7 +58,7 @@ const Projects = () => {
           className="text-center mb-16"
         >
           <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-accent">
-            Our Projects
+            DAG Projects
           </h1>
           <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
             Innovative Solutions Leveraging AI, Machine Learning, and Automation for Global Impact
