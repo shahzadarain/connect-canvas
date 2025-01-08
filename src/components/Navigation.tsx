@@ -22,7 +22,7 @@ const Navigation = () => {
         document.documentElement.clientHeight;
       const scrolled = (winScroll / height) * 100;
       setScrollProgress(scrolled);
-      setIsScrolled(window.scrollY > 50);
+      setIsScrolled(window.scrollY > 20);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -43,16 +43,16 @@ const Navigation = () => {
         transition={{ duration: 0.5 }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled 
-            ? "bg-primary/90 backdrop-blur-md shadow-lg" 
-            : "bg-transparent"
+            ? "bg-primary/95 backdrop-blur-md shadow-lg" 
+            : "bg-primary/80 backdrop-blur-sm"
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <NavigationHeader isOpen={isOpen} toggleMenu={toggleMenu} />
           
           {/* Desktop menu */}
-          <div className="hidden sm:block py-4">
-            <div className="flex justify-center space-x-6">
+          <div className="hidden sm:block py-2">
+            <div className="flex justify-center space-x-4">
               <NavigationLink to="/" isActive={isActive("/")}>
                 Home
               </NavigationLink>
@@ -139,8 +139,8 @@ const Navigation = () => {
         </div>
       </motion.nav>
 
-      {/* Spacer to prevent content from hiding under fixed nav */}
-      <div className="h-20" />
+      {/* Reduced spacer to prevent content from hiding under fixed nav */}
+      <div className="h-14" />
     </>
   );
 };

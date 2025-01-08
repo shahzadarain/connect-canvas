@@ -16,9 +16,9 @@ const NavigationLink = ({ to, children, className, mobile, isActive }: Navigatio
       to={to}
       className={({ isActive: routeActive }) =>
         cn(
-          "relative group px-4 py-2 rounded-lg transition-all duration-300",
-          "hover:text-white",
-          routeActive || isActive ? "text-white bg-white/10" : "text-white/75",
+          "relative group px-3 py-1.5 rounded-lg transition-all duration-300",
+          "hover:text-white hover:bg-white/10",
+          routeActive || isActive ? "text-white bg-white/20" : "text-white/85",
           mobile ? "block text-base w-full" : "text-sm inline-flex items-center",
           "overflow-hidden",
           className
