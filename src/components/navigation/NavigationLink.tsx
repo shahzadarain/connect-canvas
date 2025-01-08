@@ -5,9 +5,11 @@ type NavigationLinkProps = {
   to: string;
   children: React.ReactNode;
   className?: string;
+  isActive?: boolean;
+  mobile?: boolean;
 };
 
-const NavigationLink = ({ to, children, className }: NavigationLinkProps) => {
+const NavigationLink = ({ to, children, className, mobile, isActive }: NavigationLinkProps) => {
   const links = [
     { path: "/", label: "Home" },
     { path: "/journey", label: "Journey" },
@@ -25,11 +27,12 @@ const NavigationLink = ({ to, children, className }: NavigationLinkProps) => {
   return (
     <NavLink
       to={to}
-      className={({ isActive }) =>
+      className={({ isActive: routeActive }) =>
         cn(
           "transition-colors hover:text-white/90",
           isMainLink ? "font-semibold" : "font-normal",
-          isActive ? "text-white" : "text-white/75",
+          routeActive || isActive ? "text-white" : "text-white/75",
+          mobile ? "block px-3 py-2 text-base" : "px-3 py-2 text-sm",
           className
         )
       }
