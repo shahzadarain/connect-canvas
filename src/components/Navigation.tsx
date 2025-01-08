@@ -52,6 +52,9 @@ const Navigation = () => {
               <NavigationLink to="/reading" isActive={isActive("/reading")}>
                 Reading List
               </NavigationLink>
+              <NavigationLink to="/learning" isActive={isActive("/learning")}>
+                Learning
+              </NavigationLink>
               <NavigationLink to="/projects" isActive={isActive("/projects")}>
                 Projects
               </NavigationLink>
@@ -100,6 +103,9 @@ const Navigation = () => {
                 </NavigationLink>
                 <NavigationLink to="/reading" isActive={isActive("/reading")} mobile>
                   Reading List
+                </NavigationLink>
+                <NavigationLink to="/learning" isActive={isActive("/learning")} mobile>
+                  Learning
                 </NavigationLink>
                 <NavigationLink to="/projects" isActive={isActive("/projects")} mobile>
                   Projects
