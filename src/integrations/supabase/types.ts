@@ -132,6 +132,81 @@ export type Database = {
         }
         Relationships: []
       }
+      book_discussions: {
+        Row: {
+          author: string | null
+          book_id: string
+          cover_url: string | null
+          created_at: string | null
+          created_by: string | null
+          id: number
+          title: string
+        }
+        Insert: {
+          author?: string | null
+          book_id: string
+          cover_url?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: number
+          title: string
+        }
+        Update: {
+          author?: string | null
+          book_id?: string
+          cover_url?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: number
+          title?: string
+        }
+        Relationships: []
+      }
+      discussion_messages: {
+        Row: {
+          content: string
+          created_at: string | null
+          discussion_id: number | null
+          id: number
+          parent_id: number | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          discussion_id?: number | null
+          id?: number
+          parent_id?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          discussion_id?: number | null
+          id?: number
+          parent_id?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "discussion_messages_discussion_id_fkey"
+            columns: ["discussion_id"]
+            isOneToOne: false
+            referencedRelation: "book_discussions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "discussion_messages_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "discussion_messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ideas: {
         Row: {
           approval_status: string | null

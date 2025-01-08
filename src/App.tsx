@@ -19,6 +19,7 @@ import Journey from "@/pages/Journey";
 import Learning from "@/pages/Learning";
 import NotFound from "@/pages/NotFound";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import BookDiscussions from "@/pages/BookDiscussions";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -54,6 +55,14 @@ function App() {
                   element={
                     <ProtectedRoute>
                       <Reading />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/book-discussions"
+                  element={
+                    <ProtectedRoute>
+                      <BookDiscussions />
                     </ProtectedRoute>
                   }
                 />
