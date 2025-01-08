@@ -1,4 +1,5 @@
 import { type Location } from './types';
+import { type ProjectionSpecification } from 'mapbox-gl';
 
 export const locations: Location[] = [
   ["Pakistan", [69.3451, 30.3753], "Primary Work Location", 
@@ -63,7 +64,7 @@ export const mapConfig = {
   style: 'mapbox://styles/mapbox/dark-v11',
   center: [0, 20],
   zoom: 1.8,
-  projection: 'mercator'
+  projection: 'mercator' as ProjectionSpecification
 };
 
 export const createCurvedLine = (start: [number, number], end: [number, number]) => {

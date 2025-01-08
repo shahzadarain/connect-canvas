@@ -20,7 +20,7 @@ const WorldMap = () => {
         style: mapConfig.style,
         center: mapConfig.center as [number, number],
         zoom: mapConfig.zoom,
-        projection: mapConfig.projection as mapboxgl.ProjectionSpecification
+        projection: mapConfig.projection
       });
 
       map.current.addControl(new mapboxgl.NavigationControl({
