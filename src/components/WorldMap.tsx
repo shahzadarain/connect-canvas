@@ -41,10 +41,10 @@ const WorldMap = () => {
   return (
     <div className="w-full h-[600px] relative">
       <Map
-        {...mapConfig}
         mapboxAccessToken={MAPBOX_TOKEN}
         onLoad={onMapLoad}
         attributionControl={false}
+        {...mapConfig}
       >
         <MapPaths paths={paths} />
         <MapMarkers markers={markers} />

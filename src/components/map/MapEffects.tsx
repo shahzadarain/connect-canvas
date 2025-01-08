@@ -1,5 +1,5 @@
 import mapboxgl from 'mapbox-gl';
-import { type Location, type RouteFeature } from './types';
+import { Location, RouteFeature } from './types';
 
 export const addMapEffects = (map: mapboxgl.Map) => {
   map.setFog({
@@ -20,12 +20,15 @@ export const addMapEffects = (map: mapboxgl.Map) => {
 export const addFlightPaths = (map: mapboxgl.Map, locations: Location[]) => {
   locations.forEach((_, i) => {
     if (i < locations.length - 1) {
-      const from = locations[i][1];
-      const to = locations[i + 1][1];
+      const from = locations[i].coordinates;
+      const to = locations[i + 1].coordinates;
       
       const route: RouteFeature = {
         'type': 'Feature',
-        'properties': {},
+        'properties': {
+          name: locations[i].name,
+          type: 'work'
+        },
         'geometry': {
           'type': 'LineString',
           'coordinates': [from, to]

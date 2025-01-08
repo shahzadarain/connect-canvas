@@ -1,5 +1,14 @@
 import type { Feature, LineString, Point } from 'geojson';
 
+export interface MapLocation {
+  id: string;
+  name: string;
+  coordinates: [number, number];
+  roles?: string[];
+  timePeriod?: string;
+  contributions?: string[];
+}
+
 export interface Location {
   coordinates: [number, number];
   name: string;
@@ -9,10 +18,21 @@ export interface Location {
   contributions?: string[];
 }
 
+export interface MapMarkerProps {
+  location: MapLocation;
+  type: 'work' | 'mission';
+}
+
+export interface MapPathProps {
+  start: [number, number];
+  end: [number, number];
+  type: 'work' | 'mission';
+}
+
 export interface RouteFeature extends Feature<LineString> {
   properties: {
-    name: string;
-    type: 'work' | 'mission';
+    name?: string;
+    type?: 'work' | 'mission';
   };
 }
 
