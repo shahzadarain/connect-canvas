@@ -64,7 +64,9 @@ export const mapConfig = {
   style: 'mapbox://styles/mapbox/dark-v11',
   center: [0, 20],
   zoom: 1.8,
-  projection: 'mercator' as ProjectionSpecification
+  projection: {
+    name: 'mercator'
+  } as ProjectionSpecification
 };
 
 export const createCurvedLine = (start: [number, number], end: [number, number]) => {
