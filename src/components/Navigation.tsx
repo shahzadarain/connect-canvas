@@ -37,9 +37,6 @@ const Navigation = () => {
               <NavigationLink to="/" isActive={isActive("/")}>
                 Home
               </NavigationLink>
-              <NavigationLink to="/achievements" isActive={isActive("/achievements")}>
-                Achievements
-              </NavigationLink>
               <NavigationLink to="/ai-tools" isActive={isActive("/ai-tools")}>
                 AI Tools
               </NavigationLink>
@@ -88,9 +85,6 @@ const Navigation = () => {
               <div className="px-2 pt-2 pb-3 space-y-1">
                 <NavigationLink to="/" isActive={isActive("/")} mobile>
                   Home
-                </NavigationLink>
-                <NavigationLink to="/achievements" isActive={isActive("/achievements")} mobile>
-                  Achievements
                 </NavigationLink>
                 <NavigationLink to="/ai-tools" isActive={isActive("/ai-tools")} mobile>
                   AI Tools
