@@ -20,8 +20,8 @@ const ProjectSection = ({ category }: { category: string }) => {
       console.log("Fetched projects:", data);
       return data as Project[];
     },
-    gcTime: 1000 * 60 * 5, // 5 minutes
-    staleTime: 1000 * 60 * 2, // 2 minutes
+    gcTime: 1000 * 60 * 5,
+    staleTime: 1000 * 60 * 2,
   });
 
   if (error) {
@@ -31,7 +31,7 @@ const ProjectSection = ({ category }: { category: string }) => {
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {[1, 2, 3].map((i) => (
           <Skeleton key={i} className="h-[300px] rounded-xl" />
         ))}
@@ -40,7 +40,7 @@ const ProjectSection = ({ category }: { category: string }) => {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       {projects?.map((project) => (
         <ProjectCard key={project.id} project={project} />
       ))}
