@@ -34,23 +34,32 @@ const Navigation = () => {
           <div className="flex items-center justify-between h-16">
             {/* Desktop menu */}
             <div className="hidden sm:flex sm:items-center space-x-1">
+              <NavigationLink to="/" isActive={isActive("/")}>
+                Home
+              </NavigationLink>
+              <NavigationLink to="/achievements" isActive={isActive("/achievements")}>
+                Achievements
+              </NavigationLink>
+              <NavigationLink to="/ai-tools" isActive={isActive("/ai-tools")}>
+                AI Tools
+              </NavigationLink>
+              <NavigationLink to="/ai-humanitarian" isActive={isActive("/ai-humanitarian")}>
+                AI Humanitarian
+              </NavigationLink>
               <NavigationLink to="/blog" isActive={isActive("/blog")}>
-                Articles
+                Blog
               </NavigationLink>
               <NavigationLink to="/reading" isActive={isActive("/reading")}>
-                Books
+                Reading List
               </NavigationLink>
-              <NavigationLink to="/events" isActive={isActive("/events")}>
-                Events
+              <NavigationLink to="/projects" isActive={isActive("/projects")}>
+                Projects
               </NavigationLink>
-              <NavigationLink to="/membership" isActive={isActive("/membership")}>
-                Membership
+              <NavigationLink to="/ideas" isActive={isActive("/ideas")}>
+                Ideas
               </NavigationLink>
-              <NavigationLink to="/newsletter" isActive={isActive("/newsletter")}>
-                Newsletter
-              </NavigationLink>
-              <NavigationLink to="/more" isActive={isActive("/more")}>
-                More
+              <NavigationLink to="/journey" isActive={isActive("/journey")}>
+                Journey
               </NavigationLink>
             </div>
 
@@ -74,23 +83,32 @@ const Navigation = () => {
           {isOpen && (
             <div className="sm:hidden bg-red-700 rounded-b-xl">
               <div className="px-2 pt-2 pb-3 space-y-1">
+                <NavigationLink to="/" isActive={isActive("/")} mobile>
+                  Home
+                </NavigationLink>
+                <NavigationLink to="/achievements" isActive={isActive("/achievements")} mobile>
+                  Achievements
+                </NavigationLink>
+                <NavigationLink to="/ai-tools" isActive={isActive("/ai-tools")} mobile>
+                  AI Tools
+                </NavigationLink>
+                <NavigationLink to="/ai-humanitarian" isActive={isActive("/ai-humanitarian")} mobile>
+                  AI Humanitarian
+                </NavigationLink>
                 <NavigationLink to="/blog" isActive={isActive("/blog")} mobile>
-                  Articles
+                  Blog
                 </NavigationLink>
                 <NavigationLink to="/reading" isActive={isActive("/reading")} mobile>
-                  Books
+                  Reading List
                 </NavigationLink>
-                <NavigationLink to="/events" isActive={isActive("/events")} mobile>
-                  Events
+                <NavigationLink to="/projects" isActive={isActive("/projects")} mobile>
+                  Projects
                 </NavigationLink>
-                <NavigationLink to="/membership" isActive={isActive("/membership")} mobile>
-                  Membership
+                <NavigationLink to="/ideas" isActive={isActive("/ideas")} mobile>
+                  Ideas
                 </NavigationLink>
-                <NavigationLink to="/newsletter" isActive={isActive("/newsletter")} mobile>
-                  Newsletter
-                </NavigationLink>
-                <NavigationLink to="/more" isActive={isActive("/more")} mobile>
-                  More
+                <NavigationLink to="/journey" isActive={isActive("/journey")} mobile>
+                  Journey
                 </NavigationLink>
               </div>
             </div>
