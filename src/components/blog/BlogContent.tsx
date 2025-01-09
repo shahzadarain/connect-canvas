@@ -29,44 +29,24 @@ export const BlogContent = ({ content, featuredImage }: BlogContentProps) => {
       )}
 
       {/* Content */}
-      <div className="prose prose-lg max-w-none font-serif selection:bg-yellow-100 dark:selection:bg-yellow-800/30">
-        {/* Typography Styles */}
-        <style jsx global>{`
-          .prose h1 {
-            @apply text-4xl md:text-5xl font-bold mb-8 font-serif tracking-tight;
-          }
-          .prose h2 {
-            @apply text-3xl font-bold mt-12 mb-6 font-serif tracking-tight;
-          }
-          .prose h3 {
-            @apply text-2xl font-bold mt-8 mb-4 font-serif;
-          }
-          .prose p {
-            @apply text-xl leading-relaxed mb-6 font-serif text-gray-800 dark:text-gray-200;
-          }
-          .prose blockquote {
-            @apply border-l-4 border-blue-500 pl-6 my-8 italic text-2xl font-serif text-gray-700 dark:text-gray-300;
-          }
-          .prose ul {
-            @apply space-y-4 my-8 list-none pl-0;
-          }
-          .prose li {
-            @apply flex items-start space-x-4 text-lg leading-relaxed;
-          }
-          .prose img {
-            @apply rounded-lg shadow-lg my-12;
-          }
-          .prose a {
-            @apply text-blue-600 hover:text-blue-700 underline-offset-4 decoration-blue-500/30 hover:decoration-blue-500;
-          }
-          .prose code {
-            @apply px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded text-sm font-mono;
-          }
-          .prose pre {
-            @apply p-4 bg-gray-100 dark:bg-gray-800 rounded-lg overflow-x-auto my-8;
-          }
-        `}</style>
-
+      <div 
+        className="
+          prose prose-lg max-w-none font-serif selection:bg-yellow-100 dark:selection:bg-yellow-800/30
+          prose-headings:font-serif prose-headings:tracking-tight
+          prose-h1:text-4xl prose-h1:md:text-5xl prose-h1:font-bold prose-h1:mb-8
+          prose-h2:text-3xl prose-h2:font-bold prose-h2:mt-12 prose-h2:mb-6
+          prose-h3:text-2xl prose-h3:font-bold prose-h3:mt-8 prose-h3:mb-4
+          prose-p:text-xl prose-p:leading-relaxed prose-p:mb-6 prose-p:text-gray-800 dark:prose-p:text-gray-200
+          prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:pl-6 prose-blockquote:my-8 
+          prose-blockquote:italic prose-blockquote:text-2xl prose-blockquote:text-gray-700 dark:prose-blockquote:text-gray-300
+          prose-ul:space-y-4 prose-ul:my-8 prose-ul:list-none prose-ul:pl-0
+          prose-li:flex prose-li:items-start prose-li:space-x-4 prose-li:text-lg prose-li:leading-relaxed
+          prose-img:rounded-lg prose-img:shadow-lg prose-img:my-12
+          prose-a:text-blue-600 hover:prose-a:text-blue-700 prose-a:underline-offset-4 prose-a:decoration-blue-500/30 hover:prose-a:decoration-blue-500
+          prose-code:px-2 prose-code:py-1 prose-code:bg-gray-100 dark:prose-code:bg-gray-800 prose-code:rounded prose-code:text-sm prose-code:font-mono
+          prose-pre:p-4 prose-pre:bg-gray-100 dark:prose-pre:bg-gray-800 prose-pre:rounded-lg prose-pre:overflow-x-auto prose-pre:my-8
+        "
+      >
         <BlogContentFormatter content={content} />
       </div>
 

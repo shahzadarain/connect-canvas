@@ -4,7 +4,7 @@ interface BlogHeadingProps {
   level: number;
   content: string;
   id: string;
-  formatContent: (text: string) => string;
+  formatContent: (text: string) => React.ReactNode;
 }
 
 export const BlogHeading = ({ level, content, id, formatContent }: BlogHeadingProps) => {
@@ -23,11 +23,7 @@ export const BlogHeading = ({ level, content, id, formatContent }: BlogHeadingPr
         id={id} 
         className={`${headingClasses} text-gray-900 dark:text-gray-100`}
       >
-        <span 
-          dangerouslySetInnerHTML={{ 
-            __html: formatContent(content) 
-          }}
-        />
+        {formatContent(content)}
       </Component>
       <a 
         href={`#${id}`}
