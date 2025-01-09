@@ -7,6 +7,11 @@ import { PageTransition } from '@/components/ui/page-transition';
 import { BlogContent } from '@/components/blog/BlogContent';
 import { Avatar } from '@/components/ui/avatar';
 import { toast } from 'sonner';
+import { TableOfContents } from '@/components/blog/TableOfContents';
+import { ShareButtons } from '@/components/blog/ShareButtons';
+import { ReadingProgress } from '@/components/blog/ReadingProgress';
+import { ArrowLeft, ArrowRight, Clock } from 'lucide-react';
+import { calculateReadingTime } from '@/utils/blogUtils';
 
 const BlogPost = () => {
   const { slug } = useParams();
@@ -36,13 +41,13 @@ const BlogPost = () => {
   if (isLoading) {
     return (
       <div className="animate-pulse">
-        <div className="h-[60vh] bg-gray-200" />
+        <div className="h-[60vh] bg-gray-200 dark:bg-gray-800" />
         <div className="max-w-3xl mx-auto px-4 -mt-32 relative">
-          <div className="h-8 bg-gray-200 w-3/4 rounded mb-4" />
-          <div className="h-4 bg-gray-200 w-1/2 rounded mb-8" />
+          <div className="h-8 bg-gray-200 dark:bg-gray-700 w-3/4 rounded mb-4" />
+          <div className="h-4 bg-gray-200 dark:bg-gray-700 w-1/2 rounded mb-8" />
           <div className="space-y-4">
             {[...Array(6)].map((_, i) => (
-              <div key={i} className="h-4 bg-gray-200 rounded w-full" />
+              <div key={i} className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-full" />
             ))}
           </div>
         </div>
@@ -55,73 +60,103 @@ const BlogPost = () => {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-serif mb-4">Post Not Found</h1>
-          <p className="text-gray-600">The blog post you're looking for doesn't exist or has been removed.</p>
+          <p className="text-gray-600 dark:text-gray-400">The blog post you're looking for doesn't exist or has been removed.</p>
         </div>
       </div>
     );
   }
 
+  const readingTime = calculateReadingTime(post.content);
+
   return (
     <PageTransition>
-      <article className="min-h-screen bg-white">
+      <article className="min-h-screen bg-white dark:bg-gray-900">
+        <ReadingProgress />
+        
         {/* Hero Image */}
-        <div className="relative h-[60vh] overflow-hidden">
+        <div className="relative h-[70vh] overflow-hidden">
           <img
             src={post.featured_image || `https://source.unsplash.com/random/1920x1080?${post.tags?.[0] || 'blog'}`}
             alt={post.title}
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent" />
         </div>
 
         {/* Content */}
-        <div className="max-w-3xl mx-auto px-4 -mt-32 relative">
+        <div className="max-w-4xl mx-auto px-4 -mt-48 relative">
           <header className="text-center mb-16">
             <div className="inline-flex gap-2 mb-6">
               {post.tags?.map((tag, index) => (
                 <span
                   key={index}
-                  className="px-3 py-1 bg-white/90 text-gray-700 rounded-full text-sm"
+                  className="px-3 py-1 bg-white/90 dark:bg-gray-800/90 text-gray-700 dark:text-gray-300 rounded-full text-sm font-medium shadow-sm"
                 >
                   {tag}
                 </span>
               ))}
             </div>
             
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif text-white mb-4 leading-tight">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif text-white mb-6 leading-tight">
               {post.title}
             </h1>
             
-            <div className="text-white/90 mb-8">
+            <div className="flex items-center justify-center gap-6 text-white/90">
               <time className="text-sm">
                 {format(new Date(post.published_at), 'MMMM d, yyyy')}
               </time>
+              <span className="flex items-center gap-2">
+                <Clock className="w-4 h-4" />
+                <span>{readingTime} min read</span>
+              </span>
             </div>
           </header>
 
-          {/* Main Content */}
-          <div className="bg-white rounded-lg shadow-xl p-8 mb-16">
-            <BlogContent content={post.content} />
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_250px] gap-12">
+            {/* Main Content */}
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-8 mb-16">
+              <BlogContent content={post.content} />
+              <ShareButtons url={window.location.href} title={post.title} />
+            </div>
+
+            {/* Sidebar */}
+            <aside className="space-y-8">
+              <div className="sticky top-8">
+                <TableOfContents content={post.content} />
+                
+                {/* Author Bio */}
+                <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-6 mt-8">
+                  <div className="flex items-center gap-4">
+                    <Avatar className="w-16 h-16">
+                      <img 
+                        src={`https://source.unsplash.com/random/200x200?portrait`} 
+                        alt={post.author}
+                        className="object-cover"
+                      />
+                    </Avatar>
+                    <div>
+                      <h3 className="font-serif text-lg mb-2">{post.author}</h3>
+                      <p className="text-gray-600 dark:text-gray-400 text-sm">
+                        A passionate writer and technology enthusiast sharing insights about the latest developments in tech and innovation.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </aside>
           </div>
 
-          {/* Author Bio */}
-          <footer className="bg-gray-50 rounded-lg p-8 mb-16">
-            <div className="flex items-center gap-6">
-              <Avatar className="w-16 h-16">
-                <img 
-                  src={`https://source.unsplash.com/random/200x200?portrait`} 
-                  alt={post.author}
-                  className="object-cover"
-                />
-              </Avatar>
-              <div>
-                <h3 className="font-serif text-xl mb-2">{post.author}</h3>
-                <p className="text-gray-600">
-                  A passionate writer and technology enthusiast sharing insights about the latest developments in tech and innovation.
-                </p>
-              </div>
-            </div>
-          </footer>
+          {/* Navigation */}
+          <nav className="flex justify-between items-center py-8 border-t border-gray-200 dark:border-gray-700 mt-16">
+            <button className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200">
+              <ArrowLeft className="w-4 h-4" />
+              Previous Post
+            </button>
+            <button className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200">
+              Next Post
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </nav>
         </div>
       </article>
     </PageTransition>
