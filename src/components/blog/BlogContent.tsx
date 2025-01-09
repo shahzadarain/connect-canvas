@@ -15,7 +15,7 @@ export const BlogContent = ({ content, featuredImage }: BlogContentProps) => {
     console.log('Fixing image paths in content');
     
     return content.replace(
-      /!\[(.*?)\]\((\/lovable-uploads\/.*?|https:\/\/.*?)\)/g,
+      /!\[(.*?)\]\((.*?)\)/g,
       (match, altText, path) => {
         console.log('Processing markdown image:', { match, altText, path });
         
@@ -31,11 +31,11 @@ export const BlogContent = ({ content, featuredImage }: BlogContentProps) => {
           return match;
         }
         
-        // Otherwise, construct the Supabase storage URL
+        // Otherwise, assume it's a lovable-uploads file
         const fileName = path.split('/').pop();
-        const supabaseUrl = `https://mismxmgwmrknlxkaevde.supabase.co/storage/v1/object/public/resources/${fileName}`;
-        console.log('Converting to Supabase URL:', supabaseUrl);
-        return `![${altText}](${supabaseUrl})`;
+        const finalPath = `/lovable-uploads/${fileName}`;
+        console.log('Converting to lovable-uploads path:', finalPath);
+        return `![${altText}](${finalPath})`;
       }
     );
   };

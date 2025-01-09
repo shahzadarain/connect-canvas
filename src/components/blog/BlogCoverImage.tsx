@@ -25,30 +25,28 @@ export const BlogCoverImage = ({ featuredImage }: BlogCoverImageProps) => {
   };
 
   const processImageUrl = (url: string) => {
-    console.log('Processing image URL:', url);
+    console.log('Processing cover image URL:', url);
     
     if (!url) {
       console.log('No URL provided, using placeholder');
       return getRandomPlaceholderImage();
     }
     
-    // If it's already a full URL, return as is
+    // If it's already a full URL (including Supabase storage URLs), return as is
     if (url.startsWith('https://')) {
       console.log('Using full URL:', url);
       return url;
     }
     
-    // If it's a relative path from lovable-uploads
+    // If it's a lovable-uploads path, use it directly
     if (url.startsWith('/lovable-uploads/')) {
-      console.log('Converting lovable-uploads path:', url);
-      const fileName = url.split('/').pop();
-      return `/lovable-uploads/${fileName}`;
+      console.log('Using lovable-uploads path:', url);
+      return url;
     }
     
-    // If it's just a filename, assume it's in Supabase storage
-    console.log('Converting to Supabase storage URL:', url);
-    const fileName = url.split('/').pop();
-    return `https://mismxmgwmrknlxkaevde.supabase.co/storage/v1/object/public/resources/${fileName}`;
+    // If it's just a filename, assume it's in lovable-uploads
+    console.log('Converting to lovable-uploads path:', url);
+    return `/lovable-uploads/${url}`;
   };
 
   const coverImage = processImageUrl(featuredImage || '');
