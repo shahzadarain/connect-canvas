@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface BlogHeadingProps {
-  level: number;
+  level: 1 | 2 | 3 | 4 | 5;  // Explicitly define allowed heading levels
   content: string;
   id: string;
   formatContent: (text: string) => React.ReactNode;
@@ -17,7 +17,7 @@ export const BlogHeading: React.FC<BlogHeadingProps> = ({ level, content, id, fo
   } as const;
 
   const HeadingTag = `h${level}` as keyof JSX.IntrinsicElements;
-  const headingClass = headingClasses[level as keyof typeof headingClasses] || headingClasses[5];
+  const headingClass = headingClasses[level];
 
   return (
     <div className="relative group">

@@ -97,6 +97,7 @@ serve(async (req) => {
           description: article.description,
           category: article.category,
           created_at: new Date().toISOString(),
+          published_at: new Date().toISOString(),
         }))
       )
       .select()
