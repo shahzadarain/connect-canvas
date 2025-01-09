@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -11,10 +11,12 @@ import { TableOfContents } from '@/components/blog/TableOfContents';
 import { ShareButtons } from '@/components/blog/ShareButtons';
 import { ReadingProgress } from '@/components/blog/ReadingProgress';
 import { ArrowLeft, ArrowRight, Clock } from 'lucide-react';
-import { calculateReadingTime } from '@/utils/blogUtils';
+import { calculateReadingTime, generateTableOfContents } from '@/utils/blogUtils';
 
 const BlogPost = () => {
   const { slug } = useParams();
+  const [readingProgress, setReadingProgress] = useState(0);
+  const [tocItems, setTocItems] = useState([]);
 
   const { data: post, isLoading, error } = useQuery({
     queryKey: ['blog-post', slug],
@@ -37,6 +39,24 @@ const BlogPost = () => {
       return data;
     },
   });
+
+  useEffect(() => {
+    if (post?.content) {
+      const items = generateTableOfContents(post.content);
+      setTocItems(items);
+    }
+  }, [post?.content]);
+
+  useEffect(() => {
+    const updateReadingProgress = () => {
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (window.scrollY / totalHeight) * 100;
+      setReadingProgress(Math.min(100, Math.max(0, progress)));
+    };
+
+    window.addEventListener('scroll', updateReadingProgress);
+    return () => window.removeEventListener('scroll', updateReadingProgress);
+  }, []);
 
   if (isLoading) {
     return (
@@ -71,7 +91,7 @@ const BlogPost = () => {
   return (
     <PageTransition>
       <article className="min-h-screen bg-white dark:bg-gray-900">
-        <ReadingProgress />
+        <ReadingProgress progress={readingProgress} />
         
         {/* Hero Image */}
         <div className="relative h-[70vh] overflow-hidden">
@@ -122,7 +142,7 @@ const BlogPost = () => {
             {/* Sidebar */}
             <aside className="space-y-8">
               <div className="sticky top-8">
-                <TableOfContents content={post.content} />
+                <TableOfContents items={tocItems} />
                 
                 {/* Author Bio */}
                 <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-6 mt-8">
