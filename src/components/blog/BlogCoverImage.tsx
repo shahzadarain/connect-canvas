@@ -24,7 +24,20 @@ export const BlogCoverImage = ({ featuredImage }: BlogCoverImageProps) => {
     return `https://images.unsplash.com/${imageId}?auto=format&fit=crop&w=2000&q=80`;
   };
 
-  const coverImage = featuredImage || getRandomPlaceholderImage();
+  const processImageUrl = (url: string) => {
+    if (!url) return getRandomPlaceholderImage();
+    
+    // If it's already a full URL, return as is
+    if (url.startsWith('https://')) {
+      return url;
+    }
+    
+    // If it's a relative path, convert to Supabase storage URL
+    const fileName = url.split('/').pop();
+    return `https://mismxmgwmrknlxkaevde.supabase.co/storage/v1/object/public/resources/${fileName}`;
+  };
+
+  const coverImage = processImageUrl(featuredImage || '');
 
   return (
     <div className="relative aspect-[2/1] rounded-xl overflow-hidden shadow-2xl">

@@ -13,10 +13,18 @@ export const BlogContent = ({ content, featuredImage }: BlogContentProps) => {
   // Function to fix image paths in markdown content
   const fixImagePaths = (content: string) => {
     // Replace relative paths with absolute paths
-    // This assumes images are stored in the public directory
+    // This assumes images are stored in the Supabase storage bucket
     return content.replace(
-      /!\[(.*?)\]\(\/lovable-uploads\/(.*?)\)/g,
-      '![$1](https://mismxmgwmrknlxkaevde.supabase.co/storage/v1/object/public/resources/$2)'
+      /!\[(.*?)\]\((\/lovable-uploads\/.*?|https:\/\/.*?)\)/g,
+      (match, altText, path) => {
+        // If it's already a full URL, return as is
+        if (path.startsWith('https://')) {
+          return match;
+        }
+        // Otherwise, construct the Supabase storage URL
+        const fileName = path.split('/').pop();
+        return `![${altText}](https://mismxmgwmrknlxkaevde.supabase.co/storage/v1/object/public/resources/${fileName})`;
+      }
     );
   };
 
