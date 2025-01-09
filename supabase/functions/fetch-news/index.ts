@@ -62,17 +62,11 @@ serve(async (req) => {
       messages: [
         {
           role: 'system',
-          content: `You are a technology news curator. Generate 6 realistic and current news articles about the very latest technology and AI advancements happening right now. Each article should:
-          - Have a clear, concise title that reflects current events
-          - Include a detailed description (2-3 sentences) about cutting-edge developments
-          - Be categorized as either "tech" or "ai"
-          - Focus on real, current technological trends and developments from the past week
-          - Be specific about companies, products, and technologies
-          Return the response in JSON format with an array of articles containing title, description, and category fields.`
+          content: `You are a technology news curator. Generate 6 realistic and current news articles about technology and AI advancements. Each article should have a title, description (2-3 sentences), and category (either "tech" or "ai"). Return the response in JSON format with an array of articles containing these fields.`
         },
         {
           role: 'user',
-          content: 'Generate 6 current technology and AI news articles focusing on the very latest developments from this week. Make them sound like real news articles with accurate technical details and current industry trends.'
+          content: 'Generate 6 current technology and AI news articles.'
         }
       ],
       temperature: 0.7,
