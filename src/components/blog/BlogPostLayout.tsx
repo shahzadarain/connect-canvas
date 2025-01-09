@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { BlogPost } from '@/integrations/supabase/types/blog';
-import { BlogHeader } from './BlogHeader';
 import { BlogContent } from './BlogContent';
 import { BlogSidebar } from './BlogSidebar';
 import { ShareButtons } from './ShareButtons';
 import { ReadingProgress } from './ReadingProgress';
+import { BlogHeader } from './BlogHeader';
 
 interface BlogPostLayoutProps {
   post: BlogPost['Row'];
