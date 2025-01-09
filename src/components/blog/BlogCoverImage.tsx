@@ -25,43 +25,51 @@ export const BlogCoverImage = ({ featuredImage }: BlogCoverImageProps) => {
   };
 
   const processImageUrl = (url: string) => {
-    console.log('Processing cover image URL:', url);
+    console.log('Processing image URL:', url);
     
     if (!url) {
       console.log('No URL provided, using placeholder');
       return getRandomPlaceholderImage();
     }
-    
-    // If it's already a full URL (including Supabase storage URLs), return as is
-    if (url.startsWith('https://') || url.startsWith('http://')) {
-      console.log('Using full URL:', url);
+
+    // Handle absolute URLs
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      console.log('Using absolute URL:', url);
       return url;
     }
-    
-    // If it's a lovable-uploads path, ensure it starts with /
+
+    // Handle relative URLs from public directory
+    if (url.startsWith('/')) {
+      const fullUrl = `${window.location.origin}${url}`;
+      console.log('Converting relative URL to absolute:', fullUrl);
+      return fullUrl;
+    }
+
+    // Handle lovable-uploads paths
     if (url.includes('lovable-uploads')) {
       const processedUrl = url.startsWith('/') ? url : `/${url}`;
-      console.log('Using lovable-uploads path:', processedUrl);
-      return processedUrl;
+      const fullUrl = `${window.location.origin}${processedUrl}`;
+      console.log('Processing lovable-uploads URL:', fullUrl);
+      return fullUrl;
     }
-    
-    // If it's just a filename, assume it's in lovable-uploads
-    const processedUrl = `/lovable-uploads/${url}`;
-    console.log('Converting to lovable-uploads path:', processedUrl);
-    return processedUrl;
+
+    // Default case: assume it's a filename in lovable-uploads
+    const fullUrl = `${window.location.origin}/lovable-uploads/${url}`;
+    console.log('Using default lovable-uploads path:', fullUrl);
+    return fullUrl;
   };
 
-  const coverImage = processImageUrl(featuredImage || '');
-  console.log('Final cover image URL:', coverImage);
+  const imageUrl = processImageUrl(featuredImage || '');
+  console.log('Final image URL:', imageUrl);
 
   return (
     <div className="relative aspect-[2/1] rounded-xl overflow-hidden shadow-2xl">
       <img
-        src={coverImage}
+        src={imageUrl}
         alt="Blog post cover"
         className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
         onError={(e) => {
-          console.error('Error loading image:', coverImage);
+          console.error('Error loading image:', imageUrl);
           e.currentTarget.src = getRandomPlaceholderImage();
         }}
       />

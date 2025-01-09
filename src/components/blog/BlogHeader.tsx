@@ -9,15 +9,31 @@ interface BlogHeaderProps {
 }
 
 export const BlogHeader = ({ post }: BlogHeaderProps) => {
+  const processImageUrl = (url: string | null) => {
+    if (!url) return null;
+    
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      return url;
+    }
+
+    return url.startsWith('/') ? `${window.location.origin}${url}` : `${window.location.origin}/${url}`;
+  };
+
+  const featuredImage = processImageUrl(post.featured_image);
+
   return (
     <header className="relative w-full mb-16">
       {/* Hero Image Container */}
       <div className="relative h-[70vh] w-full overflow-hidden">
-        {post.featured_image && (
+        {featuredImage && (
           <img
-            src={post.featured_image}
+            src={featuredImage}
             alt={post.title}
             className="w-full h-full object-cover"
+            onError={(e) => {
+              console.error('Error loading featured image:', featuredImage);
+              e.currentTarget.src = `https://images.unsplash.com/photo-1486718448742-163732cd1544?auto=format&fit=crop&w=2000&q=80`;
+            }}
           />
         )}
         {/* Gradient Overlay */}
