@@ -22,12 +22,6 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
 
-    // Check for required environment variables
-    const openaiApiKey = Deno.env.get('OPENAI_API_KEY')
-    if (!openaiApiKey) {
-      throw new Error('OPENAI_API_KEY is required')
-    }
-
     // Check for recent articles in the database (within last 5 minutes)
     const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000)
     const { data: existingArticles, error: dbError } = await supabaseClient
@@ -53,6 +47,11 @@ serve(async (req) => {
     }
 
     // Initialize OpenAI
+    const openaiApiKey = Deno.env.get('OPENAI_API_KEY')
+    if (!openaiApiKey) {
+      throw new Error('OPENAI_API_KEY is required')
+    }
+
     const configuration = new Configuration({ apiKey: openaiApiKey })
     const openai = new OpenAIApi(configuration)
 
