@@ -15,7 +15,7 @@ export const BlogContent = ({ content, featuredImage }: BlogContentProps) => {
       {/* Back to Blog Link */}
       <Link 
         to="/blog" 
-        className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-8 group"
+        className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-8 group transition-colors"
       >
         <ArrowLeft className="w-4 h-4 mr-2 transition-transform group-hover:-translate-x-1" />
         Back to Blog
@@ -23,7 +23,7 @@ export const BlogContent = ({ content, featuredImage }: BlogContentProps) => {
 
       {/* Featured Image */}
       {featuredImage && (
-        <div className="mb-12">
+        <div className="mb-8 rounded-xl overflow-hidden shadow-xl">
           <BlogCoverImage featuredImage={featuredImage} />
         </div>
       )}
@@ -31,20 +31,23 @@ export const BlogContent = ({ content, featuredImage }: BlogContentProps) => {
       {/* Content */}
       <div 
         className="
-          prose prose-lg max-w-none font-serif selection:bg-yellow-100 dark:selection:bg-yellow-800/30
-          prose-headings:font-serif prose-headings:tracking-tight
-          prose-h1:text-4xl prose-h1:md:text-5xl prose-h1:font-bold prose-h1:mb-8
-          prose-h2:text-3xl prose-h2:font-bold prose-h2:mt-12 prose-h2:mb-6
-          prose-h3:text-2xl prose-h3:font-bold prose-h3:mt-8 prose-h3:mb-4
-          prose-p:text-xl prose-p:leading-relaxed prose-p:mb-6 prose-p:text-gray-800 dark:prose-p:text-gray-200
-          prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:pl-6 prose-blockquote:my-8 
-          prose-blockquote:italic prose-blockquote:text-2xl prose-blockquote:text-gray-700 dark:prose-blockquote:text-gray-300
-          prose-ul:space-y-4 prose-ul:my-8 prose-ul:list-none prose-ul:pl-0
-          prose-li:flex prose-li:items-start prose-li:space-x-4 prose-li:text-lg prose-li:leading-relaxed
-          prose-img:rounded-lg prose-img:shadow-lg prose-img:my-12
-          prose-a:text-blue-600 hover:prose-a:text-blue-700 prose-a:underline-offset-4 prose-a:decoration-blue-500/30 hover:prose-a:decoration-blue-500
-          prose-code:px-2 prose-code:py-1 prose-code:bg-gray-100 dark:prose-code:bg-gray-800 prose-code:rounded prose-code:text-sm prose-code:font-mono
-          prose-pre:p-4 prose-pre:bg-gray-100 dark:prose-pre:bg-gray-800 prose-pre:rounded-lg prose-pre:overflow-x-auto prose-pre:my-8
+          prose prose-lg max-w-none
+          prose-headings:font-serif prose-headings:tracking-tight prose-headings:text-gray-900 dark:prose-headings:text-gray-100
+          prose-h1:text-4xl prose-h1:md:text-5xl prose-h1:font-bold prose-h1:mb-6 prose-h1:leading-tight
+          prose-h2:text-3xl prose-h2:font-bold prose-h2:mt-10 prose-h2:mb-4
+          prose-h3:text-2xl prose-h3:font-bold prose-h3:mt-8 prose-h3:mb-3
+          prose-p:text-lg prose-p:leading-relaxed prose-p:mb-4 prose-p:text-gray-700 dark:prose-p:text-gray-300
+          prose-blockquote:border-l-4 prose-blockquote:border-blue-500/50 prose-blockquote:pl-4 prose-blockquote:my-6 
+          prose-blockquote:italic prose-blockquote:text-xl prose-blockquote:text-gray-700/90 dark:prose-blockquote:text-gray-300/90
+          prose-ul:my-4 prose-ul:space-y-2 prose-ul:list-none
+          prose-li:flex prose-li:items-start prose-li:gap-3 prose-li:text-gray-700 dark:prose-li:text-gray-300
+          prose-img:rounded-lg prose-img:shadow-lg prose-img:my-8
+          prose-a:text-blue-600 hover:prose-a:text-blue-700 prose-a:no-underline hover:prose-a:underline
+          prose-code:px-1.5 prose-code:py-0.5 prose-code:bg-gray-100 dark:prose-code:bg-gray-800/80 prose-code:rounded 
+          prose-code:text-sm prose-code:font-mono prose-code:text-gray-800 dark:prose-code:text-gray-200
+          prose-pre:p-4 prose-pre:bg-gray-100 dark:prose-pre:bg-gray-800/80 prose-pre:rounded-lg 
+          prose-pre:overflow-x-auto prose-pre:my-6 prose-pre:shadow-sm
+          selection:bg-blue-100/30 dark:selection:bg-blue-900/30
         "
       >
         <BlogContentFormatter content={content} />
