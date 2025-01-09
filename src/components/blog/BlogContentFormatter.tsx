@@ -27,7 +27,7 @@ export const BlogContentFormatter = ({ content }: BlogContentFormatterProps) => 
       if (line === '') {
         if (inList) {
           formattedContent.push(
-            <ul key={currentIndex} className="space-y-4 my-8 list-none pl-0 bg-white/50 dark:bg-gray-900/50 rounded-xl p-4 shadow-xl backdrop-blur-sm">
+            <ul key={currentIndex} className="space-y-1 my-4 list-none pl-0">
               {listItems.map((item, idx) => (
                 <BlogListItem 
                   key={idx} 
@@ -54,7 +54,7 @@ export const BlogContentFormatter = ({ content }: BlogContentFormatterProps) => 
         } else {
           inCodeBlock = false;
           formattedContent.push(
-            <div key={currentIndex} className="my-8 animate-fade-in">
+            <div key={currentIndex} className="my-6 animate-fade-in">
               <CodeBlock language={currentLanguage} code={currentCode} />
             </div>
           );
@@ -69,7 +69,7 @@ export const BlogContentFormatter = ({ content }: BlogContentFormatterProps) => 
       }
 
       if (line.startsWith('#')) {
-        const level = line.match(/^#+/)[0].length;
+        const level = Math.min(line.match(/^#+/)[0].length, 5) as 1 | 2 | 3 | 4 | 5;
         const text = line.replace(/^#+\s/, '');
         const id = text.toLowerCase().replace(/[^a-z0-9]+/g, '-');
         
@@ -105,7 +105,7 @@ export const BlogContentFormatter = ({ content }: BlogContentFormatterProps) => 
 
     if (inList && listItems.length > 0) {
       formattedContent.push(
-        <ul key={currentIndex} className="space-y-4 my-8 list-none pl-0 bg-white/50 dark:bg-gray-900/50 rounded-xl p-4 shadow-xl backdrop-blur-sm">
+        <ul key={currentIndex} className="space-y-1 my-4 list-none pl-0">
           {listItems.map((item, idx) => (
             <BlogListItem 
               key={idx} 

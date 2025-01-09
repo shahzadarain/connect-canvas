@@ -10,15 +10,15 @@ interface BlogListItemProps {
 export const BlogListItem = ({ content, index, formatContent }: BlogListItemProps) => {
   return (
     <li
-      className="flex items-start gap-3 text-gray-700 dark:text-gray-300 
-        p-2 rounded-lg transition-colors duration-200 animate-fade-in group
+      className="flex items-start gap-2 text-gray-700 dark:text-gray-300 
+        py-1.5 rounded-lg transition-colors duration-200 animate-fade-in group
         hover:bg-gray-50 dark:hover:bg-gray-800/50"
       style={{ animationDelay: `${index * 100}ms` }}
     >
-      <span className="flex-shrink-0 w-5 h-5 mt-0.5">
-        <Check className="w-5 h-5 text-blue-500 dark:text-blue-400" />
+      <span className="flex-shrink-0 w-4 h-4 mt-1.5">
+        <Check className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
       </span>
-      <span className="flex-1 text-lg leading-relaxed">
+      <span className="flex-1 text-base leading-relaxed">
         {formatContent(content)}
       </span>
     </li>
