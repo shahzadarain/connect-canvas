@@ -180,7 +180,7 @@ Our data-driven approach has improved:
   {
     title: "Secure Anonymized Reporting System for Humanitarian Emergencies",
     slug: "secure-anonymized-reporting-system-humanitarian-emergencies",
-# Secure Anonymized Reporting System for Humanitarian Emergencies
+    content: `# Secure Anonymized Reporting System for Humanitarian Emergencies
 
 In times of humanitarian crises, having a secure and anonymous way to report incidents is crucial for both victims and aid workers. This system provides a robust platform that ensures privacy while enabling efficient emergency response.
 
@@ -240,8 +240,7 @@ We continue to enhance the system with:
 - Extended language support
 - Enhanced visualization tools
 
-For more information about implementing this system, please contact our humanitarian technology team.
-`,
+For more information about implementing this system, please contact our humanitarian technology team.`,
     excerpt: "A comprehensive system for secure and anonymous incident reporting in humanitarian emergencies, featuring end-to-end encryption and real-time response capabilities.",
     author: "Sarah Chen",
     status: "published",
