@@ -12,7 +12,7 @@ interface BlogContentProps {
 export const BlogContent = ({ content, featuredImage }: BlogContentProps) => {
   // Function to fix image paths in markdown content
   const fixImagePaths = (content: string) => {
-    console.log('Fixing image paths in content');
+    console.log('Original content:', content);
     
     return content.replace(
       /!\[(.*?)\]\((.*?)\)/g,
@@ -20,31 +20,32 @@ export const BlogContent = ({ content, featuredImage }: BlogContentProps) => {
         console.log('Processing markdown image:', { match, altText, path });
         
         // If it's already a full URL, return as is
-        if (path.startsWith('https://')) {
+        if (path.startsWith('http://') || path.startsWith('https://')) {
           console.log('Using full URL:', path);
           return match;
         }
         
-        // If it's a lovable-uploads path, keep it as is
-        if (path.startsWith('/lovable-uploads/')) {
-          console.log('Using lovable-uploads path:', path);
-          return match;
+        // Handle lovable-uploads paths
+        if (path.includes('lovable-uploads')) {
+          const fullPath = path.startsWith('/') ? path : `/${path}`;
+          console.log('Using lovable-uploads path:', fullPath);
+          return `![${altText}](${window.location.origin}${fullPath})`;
         }
         
-        // Otherwise, assume it's a lovable-uploads file
+        // Default case: assume it's a lovable-uploads file
         const fileName = path.split('/').pop();
-        const finalPath = `/lovable-uploads/${fileName}`;
-        console.log('Converting to lovable-uploads path:', finalPath);
-        return `![${altText}](${finalPath})`;
+        const fullPath = `${window.location.origin}/lovable-uploads/${fileName}`;
+        console.log('Converting to full lovable-uploads path:', fullPath);
+        return `![${altText}](${fullPath})`;
       }
     );
   };
 
   const processedContent = fixImagePaths(content);
+  console.log('Processed content:', processedContent);
 
   return (
     <article className="max-w-[728px] mx-auto px-4 md:px-0">
-      {/* Back to Blog Link */}
       <Link 
         to="/blog" 
         className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-8 group transition-colors"
@@ -53,14 +54,12 @@ export const BlogContent = ({ content, featuredImage }: BlogContentProps) => {
         Back to Blog
       </Link>
 
-      {/* Featured Image */}
       {featuredImage && (
         <div className="mb-8 rounded-xl overflow-hidden shadow-lg">
           <BlogCoverImage featuredImage={featuredImage} />
         </div>
       )}
 
-      {/* Content */}
       <div 
         className="
           prose prose-lg max-w-none
@@ -76,7 +75,6 @@ export const BlogContent = ({ content, featuredImage }: BlogContentProps) => {
         <BlogContentFormatter content={processedContent} />
       </div>
 
-      {/* Share Section */}
       <div className="border-t border-gray-200 dark:border-gray-800 mt-12 pt-8">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">Share this article</h3>

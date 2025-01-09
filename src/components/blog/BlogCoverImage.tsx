@@ -25,42 +25,29 @@ export const BlogCoverImage = ({ featuredImage }: BlogCoverImageProps) => {
   };
 
   const processImageUrl = (url: string) => {
-    console.log('Processing image URL:', url);
+    console.log('Processing cover image URL:', url);
     
     if (!url) {
       console.log('No URL provided, using placeholder');
       return getRandomPlaceholderImage();
     }
-
-    // Handle absolute URLs
+    
+    // If it's already a full URL, return as is
     if (url.startsWith('http://') || url.startsWith('https://')) {
-      console.log('Using absolute URL:', url);
+      console.log('Using full URL:', url);
       return url;
     }
-
-    // Handle relative URLs from public directory
-    if (url.startsWith('/')) {
-      const fullUrl = `${window.location.origin}${url}`;
-      console.log('Converting relative URL to absolute:', fullUrl);
-      return fullUrl;
-    }
-
+    
     // Handle lovable-uploads paths
-    if (url.includes('lovable-uploads')) {
-      const processedUrl = url.startsWith('/') ? url : `/${url}`;
-      const fullUrl = `${window.location.origin}${processedUrl}`;
-      console.log('Processing lovable-uploads URL:', fullUrl);
-      return fullUrl;
-    }
-
-    // Default case: assume it's a filename in lovable-uploads
-    const fullUrl = `${window.location.origin}/lovable-uploads/${url}`;
-    console.log('Using default lovable-uploads path:', fullUrl);
+    const fullUrl = url.startsWith('/') 
+      ? `${window.location.origin}${url}`
+      : `${window.location.origin}/${url}`;
+    
+    console.log('Final processed URL:', fullUrl);
     return fullUrl;
   };
 
   const imageUrl = processImageUrl(featuredImage || '');
-  console.log('Final image URL:', imageUrl);
 
   return (
     <div className="relative aspect-[2/1] rounded-xl overflow-hidden shadow-2xl">
