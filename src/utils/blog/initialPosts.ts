@@ -173,11 +173,10 @@ Our data-driven approach has improved:
     meta_description: "Exploring the impact of data-driven decision making in humanitarian operations.",
     meta_keywords: ["Data Analytics", "Decision Making", "Humanitarian Work", "Impact Assessment"]
   },
-
-{
-  title: "Secure Anonymized Reporting System for Humanitarian Emergencies",
-  slug: "secure-anonymized-reporting-system-humanitarian-emergencies",
-  content: `
+  {
+    title: "Secure Anonymized Reporting System for Humanitarian Emergencies",
+    slug: "secure-anonymized-reporting-system-humanitarian-emergencies",
+    content: `
 # Secure Anonymized Reporting System for Humanitarian Emergencies
 
 In times of humanitarian crises, having a secure and anonymous way to report incidents is crucial for both victims and aid workers. This system provides a robust platform that ensures privacy while enabling efficient emergency response.
@@ -240,15 +239,14 @@ We continue to enhance the system with:
 
 For more information about implementing this system, please contact our humanitarian technology team.
 `,
-  excerpt: "A comprehensive system for secure and anonymous incident reporting in humanitarian emergencies, featuring end-to-end encryption and real-time response capabilities.",
-  author: "Sarah Chen",
-  status: "published",
-  featured_image: "/lovable-uploads/49ac30e5-b947-427b-829f-94f0c76d06aa.png",
-  tags: ["Security", "Humanitarian", "Technology", "Privacy"],
-  meta_description: "Learn about our secure anonymized reporting system for humanitarian emergencies, featuring end-to-end encryption and real-time response capabilities.",
-  meta_keywords: ["humanitarian tech", "secure reporting", "anonymous reporting", "emergency response", "crisis management"]
-}
-
+    excerpt: "A comprehensive system for secure and anonymous incident reporting in humanitarian emergencies, featuring end-to-end encryption and real-time response capabilities.",
+    author: "Sarah Chen",
+    status: "published",
+    featured_image: "/lovable-uploads/49ac30e5-b947-427b-829f-94f0c76d06aa.png",
+    tags: ["Security", "Humanitarian", "Technology", "Privacy"],
+    meta_description: "Learn about our secure anonymized reporting system for humanitarian emergencies, featuring end-to-end encryption and real-time response capabilities.",
+    meta_keywords: ["humanitarian tech", "secure reporting", "anonymous reporting", "emergency response", "crisis management"]
+  },
   {
     title: "OpenAI Swarm for Multi-Agent Collaboration: A Guide for UN IT Teams",
     slug: "openai-swarm-multi-agent-collaboration-guide",
