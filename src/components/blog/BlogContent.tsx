@@ -10,6 +10,18 @@ interface BlogContentProps {
 }
 
 export const BlogContent = ({ content, featuredImage }: BlogContentProps) => {
+  // Function to fix image paths in markdown content
+  const fixImagePaths = (content: string) => {
+    // Replace relative paths with absolute paths
+    // This assumes images are stored in the public directory
+    return content.replace(
+      /!\[(.*?)\]\(\/lovable-uploads\/(.*?)\)/g,
+      '![$1](https://mismxmgwmrknlxkaevde.supabase.co/storage/v1/object/public/resources/$2)'
+    );
+  };
+
+  const processedContent = fixImagePaths(content);
+
   return (
     <article className="max-w-[728px] mx-auto px-4 md:px-0">
       {/* Back to Blog Link */}
@@ -41,7 +53,7 @@ export const BlogContent = ({ content, featuredImage }: BlogContentProps) => {
           selection:bg-blue-100/30 dark:selection:bg-blue-900/30
         "
       >
-        <BlogContentFormatter content={content} />
+        <BlogContentFormatter content={processedContent} />
       </div>
 
       {/* Share Section */}
