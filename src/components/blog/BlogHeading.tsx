@@ -19,7 +19,7 @@ export const BlogHeading: React.FC<BlogHeadingProps> = ({ level, content, id, fo
     5: 'text-lg font-bold mb-2 text-gray-700 dark:text-gray-300'
   };
 
-  const HeadingTag = `h${level}` as keyof JSX.IntrinsicElements;
+  const HeadingTag = `h${level}` as const;
   const headingClass = headingClasses[level];
 
   return (
