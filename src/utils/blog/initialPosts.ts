@@ -34,6 +34,7 @@ The potential for AI in humanitarian work is immense. As we continue to develop 
     excerpt: "Exploring how artificial intelligence is revolutionizing humanitarian assistance and refugee support systems.",
     author: "Shahzad ASGHAR",
     status: "published",
+    featured_image: "/lovable-uploads/f9897ed6-0eb1-46ac-a75c-71229f7179b1.png",
     tags: ["AI", "Humanitarian", "Technology", "Innovation"],
     meta_description: "An exploration of AI applications in humanitarian contexts and their impact on refugee assistance.",
     meta_keywords: ["AI", "Humanitarian Aid", "Technology", "Innovation", "Refugee Support"]
@@ -82,6 +83,7 @@ Developed secure digital identity systems that:
     excerpt: "A comprehensive look at how digital transformation is revolutionizing humanitarian operations and improving service delivery.",
     author: "Shahzad ASGHAR",
     status: "published",
+    featured_image: "/lovable-uploads/2cbb00e0-5635-4e8e-8ff7-35464601d395.png",
     tags: ["Digital Transformation", "Humanitarian", "Technology"],
     meta_description: "Insights into the digital transformation of humanitarian operations and its impact on service delivery.",
     meta_keywords: ["Digital Transformation", "Humanitarian Operations", "Technology", "Innovation"]
@@ -126,6 +128,7 @@ Our systems have achieved:
     excerpt: "Insights into building sustainable and resilient systems for long-term refugee support and humanitarian assistance.",
     author: "Shahzad ASGHAR",
     status: "published",
+    featured_image: "/lovable-uploads/4c89cf12-c2f3-4952-afe6-1c742e2404d8.png",
     tags: ["Systems Design", "Refugee Support", "Technology"],
     meta_description: "Learn about building resilient systems for refugee support and humanitarian assistance.",
     meta_keywords: ["Resilient Systems", "Refugee Support", "Technology", "Humanitarian Aid"]
@@ -169,6 +172,7 @@ Our data-driven approach has improved:
     excerpt: "How data-driven approaches are transforming decision-making in humanitarian operations and improving outcomes.",
     author: "Shahzad ASGHAR",
     status: "published",
+    featured_image: "/lovable-uploads/8cac0737-3e7f-4979-8c34-0aee6a5c5f26.png",
     tags: ["Data Analytics", "Decision Making", "Humanitarian"],
     meta_description: "Exploring the impact of data-driven decision making in humanitarian operations.",
     meta_keywords: ["Data Analytics", "Decision Making", "Humanitarian Work", "Impact Assessment"]
@@ -176,7 +180,6 @@ Our data-driven approach has improved:
   {
     title: "Secure Anonymized Reporting System for Humanitarian Emergencies",
     slug: "secure-anonymized-reporting-system-humanitarian-emergencies",
-    content: `
 # Secure Anonymized Reporting System for Humanitarian Emergencies
 
 In times of humanitarian crises, having a secure and anonymous way to report incidents is crucial for both victims and aid workers. This system provides a robust platform that ensures privacy while enabling efficient emergency response.
@@ -340,6 +343,7 @@ The OpenAI Swarm framework provides a robust foundation for coordinating multipl
     excerpt: "A comprehensive guide for UN IT teams on implementing OpenAI Swarm for multi-agent collaboration, covering architecture, use cases, and best practices.",
     author: "Shahzad ASGHAR",
     status: "published",
+    featured_image: "/lovable-uploads/bdd53de1-ec83-441e-aece-00a17a8ed612.png",
     tags: ["AI", "Multi-Agent Systems", "UN Technology", "OpenAI", "System Architecture"],
     meta_description: "Learn how to implement OpenAI Swarm for multi-agent collaboration in UN IT environments, including architecture, practical use cases, and implementation guidelines.",
     meta_keywords: ["OpenAI Swarm", "Multi-Agent Systems", "UN Technology", "AI Implementation", "System Architecture", "IT Infrastructure"],
