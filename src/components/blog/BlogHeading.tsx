@@ -9,11 +9,11 @@ interface BlogHeadingProps {
 
 export const BlogHeading: React.FC<BlogHeadingProps> = ({ level, content, id, formatContent }) => {
   const headingClasses = {
-    1: 'text-4xl md:text-5xl font-bold mb-8 bg-emerald-100 text-emerald-900 px-4 py-2 rounded-lg inline-block',
-    2: 'text-3xl font-bold mb-6 bg-purple-100 text-purple-900 px-4 py-2 rounded-lg inline-block',
-    3: 'text-2xl font-bold mb-4 bg-blue-100 text-blue-900 px-4 py-2 rounded-lg inline-block',
-    4: 'text-xl font-bold mb-3 bg-orange-100 text-orange-900 px-4 py-2 rounded-lg inline-block',
-    5: 'text-lg font-bold mb-2 bg-red-100 text-red-900 px-4 py-2 rounded-lg inline-block'
+    1: 'text-4xl md:text-5xl font-bold mb-8 text-gray-900 dark:text-gray-100',
+    2: 'text-3xl font-bold mb-6 text-gray-800 dark:text-gray-200',
+    3: 'text-2xl font-bold mb-4 text-gray-800 dark:text-gray-200',
+    4: 'text-xl font-bold mb-3 text-gray-700 dark:text-gray-300',
+    5: 'text-lg font-bold mb-2 text-gray-700 dark:text-gray-300'
   } as const;
 
   const HeadingTag = `h${level}` as keyof JSX.IntrinsicElements;
