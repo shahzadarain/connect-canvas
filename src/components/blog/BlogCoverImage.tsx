@@ -27,11 +27,11 @@ export const BlogCoverImage = ({ featuredImage }: BlogCoverImageProps) => {
   const coverImage = featuredImage || getRandomPlaceholderImage();
 
   return (
-    <div className="mb-12 rounded-xl overflow-hidden shadow-2xl">
+    <div className="relative aspect-[2/1] rounded-xl overflow-hidden shadow-2xl">
       <img
         src={coverImage}
         alt="Blog post cover"
-        className="w-full h-[400px] object-cover transition-transform duration-700 hover:scale-105"
+        className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
         onError={(e) => {
           console.error('Error loading image:', e);
           e.currentTarget.src = getRandomPlaceholderImage();
