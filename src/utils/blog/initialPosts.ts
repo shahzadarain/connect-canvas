@@ -244,7 +244,7 @@ For more information about implementing this system, please contact our humanita
     excerpt: "A comprehensive system for secure and anonymous incident reporting in humanitarian emergencies, featuring end-to-end encryption and real-time response capabilities.",
     author: "Sarah Chen",
     status: "published",
-    featured_image: "/lovable-uploads/49ac30e5-b947-427b-829f-94f0c76d06aa.png",
+    featured_image: "/lovable-uploads/a3d9bf3a-c632-4c5b-a537-7a54e4010218.png",
     tags: ["Security", "Humanitarian", "Technology", "Privacy"],
     meta_description: "Learn about our secure anonymized reporting system for humanitarian emergencies, featuring end-to-end encryption and real-time response capabilities.",
     meta_keywords: ["humanitarian tech", "secure reporting", "anonymous reporting", "emergency response", "crisis management"]
@@ -342,10 +342,9 @@ The OpenAI Swarm framework provides a robust foundation for coordinating multipl
     excerpt: "A comprehensive guide for UN IT teams on implementing OpenAI Swarm for multi-agent collaboration, covering architecture, use cases, and best practices.",
     author: "Shahzad ASGHAR",
     status: "published",
-    featured_image: "/lovable-uploads/bdd53de1-ec83-441e-aece-00a17a8ed612.png",
+    featured_image: "/lovable-uploads/fe25457c-e16f-4d5a-bc65-f6fa07c73cf0.png",
     tags: ["AI", "Multi-Agent Systems", "UN Technology", "OpenAI", "System Architecture"],
     meta_description: "Learn how to implement OpenAI Swarm for multi-agent collaboration in UN IT environments, including architecture, practical use cases, and implementation guidelines.",
-    meta_keywords: ["OpenAI Swarm", "Multi-Agent Systems", "UN Technology", "AI Implementation", "System Architecture", "IT Infrastructure"],
-    published_at: new Date().toISOString()
+    meta_keywords: ["OpenAI Swarm", "Multi-Agent Systems", "UN Technology", "AI Implementation", "System Architecture", "IT Infrastructure"]
   }
 ];
