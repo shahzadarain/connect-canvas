@@ -25,19 +25,34 @@ export const BlogCoverImage = ({ featuredImage }: BlogCoverImageProps) => {
   };
 
   const processImageUrl = (url: string) => {
-    if (!url) return getRandomPlaceholderImage();
+    console.log('Processing image URL:', url);
+    
+    if (!url) {
+      console.log('No URL provided, using placeholder');
+      return getRandomPlaceholderImage();
+    }
     
     // If it's already a full URL, return as is
     if (url.startsWith('https://')) {
+      console.log('Using full URL:', url);
       return url;
     }
     
-    // If it's a relative path, convert to Supabase storage URL
+    // If it's a relative path from lovable-uploads
+    if (url.startsWith('/lovable-uploads/')) {
+      console.log('Converting lovable-uploads path:', url);
+      const fileName = url.split('/').pop();
+      return `/lovable-uploads/${fileName}`;
+    }
+    
+    // If it's just a filename, assume it's in Supabase storage
+    console.log('Converting to Supabase storage URL:', url);
     const fileName = url.split('/').pop();
     return `https://mismxmgwmrknlxkaevde.supabase.co/storage/v1/object/public/resources/${fileName}`;
   };
 
   const coverImage = processImageUrl(featuredImage || '');
+  console.log('Final cover image URL:', coverImage);
 
   return (
     <div className="relative aspect-[2/1] rounded-xl overflow-hidden shadow-2xl">
@@ -46,7 +61,7 @@ export const BlogCoverImage = ({ featuredImage }: BlogCoverImageProps) => {
         alt="Blog post cover"
         className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
         onError={(e) => {
-          console.error('Error loading image:', e);
+          console.error('Error loading image:', coverImage);
           e.currentTarget.src = getRandomPlaceholderImage();
         }}
       />

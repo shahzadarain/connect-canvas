@@ -12,18 +12,30 @@ interface BlogContentProps {
 export const BlogContent = ({ content, featuredImage }: BlogContentProps) => {
   // Function to fix image paths in markdown content
   const fixImagePaths = (content: string) => {
-    // Replace relative paths with absolute paths
-    // This assumes images are stored in the Supabase storage bucket
+    console.log('Fixing image paths in content');
+    
     return content.replace(
       /!\[(.*?)\]\((\/lovable-uploads\/.*?|https:\/\/.*?)\)/g,
       (match, altText, path) => {
+        console.log('Processing markdown image:', { match, altText, path });
+        
         // If it's already a full URL, return as is
         if (path.startsWith('https://')) {
+          console.log('Using full URL:', path);
           return match;
         }
+        
+        // If it's a lovable-uploads path, keep it as is
+        if (path.startsWith('/lovable-uploads/')) {
+          console.log('Using lovable-uploads path:', path);
+          return match;
+        }
+        
         // Otherwise, construct the Supabase storage URL
         const fileName = path.split('/').pop();
-        return `![${altText}](https://mismxmgwmrknlxkaevde.supabase.co/storage/v1/object/public/resources/${fileName})`;
+        const supabaseUrl = `https://mismxmgwmrknlxkaevde.supabase.co/storage/v1/object/public/resources/${fileName}`;
+        console.log('Converting to Supabase URL:', supabaseUrl);
+        return `![${altText}](${supabaseUrl})`;
       }
     );
   };
