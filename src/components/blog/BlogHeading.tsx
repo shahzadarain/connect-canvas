@@ -7,24 +7,26 @@ interface BlogHeadingProps {
   formatContent: (text: string) => React.ReactNode;
 }
 
-export const BlogHeading = ({ level, content, id, formatContent }: BlogHeadingProps) => {
+export const BlogHeading: React.FC<BlogHeadingProps> = ({ level, content, id, formatContent }) => {
   const headingClasses = {
     1: 'text-4xl md:text-5xl font-bold mb-6 mt-12 leading-tight scroll-mt-20',
     2: 'text-3xl font-bold mb-4 mt-10 leading-tight scroll-mt-16',
     3: 'text-2xl font-bold mb-3 mt-8 leading-tight scroll-mt-16',
     4: 'text-xl font-bold mb-2 mt-6 leading-tight scroll-mt-16',
-  }[level] || 'text-lg font-bold mb-2 mt-4 scroll-mt-16';
+    5: 'text-lg font-bold mb-2 mt-4 scroll-mt-16'
+  } as const;
 
-  const Component = `h${level}` as keyof JSX.IntrinsicElements;
+  const HeadingTag = `h${level}` as keyof JSX.IntrinsicElements;
+  const headingClass = headingClasses[level as keyof typeof headingClasses] || headingClasses[5];
 
   return (
     <div className="relative group">
-      <Component 
+      <HeadingTag 
         id={id} 
-        className={`${headingClasses} font-serif tracking-tight text-gray-900 dark:text-gray-100`}
+        className={`${headingClass} font-serif tracking-tight text-gray-900 dark:text-gray-100 transition-colors duration-200`}
       >
         {formatContent(content)}
-      </Component>
+      </HeadingTag>
       <a 
         href={`#${id}`}
         className="absolute -left-6 top-1/2 -translate-y-1/2 opacity-0 
