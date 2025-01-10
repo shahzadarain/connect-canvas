@@ -4,6 +4,7 @@ import { format } from 'date-fns';
 import { Clock, Calendar, User } from 'lucide-react';
 import { calculateReadingTime } from '@/utils/blogUtils';
 import { BlogPost } from '@/integrations/supabase/types/blog';
+import type { Json } from '@/integrations/supabase/types/common';
 
 interface BlogPostHeroProps {
   post: BlogPost['Row'];
@@ -52,7 +53,7 @@ export const BlogPostHero = ({ post }: BlogPostHeroProps) => {
             </span>
             <time className="flex items-center gap-2">
               <Calendar className="w-4 h-4" />
-              {format(new Date(post.published_at), 'MMMM d, yyyy')}
+              {format(new Date(post.published_at || post.created_at || ''), 'MMMM d, yyyy')}
             </time>
             <span className="flex items-center gap-2">
               <Clock className="w-4 h-4" />

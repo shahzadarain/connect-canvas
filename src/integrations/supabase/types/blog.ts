@@ -18,8 +18,10 @@ export interface BlogPost {
     draft_content: string | null
     last_autosave_at: string | null
     theme: string | null
-    font_settings: Record<string, unknown> | null
+    font_settings: Json | null
     author_id: string | null
+    category: string | null
+    view_count: number | null
   }
   Insert: {
     id?: number
@@ -40,8 +42,10 @@ export interface BlogPost {
     draft_content?: string | null
     last_autosave_at?: string | null
     theme?: string | null
-    font_settings?: Record<string, unknown> | null
+    font_settings?: Json | null
     author_id?: string | null
+    category?: string | null
+    view_count?: number | null
   }
   Update: {
     id?: number
@@ -62,8 +66,10 @@ export interface BlogPost {
     draft_content?: string | null
     last_autosave_at?: string | null
     theme?: string | null
-    font_settings?: Record<string, unknown> | null
+    font_settings?: Json | null
     author_id?: string | null
+    category?: string | null
+    view_count?: number | null
   }
   Relationships: []
 }
@@ -81,5 +87,6 @@ export type BlogPostInput = {
   meta_keywords?: string[]
   meta_title?: string
   theme?: string
-  font_settings?: Record<string, unknown>
+  font_settings?: Json
+  category?: string
 }
