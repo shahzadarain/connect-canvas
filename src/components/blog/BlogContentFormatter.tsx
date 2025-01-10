@@ -4,7 +4,6 @@ import { BlogListItem } from './BlogListItem';
 import { BlogHeading } from './BlogHeading';
 import { BlogParagraph } from './BlogParagraph';
 import { formatLinks, formatInlineText } from '@/utils/blogFormatters';
-import DOMPurify from 'dompurify';
 
 interface BlogContentFormatterProps {
   content: string;
@@ -40,14 +39,6 @@ export const BlogContentFormatter = ({ content }: BlogContentFormatterProps) => 
     // Remove style tags from content after applying them
     content = content.replace(styleTagRegex, '');
 
-    // Configure DOMPurify to allow certain HTML tags and attributes
-    DOMPurify.setConfig({
-      ADD_TAGS: ['table', 'tr', 'td', 'th', 'thead', 'tbody', 'style'],
-      ADD_ATTR: ['class', 'style', 'id', 'colspan', 'rowspan', 'align', 'width', 'height', 'valign', 'target'],
-      FORBID_TAGS: ['script'],
-      FORBID_ATTR: ['onerror', 'onload', 'onclick']
-    });
-
     const lines = content.split('\n');
 
     for (let i = 0; i < lines.length; i++) {
@@ -63,7 +54,7 @@ export const BlogContentFormatter = ({ content }: BlogContentFormatterProps) => 
                   key={idx} 
                   content={item} 
                   index={idx} 
-                  formatContent={(text) => DOMPurify.sanitize(text)} 
+                  formatContent={(text) => text} 
                 />
               ))}
             </ul>
@@ -143,7 +134,7 @@ export const BlogContentFormatter = ({ content }: BlogContentFormatterProps) => 
             level={level}
             content={text}
             id={id}
-            formatContent={(text) => DOMPurify.sanitize(text)}
+            formatContent={(text) => text}
           />
         );
         currentIndex++;
@@ -159,12 +150,7 @@ export const BlogContentFormatter = ({ content }: BlogContentFormatterProps) => 
       }
 
       // Handle HTML content and regular paragraphs
-      const sanitizedContent = DOMPurify.sanitize(line, {
-        ADD_TAGS: ['table', 'tr', 'td', 'th', 'thead', 'tbody', 'style', 'a', 'span', 'br'],
-        ADD_ATTR: ['class', 'style', 'id', 'colspan', 'rowspan', 'align', 'width', 'height', 'valign', 'href', 'target']
-      });
-
-      if (sanitizedContent.trim()) {
+      if (line.trim()) {
         formattedContent.push(
           <div
             key={currentIndex}
@@ -176,7 +162,7 @@ export const BlogContentFormatter = ({ content }: BlogContentFormatterProps) => 
               [&_tr:nth-child(even)]:bg-gray-50 dark:[&_tr:nth-child(even)]:bg-gray-900/50
               [&_a]:text-blue-600 dark:[&_a]:text-blue-400 [&_a]:no-underline hover:[&_a]:underline
               [&_.task]:font-bold [&_.task]:text-red-600 dark:[&_.task]:text-red-400"
-            dangerouslySetInnerHTML={{ __html: sanitizedContent }}
+            dangerouslySetInnerHTML={{ __html: line }}
           />
         );
         currentIndex++;
