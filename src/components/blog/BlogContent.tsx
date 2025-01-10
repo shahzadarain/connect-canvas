@@ -19,12 +19,10 @@ export const BlogContent = ({ content, featuredImage }: BlogContentProps) => {
       (match, altText, path) => {
         console.log('Processing markdown image:', { match, altText, path });
         
-        // If it's already a full URL (but not a template literal), return as is
+        // If it's already a full URL, return as is
         if (path.startsWith('http://') || path.startsWith('https://')) {
-          if (!path.includes('${window.location.origin}')) {
-            console.log('Using full URL:', path);
-            return match;
-          }
+          console.log('Using full URL:', path);
+          return match;
         }
         
         // Handle lovable-uploads paths
