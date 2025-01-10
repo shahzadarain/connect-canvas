@@ -39,6 +39,13 @@ export const BlogCoverImage = ({ featuredImage }: BlogCoverImageProps) => {
     }
     
     // Handle lovable-uploads paths
+    if (url.startsWith('/lovable-uploads/')) {
+      const fullUrl = `${window.location.origin}${url}`;
+      console.log('Using lovable-uploads URL:', fullUrl);
+      return fullUrl;
+    }
+    
+    // Handle relative paths
     const fullUrl = url.startsWith('/') 
       ? `${window.location.origin}${url}`
       : `${window.location.origin}/${url}`;
