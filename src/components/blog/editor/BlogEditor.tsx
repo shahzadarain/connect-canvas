@@ -78,7 +78,7 @@ export const BlogEditor = ({ initialContent = '', postId }: BlogEditorProps) => 
         HTMLAttributes: {
           class: 'rounded-lg max-w-full h-auto',
         },
-        uploadImage: handleImageUpload,
+        allowBase64: true,
       }),
       Link.configure({
         openOnClick: false,
@@ -118,7 +118,7 @@ export const BlogEditor = ({ initialContent = '', postId }: BlogEditorProps) => 
           featured_image: featuredImage,
           updated_at: new Date().toISOString(),
         })
-        .eq('id', id);
+        .eq('id', parseInt(id));
 
       if (error) {
         console.error('Auto-save error:', error);
@@ -149,7 +149,7 @@ export const BlogEditor = ({ initialContent = '', postId }: BlogEditorProps) => 
         const { data: post, error } = await supabase
           .from('blog_posts')
           .select('*')
-          .eq('id', id)
+          .eq('id', parseInt(id))
           .single();
 
         if (error) {
@@ -206,7 +206,7 @@ export const BlogEditor = ({ initialContent = '', postId }: BlogEditorProps) => 
       const { error } = await supabase
         .from('blog_posts')
         .upsert({
-          id: postId,
+          id: postId ? parseInt(String(postId)) : undefined,
           ...postData,
         });
 
@@ -291,7 +291,7 @@ export const BlogEditor = ({ initialContent = '', postId }: BlogEditorProps) => 
           </TabsList>
           
           <EditorActions
-            postId={id}
+            postId={id ? parseInt(id) : undefined}
             status={status}
             saving={saving}
             onSave={handleSave}
