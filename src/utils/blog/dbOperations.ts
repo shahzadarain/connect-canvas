@@ -1,6 +1,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import { initialBlogPosts } from "./initialPosts";
-import { BlogPostInput } from "./types";
+import type { BlogPostInput } from "./types";
+import type { Json } from "@/integrations/supabase/types/common";
 
 export const initializeBlogPosts = async () => {
   console.log("Initializing blog posts...");
@@ -29,7 +30,7 @@ export const initializeBlogPosts = async () => {
       .from("blog_posts")
       .insert(postsToInsert.map(post => ({
         ...post,
-        font_settings: post.font_settings || {},
+        font_settings: post.font_settings as Json || {},
       })))
       .select();
 
@@ -49,7 +50,7 @@ export const initializeBlogPosts = async () => {
 export const createBlogPost = async (post: BlogPostInput) => {
   const postData = {
     ...post,
-    font_settings: post.font_settings || {},
+    font_settings: post.font_settings as Json || {},
   };
 
   const { data, error } = await supabase
