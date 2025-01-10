@@ -6,9 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/hooks/use-toast'
 import { supabase } from '@/integrations/supabase/client'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { BlogPostMeta } from '../BlogPostMeta'
-import { BlogContent } from '../BlogContent'
+import { Bell, MoreHorizontal } from 'lucide-react'
 
 const BlogEditor = () => {
   const [searchParams] = useSearchParams()
@@ -19,8 +17,6 @@ const BlogEditor = () => {
 
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
-  const [metaTitle, setMetaTitle] = useState('')
-  const [metaDescription, setMetaDescription] = useState('')
   const [saving, setSaving] = useState(false)
   const [autoSaveTimer, setAutoSaveTimer] = useState<NodeJS.Timeout>()
 
@@ -38,8 +34,6 @@ const BlogEditor = () => {
 
       setTitle(post.title || '')
       setContent(post.content || '')
-      setMetaTitle(post.meta_title || '')
-      setMetaDescription(post.meta_description || '')
     } catch (error) {
       console.error('Error loading post:', error)
       toast({
@@ -63,8 +57,6 @@ const BlogEditor = () => {
         .update({
           title,
           content,
-          meta_title: metaTitle,
-          meta_description: metaDescription,
           last_autosave_at: new Date().toISOString(),
           font_settings: {},
         })
@@ -76,14 +68,14 @@ const BlogEditor = () => {
     } catch (error) {
       console.error('Error auto-saving:', error)
     }
-  }, [postId, title, content, metaTitle, metaDescription])
+  }, [postId, title, content])
 
   useEffect(() => {
     if (autoSaveTimer) clearTimeout(autoSaveTimer)
     const timer = setTimeout(autoSave, 3000)
     setAutoSaveTimer(timer)
     return () => clearTimeout(timer)
-  }, [title, content, metaTitle, metaDescription, autoSave])
+  }, [title, content, autoSave])
 
   const handleSave = async (status: 'draft' | 'published' = 'draft') => {
     if (!title || !content) {
@@ -105,8 +97,6 @@ const BlogEditor = () => {
           .update({
             title,
             content,
-            meta_title: metaTitle,
-            meta_description: metaDescription,
             status,
             updated_at: new Date().toISOString(),
             font_settings: {},
@@ -117,17 +107,15 @@ const BlogEditor = () => {
       } else {
         const { error } = await supabase
           .from('blog_posts')
-          .insert({
+          .insert([{
             title,
             content,
             slug,
-            meta_title: metaTitle,
-            meta_description: metaDescription,
             status,
             author: session?.user?.email || 'Anonymous',
             author_id: session?.user?.id,
             font_settings: {},
-          })
+          }])
 
         if (error) throw error
       }
@@ -151,77 +139,69 @@ const BlogEditor = () => {
   }
 
   return (
-    <div className="container mx-auto p-4 max-w-5xl">
-      <div className="space-y-6">
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="border-b border-border">
+        <div className="container mx-auto px-4 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => navigate('/blog')}
+            >
+              ✕
+            </Button>
+            <span className="text-sm text-muted-foreground">
+              Draft in {session?.user?.email}
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="rounded-full"
+            >
+              <Bell className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="rounded-full"
+            >
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => handleSave('draft')}
+              disabled={saving}
+            >
+              Save draft
+            </Button>
+            <Button
+              size="sm"
+              onClick={() => handleSave('published')}
+              disabled={saving}
+              className="bg-green-600 hover:bg-green-700"
+            >
+              Publish
+            </Button>
+          </div>
+        </div>
+      </header>
+
+      {/* Editor */}
+      <div className="container mx-auto px-4 py-8 max-w-3xl">
         <Input
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          placeholder="Post title..."
-          className="text-3xl font-bold"
+          placeholder="Title"
+          className="text-4xl font-bold border-none px-0 mb-8 focus-visible:ring-0"
         />
-
-        <Tabs defaultValue="editor">
-          <TabsList>
-            <TabsTrigger value="editor">Editor</TabsTrigger>
-            <TabsTrigger value="preview">Preview</TabsTrigger>
-            <TabsTrigger value="seo">SEO</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="editor" className="min-h-[600px]">
-            <TipTapEditor
-              content={content}
-              onChange={setContent}
-            />
-          </TabsContent>
-
-          <TabsContent value="preview">
-            <div className="prose prose-lg dark:prose-invert max-w-none">
-              <h1>{title}</h1>
-              <BlogContent content={content} />
-            </div>
-          </TabsContent>
-
-          <TabsContent value="seo" className="space-y-4">
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Meta Title</label>
-              <Input
-                value={metaTitle}
-                onChange={(e) => setMetaTitle(e.target.value)}
-                placeholder="SEO-friendly title..."
-              />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Meta Description</label>
-              <Input
-                value={metaDescription}
-                onChange={(e) => setMetaDescription(e.target.value)}
-                placeholder="Brief description for search engines..."
-              />
-            </div>
-          </TabsContent>
-        </Tabs>
-        
-        <div className="flex justify-end gap-4">
-          <Button
-            variant="outline"
-            onClick={() => navigate('/blog')}
-          >
-            Cancel
-          </Button>
-          <Button
-            variant="outline"
-            onClick={() => handleSave('draft')}
-            disabled={saving}
-          >
-            Save as Draft
-          </Button>
-          <Button
-            onClick={() => handleSave('published')}
-            disabled={saving}
-          >
-            {saving ? 'Saving...' : 'Publish'}
-          </Button>
-        </div>
+        <TipTapEditor
+          content={content}
+          onChange={setContent}
+        />
       </div>
     </div>
   )
