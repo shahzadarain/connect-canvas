@@ -23,6 +23,7 @@ export const EditorToolbar = ({ editor, onImageUpload }: EditorToolbarProps) => 
     if (!file || !onImageUpload) return;
 
     try {
+      console.log('Starting image upload process');
       const url = await onImageUpload(file);
       editor.chain().focus().setImage({ src: url }).run();
 
@@ -31,19 +32,12 @@ export const EditorToolbar = ({ editor, onImageUpload }: EditorToolbarProps) => 
         description: "Image uploaded successfully",
       });
     } catch (error) {
-      console.error('Error uploading image:', error);
+      console.error('Error in handleImageUpload:', error);
       toast({
         title: "Error",
         description: "Failed to upload image",
         variant: "destructive",
       });
-    }
-  };
-
-  const addLink = () => {
-    const url = window.prompt('Enter URL');
-    if (url) {
-      editor.chain().focus().setLink({ href: url }).run();
     }
   };
 
@@ -140,7 +134,12 @@ export const EditorToolbar = ({ editor, onImageUpload }: EditorToolbarProps) => 
       <Button
         size="sm"
         variant={editor.isActive('link') ? 'default' : 'outline'}
-        onClick={addLink}
+        onClick={() => {
+          const url = window.prompt('Enter URL');
+          if (url) {
+            editor.chain().focus().setLink({ href: url }).run();
+          }
+        }}
       >
         <LinkIcon className="h-4 w-4" />
       </Button>
