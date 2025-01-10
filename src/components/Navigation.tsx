@@ -26,6 +26,9 @@ const Navigation = () => {
           <div className="hidden md:flex md:items-center md:space-x-1">
             <NavigationLink to="/">Home</NavigationLink>
             <NavigationLink to="/blog">Blog</NavigationLink>
+            {session && (
+              <NavigationLink to="/blog/editor">Blog Editor</NavigationLink>
+            )}
             <NavigationLink to="/ai-tools">AI Tools</NavigationLink>
             <NavigationLink to="/ai-news">AI News</NavigationLink>
             <NavigationLink to="/ai-humanitarian">AI Humanitarian</NavigationLink>
@@ -59,6 +62,11 @@ const Navigation = () => {
             <NavigationLink to="/blog" mobile onClick={closeMenu}>
               Blog
             </NavigationLink>
+            {session && (
+              <NavigationLink to="/blog/editor" mobile onClick={closeMenu}>
+                Blog Editor
+              </NavigationLink>
+            )}
             <NavigationLink to="/ai-tools" mobile onClick={closeMenu}>
               AI Tools
             </NavigationLink>

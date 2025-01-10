@@ -9,6 +9,7 @@ import Login from "@/pages/Login";
 import Reading from "@/pages/Reading";
 import Blog from "@/pages/Blog";
 import BlogPost from "@/pages/BlogPost";
+import BlogEditor from "@/pages/BlogEditor";
 import AITools from "@/pages/AITools";
 import AINews from "@/pages/AINews";
 import AIHumanitarian from "@/pages/AIHumanitarian";
@@ -43,6 +44,14 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/blog/:slug" element={<BlogPost />} />
+                <Route
+                  path="/blog/editor"
+                  element={
+                    <ProtectedRoute>
+                      <BlogEditor />
+                    </ProtectedRoute>
+                  }
+                />
                 <Route path="/ai-tools" element={<AITools />} />
                 <Route path="/ai-news" element={<AINews />} />
                 <Route path="/ai-humanitarian" element={<AIHumanitarian />} />
