@@ -1,5 +1,5 @@
 import React from 'react';
-import { BlogEditor } from '@/components/blog/editor/BlogEditor';
+import BlogEditor from '@/components/blog/editor/BlogEditor';
 
 const BlogEditorPage = () => {
   return (

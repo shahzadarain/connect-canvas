@@ -1,6 +1,5 @@
 import Hero from "@/components/Hero";
 import ImpactMetrics from "@/components/ImpactMetrics";
-import NewsSection from "@/components/NewsSection";
 import Contact from "@/components/Contact";
 import SubmitIdea from "@/components/SubmitIdea";
 import { motion } from "framer-motion";
@@ -10,7 +9,6 @@ import { Helmet } from "react-helmet";
 const Index = () => {
   const isMobile = useIsMobile();
 
-  // Enhanced animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -71,15 +69,6 @@ const Index = () => {
               variants={sectionVariants}
               className="relative z-10"
               role="region"
-              aria-label="Latest news"
-            >
-              <NewsSection />
-            </motion.section>
-            
-            <motion.section
-              variants={sectionVariants}
-              className="relative z-10"
-              role="region"
               aria-label="Submit your idea"
             >
               <SubmitIdea />
@@ -95,7 +84,6 @@ const Index = () => {
             </motion.section>
           </div>
 
-          {/* Enhanced background elements */}
           <div className="absolute inset-0 pointer-events-none">
             <div className="absolute inset-0 bg-gradient-to-b from-background via-background/50 to-background opacity-50" />
             <div 
@@ -105,7 +93,6 @@ const Index = () => {
           </div>
         </main>
 
-        {/* Skip to main content link for accessibility */}
         <a 
           href="#main-content" 
           className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary text-white px-4 py-2 rounded-md"
