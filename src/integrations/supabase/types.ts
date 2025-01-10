@@ -81,6 +81,33 @@ export type Database = {
         }
         Relationships: []
       }
+      author_profiles: {
+        Row: {
+          bio: string | null
+          created_at: string | null
+          id: string
+          profile_image_url: string | null
+          title: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          bio?: string | null
+          created_at?: string | null
+          id: string
+          profile_image_url?: string | null
+          title?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          bio?: string | null
+          created_at?: string | null
+          id?: string
+          profile_image_url?: string | null
+          title?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       blog_posts: {
         Row: {
           author: string
