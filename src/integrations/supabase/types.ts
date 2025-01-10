@@ -87,15 +87,20 @@ export type Database = {
           author_id: string | null
           content: string
           created_at: string | null
+          draft_content: string | null
           excerpt: string | null
           featured_image: string | null
+          font_settings: Json | null
           id: number
+          last_autosave_at: string | null
           meta_description: string | null
           meta_keywords: string[] | null
+          meta_title: string | null
           published_at: string | null
           slug: string
           status: string | null
           tags: string[] | null
+          theme: string | null
           title: string
           updated_at: string | null
         }
@@ -104,15 +109,20 @@ export type Database = {
           author_id?: string | null
           content: string
           created_at?: string | null
+          draft_content?: string | null
           excerpt?: string | null
           featured_image?: string | null
+          font_settings?: Json | null
           id?: number
+          last_autosave_at?: string | null
           meta_description?: string | null
           meta_keywords?: string[] | null
+          meta_title?: string | null
           published_at?: string | null
           slug: string
           status?: string | null
           tags?: string[] | null
+          theme?: string | null
           title: string
           updated_at?: string | null
         }
@@ -121,15 +131,20 @@ export type Database = {
           author_id?: string | null
           content?: string
           created_at?: string | null
+          draft_content?: string | null
           excerpt?: string | null
           featured_image?: string | null
+          font_settings?: Json | null
           id?: number
+          last_autosave_at?: string | null
           meta_description?: string | null
           meta_keywords?: string[] | null
+          meta_title?: string | null
           published_at?: string | null
           slug?: string
           status?: string | null
           tags?: string[] | null
+          theme?: string | null
           title?: string
           updated_at?: string | null
         }
