@@ -39,28 +39,6 @@ export const BlogEditor = ({ initialContent = '', postId }: BlogEditorProps) => 
         HTMLAttributes: {
           class: 'rounded-lg max-w-full h-auto',
         },
-        uploadImage: async (file) => {
-          try {
-            const fileExt = file.name.split('.').pop();
-            const fileName = `${crypto.randomUUID()}.${fileExt}`;
-            const filePath = `lovable-uploads/${fileName}`;
-
-            const { error: uploadError, data } = await supabase.storage
-              .from('resources')
-              .upload(filePath, file);
-
-            if (uploadError) throw uploadError;
-
-            const { data: { publicUrl } } = supabase.storage
-              .from('resources')
-              .getPublicUrl(filePath);
-
-            return publicUrl;
-          } catch (error) {
-            console.error('Error uploading image:', error);
-            throw error;
-          }
-        },
       }),
       Link.configure({
         openOnClick: false,
@@ -227,6 +205,29 @@ export const BlogEditor = ({ initialContent = '', postId }: BlogEditorProps) => 
   if (!editor) {
     return null;
   }
+
+  const handleImageUpload = async (file: File): Promise<string> => {
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${crypto.randomUUID()}.${fileExt}`;
+      const filePath = `lovable-uploads/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('resources')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('resources')
+        .getPublicUrl(filePath);
+
+      return publicUrl;
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      throw error;
+    }
+  };
 
   return (
     <div className="container mx-auto p-4 space-y-4">

@@ -47,18 +47,15 @@ serve(async (req) => {
     }
 
     // Initialize OpenAI
-    const openaiApiKey = Deno.env.get('OPENAI_API_KEY')
-    if (!openaiApiKey) {
-      throw new Error('OPENAI_API_KEY is required')
-    }
-
-    const configuration = new Configuration({ apiKey: openaiApiKey })
+    const configuration = new Configuration({ 
+      apiKey: Deno.env.get('OPENAI_API_KEY')
+    })
     const openai = new OpenAIApi(configuration)
 
     // Generate new articles using OpenAI
     console.log('Generating new articles using OpenAI')
     const completion = await openai.createChatCompletion({
-      model: 'gpt-4', // Fixed: Changed from 'gpt-4o-mini' to 'gpt-4'
+      model: 'gpt-4',
       messages: [
         {
           role: 'system',
