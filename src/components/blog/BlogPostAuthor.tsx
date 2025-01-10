@@ -10,8 +10,8 @@ export const BlogPostAuthor = ({ author }: BlogPostAuthorProps) => {
   const getAuthorInfo = (authorName: string) => {
     if (authorName === "Muhammad Sohaib") {
       return {
-        image: "/lovable-uploads/e19c497e-94f7-49cc-8b5e-3a9078e3964d.png",
-        bio: "AI expert at the United Nations specializing in data-driven solutions, machine learning, and ethical AI. Proven leadership in advancing innovation and digital transformation for global impact."
+        image: "https://i.ibb.co/djnm7xC/sohaib.png",
+        bio: "AI researcher, ex-Junior Researcher at OpenAI, now at UN on Co-polit Project, advancing AI for global impact."
       };
     }
     
