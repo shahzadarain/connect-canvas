@@ -58,9 +58,9 @@ export type Tables<T extends keyof Database['public']['Tables']> = Database['pub
 export type TablesInsert<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Insert']
 export type TablesUpdate<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Update']
 
-export type * from './blog';
-export type * from './learning';
-export type * from './ideas';
-export type * from './news';
-export type * from './newsletter';
-export type * from './ai-tools';
+export type { BlogPost } from './blog';
+export type { LearningResource } from './learning';
+export type { Idea } from './ideas';
+export type { NewsArticle } from './news';
+export type { NewsletterSubscriber } from './newsletter';
+export type { AITool } from './ai-tools';

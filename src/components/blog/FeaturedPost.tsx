@@ -3,7 +3,7 @@ import { Clock, Edit } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { BlogPost } from "@/integrations/supabase/types";
+import { BlogPost } from "@/integrations/supabase/types/blog";
 import { calculateReadingTime } from "@/utils/blogUtils";
 
 interface FeaturedPostProps {
