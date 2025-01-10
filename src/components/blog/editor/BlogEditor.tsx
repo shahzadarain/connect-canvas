@@ -154,7 +154,7 @@ const BlogEditor = () => {
     }
   }
 
-  const handleCoverImageUpload = async (file: File) => {
+  const handleCoverImageUpload = async (file: File): Promise<string> => {
     try {
       const fileExt = file.name.split('.').pop()
       const filePath = `${crypto.randomUUID()}.${fileExt}`
@@ -170,6 +170,7 @@ const BlogEditor = () => {
         .getPublicUrl(filePath)
 
       setCoverImage(publicUrl)
+      return publicUrl
     } catch (error) {
       console.error('Error uploading cover image:', error)
       toast({
@@ -177,6 +178,7 @@ const BlogEditor = () => {
         description: "Failed to upload cover image",
         variant: "destructive",
       })
+      throw error
     }
   }
 
@@ -287,10 +289,7 @@ const BlogEditor = () => {
         <TipTapEditor
           content={content}
           onChange={setContent}
-          onImageUpload={async (file) => {
-            const url = await handleCoverImageUpload(file)
-            return url
-          }}
+          onImageUpload={handleCoverImageUpload}
         />
       </div>
     </div>
