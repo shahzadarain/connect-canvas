@@ -1,33 +1,31 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { format } from 'date-fns';
 import { PageTransition } from '@/components/ui/page-transition';
 import { BlogContent } from '@/components/blog/BlogContent';
-import { Avatar } from '@/components/ui/avatar';
-import { toast } from 'sonner';
 import { TableOfContents } from '@/components/blog/TableOfContents';
 import { ShareButtons } from '@/components/blog/ShareButtons';
 import { ReadingProgress } from '@/components/blog/ReadingProgress';
-import { ArrowLeft, ArrowRight, Clock, Calendar, User } from 'lucide-react';
-import { calculateReadingTime, generateTableOfContents } from '@/utils/blogUtils';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
 import { Helmet } from 'react-helmet';
+import { BlogPostHero } from '@/components/blog/BlogPostHero';
+import { BlogPostAuthor } from '@/components/blog/BlogPostAuthor';
+import { BlogPostNavigation } from '@/components/blog/BlogPostNavigation';
+import { toast } from 'sonner';
 
 const BlogPost = () => {
   const { slug } = useParams();
-  const [readingProgress, setReadingProgress] = useState(0);
-  const [tocItems, setTocItems] = useState([]);
+  const [readingProgress, setReadingProgress] = React.useState(0);
+  const [tocItems, setTocItems] = React.useState([]);
 
-  // Fetch blog post with view count increment
   const { data: post, isLoading, error } = useQuery({
     queryKey: ['blog-post', slug],
     queryFn: async () => {
       console.log('Fetching blog post:', slug);
       
-      // First get the post
       const { data: post, error: fetchError } = await supabase
         .from('blog_posts')
         .select('*')
@@ -56,19 +54,11 @@ const BlogPost = () => {
         console.error('Error updating view count:', updateError);
       }
       
-      console.log('Fetched blog post:', post);
       return post;
     },
   });
 
-  useEffect(() => {
-    if (post?.content) {
-      const items = generateTableOfContents(post.content);
-      setTocItems(items);
-    }
-  }, [post?.content]);
-
-  useEffect(() => {
+  React.useEffect(() => {
     const updateReadingProgress = () => {
       const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
       const progress = (window.scrollY / totalHeight) * 100;
@@ -113,8 +103,6 @@ const BlogPost = () => {
     );
   }
 
-  const readingTime = calculateReadingTime(post.content);
-
   return (
     <PageTransition>
       <Helmet>
@@ -129,88 +117,19 @@ const BlogPost = () => {
 
       <article className="min-h-screen bg-white dark:bg-gray-900">
         <ReadingProgress progress={readingProgress} />
+        <BlogPostHero post={post} />
         
-        {/* Hero Image */}
-        <div className="relative h-[70vh] overflow-hidden">
-          <img
-            src={post.featured_image || `https://source.unsplash.com/random/1920x1080?${post.tags?.[0] || 'blog'}`}
-            alt={post.title}
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent" />
-        </div>
-
-        {/* Content */}
-        <div className="max-w-4xl mx-auto px-4 -mt-48 relative">
-          <header className="text-center mb-16">
-            <div className="inline-flex gap-2 mb-6">
-              {post.category && (
-                <span className="px-3 py-1 bg-white/90 dark:bg-gray-800/90 text-gray-700 dark:text-gray-300 rounded-full text-sm font-medium shadow-sm">
-                  {post.category}
-                </span>
-              )}
-              {post.tags?.map((tag, index) => (
-                <span
-                  key={index}
-                  className="px-3 py-1 bg-white/90 dark:bg-gray-800/90 text-gray-700 dark:text-gray-300 rounded-full text-sm font-medium shadow-sm"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-            
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif text-white mb-6 leading-tight">
-              {post.title}
-            </h1>
-            
-            <div className="flex items-center justify-center gap-6 text-white/90">
-              <span className="flex items-center gap-2">
-                <User className="w-4 h-4" />
-                {post.author}
-              </span>
-              <time className="flex items-center gap-2">
-                <Calendar className="w-4 h-4" />
-                {format(new Date(post.published_at), 'MMMM d, yyyy')}
-              </time>
-              <span className="flex items-center gap-2">
-                <Clock className="w-4 h-4" />
-                {readingTime} min read
-              </span>
-            </div>
-          </header>
-
+        <div className="max-w-4xl mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_250px] gap-12">
-            {/* Main Content */}
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-8 mb-16">
               <BlogContent content={post.content} />
               <ShareButtons url={window.location.href} title={post.title} />
             </div>
 
-            {/* Sidebar */}
             <aside className="space-y-8">
               <div className="sticky top-8">
                 <TableOfContents items={tocItems} />
-                
-                {/* Author Bio */}
-                <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-6 mt-8">
-                  <div className="flex items-center gap-4">
-                    <Avatar className="w-16 h-16">
-                      <img 
-                        src={`https://source.unsplash.com/random/200x200?portrait`} 
-                        alt={post.author}
-                        className="object-cover"
-                      />
-                    </Avatar>
-                    <div>
-                      <h3 className="font-serif text-lg mb-2">{post.author}</h3>
-                      <p className="text-gray-600 dark:text-gray-400 text-sm">
-                        A passionate writer and technology enthusiast sharing insights about the latest developments in tech and innovation.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* View Count */}
+                <BlogPostAuthor author={post.author} />
                 <div className="text-sm text-gray-500 dark:text-gray-400 mt-4 text-center">
                   {post.view_count || 0} views
                 </div>
@@ -218,17 +137,7 @@ const BlogPost = () => {
             </aside>
           </div>
 
-          {/* Navigation */}
-          <nav className="flex justify-between items-center py-8 border-t border-gray-200 dark:border-gray-700 mt-16">
-            <Button variant="ghost" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Previous Post
-            </Button>
-            <Button variant="ghost" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200">
-              Next Post
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
-          </nav>
+          <BlogPostNavigation />
         </div>
       </article>
     </PageTransition>
