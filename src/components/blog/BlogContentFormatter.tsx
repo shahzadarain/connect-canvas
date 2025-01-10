@@ -20,10 +20,32 @@ export const BlogContentFormatter = ({ content }: BlogContentFormatterProps) => 
     let inList = false;
     let listItems: string[] = [];
 
+    // Extract and apply any style tags
+    const styleTagRegex = /<style>([\s\S]*?)<\/style>/g;
+    const styles = Array.from(content.matchAll(styleTagRegex));
+    
+    // Create a style element for each style block found
+    styles.forEach((style, index) => {
+      const styleElement = document.createElement('style');
+      styleElement.id = `blog-content-style-${index}`;
+      styleElement.textContent = style[1];
+      // Remove any existing style with the same ID
+      const existingStyle = document.getElementById(styleElement.id);
+      if (existingStyle) {
+        existingStyle.remove();
+      }
+      document.head.appendChild(styleElement);
+    });
+
+    // Remove style tags from content after applying them
+    content = content.replace(styleTagRegex, '');
+
     // Configure DOMPurify to allow certain HTML tags and attributes
     DOMPurify.setConfig({
       ADD_TAGS: ['table', 'tr', 'td', 'th', 'thead', 'tbody', 'style'],
-      ADD_ATTR: ['class', 'style']
+      ADD_ATTR: ['class', 'style', 'id'],
+      FORBID_TAGS: ['script'], // Explicitly forbid script tags for security
+      FORBID_ATTR: ['onerror', 'onload', 'onclick'] // Forbid event handlers
     });
 
     const lines = content.split('\n');
@@ -139,7 +161,7 @@ export const BlogContentFormatter = ({ content }: BlogContentFormatterProps) => 
       // Handle HTML content and regular paragraphs
       const sanitizedContent = DOMPurify.sanitize(line, {
         ADD_TAGS: ['table', 'tr', 'td', 'th', 'thead', 'tbody', 'style'],
-        ADD_ATTR: ['class', 'style']
+        ADD_ATTR: ['class', 'style', 'id']
       });
 
       formattedContent.push(
@@ -154,6 +176,16 @@ export const BlogContentFormatter = ({ content }: BlogContentFormatterProps) => 
 
     return formattedContent;
   };
+
+  // Cleanup function to remove added styles when component unmounts
+  React.useEffect(() => {
+    return () => {
+      // Remove any style tags we added
+      document.querySelectorAll('[id^="blog-content-style-"]').forEach(element => {
+        element.remove();
+      });
+    };
+  }, []);
 
   return <>{formatContent(content)}</>;
 };
