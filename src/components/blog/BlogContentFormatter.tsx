@@ -141,8 +141,8 @@ export const BlogContentFormatter = ({ content }: BlogContentFormatterProps) => 
         continue;
       }
 
-      // Handle lists
-      if (line.startsWith('- ') || line.startsWith('* ') || line.match(/^\d+\./)) {
+      // Handle lists - only if line starts with - or * and doesn't contain HTML
+      if ((line.startsWith('- ') || line.startsWith('* ') || line.match(/^\d+\./)) && !line.includes('<')) {
         inList = true;
         const itemContent = line.replace(/^[-*]\s|^\d+\.\s/, '');
         listItems.push(itemContent);
