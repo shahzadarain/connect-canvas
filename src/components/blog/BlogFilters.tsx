@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { BlogSearch } from "@/components/blog/BlogSearch";
 import { BlogTagCloud } from "@/components/blog/BlogTagCloud";
-import { ArrowUpDown, Grid, List } from "lucide-react";
+import { ArrowUpDown, Grid, List, Tag, Folder } from "lucide-react";
+import { motion } from "framer-motion";
 
 interface BlogFiltersProps {
   onSearch: (term: string) => void;
@@ -11,6 +12,9 @@ interface BlogFiltersProps {
   tags: string[];
   selectedTag: string | null;
   onTagClick: (tag: string) => void;
+  categories: string[];
+  selectedCategory: string | null;
+  onCategoryClick: (category: string) => void;
 }
 
 export const BlogFilters = ({
@@ -21,6 +25,9 @@ export const BlogFilters = ({
   tags,
   selectedTag,
   onTagClick,
+  categories,
+  selectedCategory,
+  onCategoryClick,
 }: BlogFiltersProps) => {
   return (
     <div className="mb-12 space-y-6">
@@ -51,6 +58,36 @@ export const BlogFilters = ({
           </Button>
         </div>
       </div>
+
+      {/* Categories */}
+      {categories.length > 0 && (
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 text-emerald-500">
+            <Folder className="h-4 w-4" />
+            <h3 className="font-semibold">Categories</h3>
+          </div>
+          <motion.div 
+            className="flex flex-wrap gap-2"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            {categories.map((category) => (
+              <button
+                key={category}
+                onClick={() => onCategoryClick(category)}
+                className={`rounded-full px-3 py-1 text-sm transition-colors ${
+                  selectedCategory === category
+                    ? 'bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-400'
+                    : 'bg-gray-100 text-gray-600 hover:bg-blue-100 hover:text-blue-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-blue-900 dark:hover:text-blue-400'
+                }`}
+              >
+                {category}
+              </button>
+            ))}
+          </motion.div>
+        </div>
+      )}
       
       <BlogTagCloud 
         tags={tags} 

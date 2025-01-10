@@ -85,6 +85,7 @@ export type Database = {
         Row: {
           author: string
           author_id: string | null
+          category: string | null
           content: string
           created_at: string | null
           draft_content: string | null
@@ -103,10 +104,12 @@ export type Database = {
           theme: string | null
           title: string
           updated_at: string | null
+          view_count: number | null
         }
         Insert: {
           author: string
           author_id?: string | null
+          category?: string | null
           content: string
           created_at?: string | null
           draft_content?: string | null
@@ -125,10 +128,12 @@ export type Database = {
           theme?: string | null
           title: string
           updated_at?: string | null
+          view_count?: number | null
         }
         Update: {
           author?: string
           author_id?: string | null
+          category?: string | null
           content?: string
           created_at?: string | null
           draft_content?: string | null
@@ -147,6 +152,7 @@ export type Database = {
           theme?: string | null
           title?: string
           updated_at?: string | null
+          view_count?: number | null
         }
         Relationships: []
       }
