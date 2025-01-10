@@ -10,6 +10,22 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { calculateReadingTime } from "@/utils/blogUtils";
 
+// Array of high-quality placeholder images
+const placeholderImages = [
+  "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=800&q=80", // Tech
+  "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80", // Data
+  "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80", // AI
+  "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=80", // Work
+  "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80", // Code
+  "https://images.unsplash.com/photo-1523961131990-5ea7c61b2107?auto=format&fit=crop&w=800&q=80", // Digital
+  "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80", // Analysis
+];
+
+const getRandomImage = (seed: number) => {
+  // Use the seed to consistently get the same image for the same post
+  return placeholderImages[seed % placeholderImages.length];
+};
+
 const Blog = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
@@ -96,7 +112,7 @@ const Blog = () => {
           >
             <article className="relative h-[60vh] rounded-2xl overflow-hidden">
               <img
-                src={featuredPost.featured_image || `https://source.unsplash.com/random/1920x1080?${featuredPost.tags?.[0] || 'blog'}`}
+                src={featuredPost.featured_image || getRandomImage(featuredPost.id)}
                 alt={featuredPost.title}
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
@@ -133,13 +149,13 @@ const Blog = () => {
         <div className="mb-12 space-y-6">
           <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
             <div className="w-full sm:w-96">
-              <BlogSearch onSearch={handleSearch} />
+              <BlogSearch onSearch={setSearchTerm} />
             </div>
             <div className="flex gap-2">
               <Button
                 variant="outline"
                 size="icon"
-                onClick={toggleSortDirection}
+                onClick={() => setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc')}
                 className="ml-2"
               >
                 <ArrowUpDown className="h-4 w-4" />
@@ -159,7 +175,7 @@ const Blog = () => {
             </div>
           </div>
           
-          <BlogTagCloud tags={allTags} onTagClick={handleTagClick} />
+          <BlogTagCloud tags={Array.from(new Set(posts?.flatMap(post => post.tags || [])))} onTagClick={setSelectedTag} selectedTag={selectedTag} />
         </div>
 
         <div className={viewMode === 'grid' ? 
@@ -179,7 +195,7 @@ const Blog = () => {
               }`}>
                 <div className={`relative ${viewMode === 'list' ? 'w-48' : 'h-64'} overflow-hidden`}>
                   <img
-                    src={post.featured_image || `https://source.unsplash.com/random/800x600?${post.tags?.[0] || 'blog'}`}
+                    src={post.featured_image || getRandomImage(post.id)}
                     alt={post.title}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
