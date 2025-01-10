@@ -10,33 +10,54 @@ import { toast } from 'sonner';
 import { TableOfContents } from '@/components/blog/TableOfContents';
 import { ShareButtons } from '@/components/blog/ShareButtons';
 import { ReadingProgress } from '@/components/blog/ReadingProgress';
-import { ArrowLeft, ArrowRight, Clock } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Clock, Calendar, User } from 'lucide-react';
 import { calculateReadingTime, generateTableOfContents } from '@/utils/blogUtils';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Button } from '@/components/ui/button';
+import { Helmet } from 'react-helmet';
 
 const BlogPost = () => {
   const { slug } = useParams();
   const [readingProgress, setReadingProgress] = useState(0);
   const [tocItems, setTocItems] = useState([]);
 
+  // Fetch blog post with view count increment
   const { data: post, isLoading, error } = useQuery({
     queryKey: ['blog-post', slug],
     queryFn: async () => {
       console.log('Fetching blog post:', slug);
-      const { data, error } = await supabase
+      
+      // First get the post
+      const { data: post, error: fetchError } = await supabase
         .from('blog_posts')
         .select('*')
         .eq('slug', slug)
         .eq('status', 'published')
-        .single();
+        .maybeSingle();
       
-      if (error) {
-        console.error('Error fetching blog post:', error);
+      if (fetchError) {
+        console.error('Error fetching blog post:', fetchError);
         toast.error('Failed to load blog post');
-        throw error;
+        throw fetchError;
+      }
+
+      if (!post) {
+        console.log('No post found with slug:', slug);
+        return null;
+      }
+
+      // Increment view count
+      const { error: updateError } = await supabase
+        .from('blog_posts')
+        .update({ view_count: (post.view_count || 0) + 1 })
+        .eq('id', post.id);
+
+      if (updateError) {
+        console.error('Error updating view count:', updateError);
       }
       
-      console.log('Fetched blog post:', data);
-      return data;
+      console.log('Fetched blog post:', post);
+      return post;
     },
   });
 
@@ -63,11 +84,11 @@ const BlogPost = () => {
       <div className="animate-pulse">
         <div className="h-[60vh] bg-gray-200 dark:bg-gray-800" />
         <div className="max-w-3xl mx-auto px-4 -mt-32 relative">
-          <div className="h-8 bg-gray-200 dark:bg-gray-700 w-3/4 rounded mb-4" />
-          <div className="h-4 bg-gray-200 dark:bg-gray-700 w-1/2 rounded mb-8" />
+          <Skeleton className="h-8 w-3/4 rounded mb-4" />
+          <Skeleton className="h-4 w-1/2 rounded mb-8" />
           <div className="space-y-4">
             {[...Array(6)].map((_, i) => (
-              <div key={i} className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-full" />
+              <Skeleton key={i} className="h-4 w-full rounded" />
             ))}
           </div>
         </div>
@@ -80,7 +101,13 @@ const BlogPost = () => {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-serif mb-4">Post Not Found</h1>
-          <p className="text-gray-600 dark:text-gray-400">The blog post you're looking for doesn't exist or has been removed.</p>
+          <p className="text-gray-600 dark:text-gray-400 mb-8">
+            The blog post you're looking for doesn't exist or has been removed.
+          </p>
+          <Button variant="outline" onClick={() => window.history.back()}>
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Go Back
+          </Button>
         </div>
       </div>
     );
@@ -90,6 +117,16 @@ const BlogPost = () => {
 
   return (
     <PageTransition>
+      <Helmet>
+        <title>{post.title} | Your Blog</title>
+        <meta name="description" content={post.excerpt || post.meta_description} />
+        <meta property="og:title" content={post.title} />
+        <meta property="og:description" content={post.excerpt || post.meta_description} />
+        <meta property="og:image" content={post.featured_image} />
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary_large_image" />
+      </Helmet>
+
       <article className="min-h-screen bg-white dark:bg-gray-900">
         <ReadingProgress progress={readingProgress} />
         
@@ -107,6 +144,11 @@ const BlogPost = () => {
         <div className="max-w-4xl mx-auto px-4 -mt-48 relative">
           <header className="text-center mb-16">
             <div className="inline-flex gap-2 mb-6">
+              {post.category && (
+                <span className="px-3 py-1 bg-white/90 dark:bg-gray-800/90 text-gray-700 dark:text-gray-300 rounded-full text-sm font-medium shadow-sm">
+                  {post.category}
+                </span>
+              )}
               {post.tags?.map((tag, index) => (
                 <span
                   key={index}
@@ -122,12 +164,17 @@ const BlogPost = () => {
             </h1>
             
             <div className="flex items-center justify-center gap-6 text-white/90">
-              <time className="text-sm">
+              <span className="flex items-center gap-2">
+                <User className="w-4 h-4" />
+                {post.author}
+              </span>
+              <time className="flex items-center gap-2">
+                <Calendar className="w-4 h-4" />
                 {format(new Date(post.published_at), 'MMMM d, yyyy')}
               </time>
               <span className="flex items-center gap-2">
                 <Clock className="w-4 h-4" />
-                <span>{readingTime} min read</span>
+                {readingTime} min read
               </span>
             </div>
           </header>
@@ -162,20 +209,25 @@ const BlogPost = () => {
                     </div>
                   </div>
                 </div>
+
+                {/* View Count */}
+                <div className="text-sm text-gray-500 dark:text-gray-400 mt-4 text-center">
+                  {post.view_count || 0} views
+                </div>
               </div>
             </aside>
           </div>
 
           {/* Navigation */}
           <nav className="flex justify-between items-center py-8 border-t border-gray-200 dark:border-gray-700 mt-16">
-            <button className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200">
-              <ArrowLeft className="w-4 h-4" />
+            <Button variant="ghost" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200">
+              <ArrowLeft className="w-4 h-4 mr-2" />
               Previous Post
-            </button>
-            <button className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200">
+            </Button>
+            <Button variant="ghost" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200">
               Next Post
-              <ArrowRight className="w-4 h-4" />
-            </button>
+              <ArrowRight className="w-4 h-4 ml-2" />
+            </Button>
           </nav>
         </div>
       </article>
