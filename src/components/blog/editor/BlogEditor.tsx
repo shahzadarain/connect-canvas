@@ -23,7 +23,7 @@ interface BlogEditorProps {
 }
 
 export const BlogEditor = ({ initialContent = '', postId }: BlogEditorProps) => {
-  const { id } = useParams(); // Get post ID from URL if editing
+  const { id } = useParams();
   const [title, setTitle] = useState('');
   const [excerpt, setExcerpt] = useState('');
   const [metaDescription, setMetaDescription] = useState('');
