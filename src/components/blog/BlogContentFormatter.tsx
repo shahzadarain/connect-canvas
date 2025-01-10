@@ -43,9 +43,9 @@ export const BlogContentFormatter = ({ content }: BlogContentFormatterProps) => 
     // Configure DOMPurify to allow certain HTML tags and attributes
     DOMPurify.setConfig({
       ADD_TAGS: ['table', 'tr', 'td', 'th', 'thead', 'tbody', 'style'],
-      ADD_ATTR: ['class', 'style', 'id'],
-      FORBID_TAGS: ['script'], // Explicitly forbid script tags for security
-      FORBID_ATTR: ['onerror', 'onload', 'onclick'] // Forbid event handlers
+      ADD_ATTR: ['class', 'style', 'id', 'colspan', 'rowspan', 'align'],
+      FORBID_TAGS: ['script'],
+      FORBID_ATTR: ['onerror', 'onload', 'onclick']
     });
 
     const lines = content.split('\n');
@@ -161,14 +161,17 @@ export const BlogContentFormatter = ({ content }: BlogContentFormatterProps) => 
       // Handle HTML content and regular paragraphs
       const sanitizedContent = DOMPurify.sanitize(line, {
         ADD_TAGS: ['table', 'tr', 'td', 'th', 'thead', 'tbody', 'style'],
-        ADD_ATTR: ['class', 'style', 'id']
+        ADD_ATTR: ['class', 'style', 'id', 'colspan', 'rowspan', 'align']
       });
 
       if (sanitizedContent.trim()) {
         formattedContent.push(
           <div
             key={currentIndex}
-            className="prose prose-lg dark:prose-invert max-w-none mb-6"
+            className="prose prose-lg dark:prose-invert max-w-none mb-6 [&_table]:w-full [&_table]:border-collapse [&_table]:my-4 
+              [&_th]:border [&_th]:border-gray-300 [&_th]:dark:border-gray-700 [&_th]:p-2 [&_th]:bg-gray-100 [&_th]:dark:bg-gray-800
+              [&_td]:border [&_td]:border-gray-300 [&_td]:dark:border-gray-700 [&_td]:p-2
+              [&_tr:nth-child(even)]:bg-gray-50 [&_tr:nth-child(even)]:dark:bg-gray-900/50"
             dangerouslySetInnerHTML={{ __html: sanitizedContent }}
           />
         );
@@ -182,7 +185,6 @@ export const BlogContentFormatter = ({ content }: BlogContentFormatterProps) => 
   // Cleanup function to remove added styles when component unmounts
   React.useEffect(() => {
     return () => {
-      // Remove any style tags we added
       document.querySelectorAll('[id^="blog-content-style-"]').forEach(element => {
         element.remove();
       });
