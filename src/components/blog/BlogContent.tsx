@@ -62,7 +62,7 @@ export const BlogContent: React.FC<BlogContentProps> = ({ content, featuredImage
                   className="rounded-lg shadow-lg w-full h-full object-cover hover:opacity-95 transition-opacity duration-200"
                   onError={(e) => {
                     console.error('Error loading image:', url);
-                    e.currentTarget.src = '/placeholder.svg';
+                    e.currentTarget.src = '/lovable-uploads/6f128401-a85d-463e-b38e-a398900209ed.png';
                   }}
                 />
               </AspectRatio>
@@ -122,7 +122,7 @@ export const BlogContent: React.FC<BlogContentProps> = ({ content, featuredImage
               className="w-full h-full object-cover rounded-xl shadow-lg"
               onError={(e) => {
                 console.error('Error loading featured image:', featuredImage);
-                e.currentTarget.src = '/placeholder.svg';
+                e.currentTarget.src = '/lovable-uploads/6f128401-a85d-463e-b38e-a398900209ed.png';
               }}
             />
           </AspectRatio>
