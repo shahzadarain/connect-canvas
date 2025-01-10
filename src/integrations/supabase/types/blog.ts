@@ -14,6 +14,12 @@ export interface BlogPost {
     tags: string[] | null
     meta_description: string | null
     meta_keywords: string[] | null
+    meta_title: string | null
+    draft_content: string | null
+    last_autosave_at: string | null
+    theme: string | null
+    font_settings: Record<string, unknown> | null
+    author_id: string | null
   }
   Insert: {
     id?: number
@@ -30,6 +36,12 @@ export interface BlogPost {
     tags?: string[] | null
     meta_description?: string | null
     meta_keywords?: string[] | null
+    meta_title?: string | null
+    draft_content?: string | null
+    last_autosave_at?: string | null
+    theme?: string | null
+    font_settings?: Record<string, unknown> | null
+    author_id?: string | null
   }
   Update: {
     id?: number
@@ -46,6 +58,12 @@ export interface BlogPost {
     tags?: string[] | null
     meta_description?: string | null
     meta_keywords?: string[] | null
+    meta_title?: string | null
+    draft_content?: string | null
+    last_autosave_at?: string | null
+    theme?: string | null
+    font_settings?: Record<string, unknown> | null
+    author_id?: string | null
   }
   Relationships: []
 }
@@ -61,4 +79,7 @@ export type BlogPostInput = {
   tags?: string[]
   meta_description?: string
   meta_keywords?: string[]
+  meta_title?: string
+  theme?: string
+  font_settings?: Record<string, unknown>
 }

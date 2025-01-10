@@ -1,64 +1,154 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
+import { useState, useEffect, useCallback } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useSession } from '@supabase/auth-helpers-react'
+import { TipTapEditor } from './TipTapEditor'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { useToast } from '@/components/ui/use-toast'
+import { supabase } from '@/integrations/supabase/client'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { BlogPostMeta } from '../BlogPostMeta'
+import { BlogContent } from '../BlogContent'
 
 const BlogEditor = () => {
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [saving, setSaving] = useState(false);
-  const { toast } = useToast();
-  const navigate = useNavigate();
+  const [searchParams] = useSearchParams()
+  const postId = searchParams.get('id')
+  const session = useSession()
+  const navigate = useNavigate()
+  const { toast } = useToast()
 
-  const handleSave = async () => {
+  const [title, setTitle] = useState('')
+  const [content, setContent] = useState('')
+  const [metaTitle, setMetaTitle] = useState('')
+  const [metaDescription, setMetaDescription] = useState('')
+  const [saving, setSaving] = useState(false)
+  const [autoSaveTimer, setAutoSaveTimer] = useState<NodeJS.Timeout>()
+
+  const loadPost = useCallback(async () => {
+    if (!postId) return
+
+    try {
+      const { data: post, error } = await supabase
+        .from('blog_posts')
+        .select('*')
+        .eq('id', postId)
+        .single()
+
+      if (error) throw error
+
+      setTitle(post.title || '')
+      setContent(post.content || '')
+      setMetaTitle(post.meta_title || '')
+      setMetaDescription(post.meta_description || '')
+    } catch (error) {
+      console.error('Error loading post:', error)
+      toast({
+        title: "Error",
+        description: "Failed to load blog post",
+        variant: "destructive",
+      })
+    }
+  }, [postId, toast])
+
+  useEffect(() => {
+    loadPost()
+  }, [loadPost])
+
+  const autoSave = useCallback(async () => {
+    if (!postId || !title || !content) return
+
+    try {
+      const { error } = await supabase
+        .from('blog_posts')
+        .update({
+          title,
+          content,
+          meta_title: metaTitle,
+          meta_description: metaDescription,
+          last_autosave_at: new Date().toISOString(),
+        })
+        .eq('id', postId)
+
+      if (error) throw error
+
+      console.log('Auto-saved successfully')
+    } catch (error) {
+      console.error('Error auto-saving:', error)
+    }
+  }, [postId, title, content, metaTitle, metaDescription])
+
+  useEffect(() => {
+    if (autoSaveTimer) clearTimeout(autoSaveTimer)
+    const timer = setTimeout(autoSave, 3000)
+    setAutoSaveTimer(timer)
+    return () => clearTimeout(timer)
+  }, [title, content, metaTitle, metaDescription, autoSave])
+
+  const handleSave = async (status: 'draft' | 'published' = 'draft') => {
     if (!title || !content) {
       toast({
         title: "Error",
-        description: "Please fill in all fields",
+        description: "Please fill in all required fields",
         variant: "destructive",
-      });
-      return;
+      })
+      return
     }
 
-    setSaving(true);
+    setSaving(true)
     try {
-      const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-')
       
-      const { error } = await supabase
-        .from('blog_posts')
-        .insert({
-          title,
-          content,
-          slug,
-          status: 'draft',
-          author: 'Admin',
-        });
+      if (postId) {
+        const { error } = await supabase
+          .from('blog_posts')
+          .update({
+            title,
+            content,
+            meta_title: metaTitle,
+            meta_description: metaDescription,
+            status,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', postId)
 
-      if (error) throw error;
+        if (error) throw error
+      } else {
+        const { error } = await supabase
+          .from('blog_posts')
+          .insert({
+            title,
+            content,
+            slug,
+            meta_title: metaTitle,
+            meta_description: metaDescription,
+            status,
+            author: session?.user?.email || 'Anonymous',
+            author_id: session?.user?.id,
+          })
+
+        if (error) throw error
+      }
 
       toast({
         title: "Success",
-        description: "Blog post saved as draft",
-      });
+        description: `Blog post ${status === 'published' ? 'published' : 'saved as draft'}`,
+      })
 
-      navigate('/blog');
+      navigate('/blog')
     } catch (error) {
-      console.error('Error saving blog post:', error);
+      console.error('Error saving blog post:', error)
       toast({
         title: "Error",
         description: "Failed to save blog post",
         variant: "destructive",
-      });
+      })
     } finally {
-      setSaving(false);
+      setSaving(false)
     }
-  };
+  }
 
   return (
-    <div className="container mx-auto p-4 max-w-4xl">
+    <div className="container mx-auto p-4 max-w-5xl">
       <div className="space-y-6">
         <Input
           value={title}
@@ -66,13 +156,47 @@ const BlogEditor = () => {
           placeholder="Post title..."
           className="text-3xl font-bold"
         />
-        
-        <Textarea
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          placeholder="Write your post content here..."
-          className="min-h-[500px] p-4"
-        />
+
+        <Tabs defaultValue="editor">
+          <TabsList>
+            <TabsTrigger value="editor">Editor</TabsTrigger>
+            <TabsTrigger value="preview">Preview</TabsTrigger>
+            <TabsTrigger value="seo">SEO</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="editor" className="min-h-[600px]">
+            <TipTapEditor
+              content={content}
+              onChange={setContent}
+            />
+          </TabsContent>
+
+          <TabsContent value="preview">
+            <div className="prose prose-lg dark:prose-invert max-w-none">
+              <h1>{title}</h1>
+              <BlogContent content={content} />
+            </div>
+          </TabsContent>
+
+          <TabsContent value="seo" className="space-y-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Meta Title</label>
+              <Input
+                value={metaTitle}
+                onChange={(e) => setMetaTitle(e.target.value)}
+                placeholder="SEO-friendly title..."
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Meta Description</label>
+              <Input
+                value={metaDescription}
+                onChange={(e) => setMetaDescription(e.target.value)}
+                placeholder="Brief description for search engines..."
+              />
+            </div>
+          </TabsContent>
+        </Tabs>
         
         <div className="flex justify-end gap-4">
           <Button
@@ -82,15 +206,22 @@ const BlogEditor = () => {
             Cancel
           </Button>
           <Button
-            onClick={handleSave}
+            variant="outline"
+            onClick={() => handleSave('draft')}
             disabled={saving}
           >
-            {saving ? 'Saving...' : 'Save as Draft'}
+            Save as Draft
+          </Button>
+          <Button
+            onClick={() => handleSave('published')}
+            disabled={saving}
+          >
+            {saving ? 'Saving...' : 'Publish'}
           </Button>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default BlogEditor;
+export default BlogEditor
