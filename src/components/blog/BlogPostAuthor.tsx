@@ -19,7 +19,7 @@ export const BlogPostAuthor = ({ author }: BlogPostAuthorProps) => {
         <div>
           <h3 className="font-serif text-lg mb-2">{author}</h3>
           <p className="text-gray-600 dark:text-gray-400 text-sm">
-            A passionate writer and technology enthusiast sharing insights about the latest developments in tech and innovation.
+            AI expert at the United Nations specializing in data-driven solutions, machine learning, and ethical AI. Proven leadership in advancing innovation and digital transformation for global impact.
           </p>
         </div>
       </div>
