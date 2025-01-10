@@ -27,9 +27,11 @@ export const BlogContent = ({ content, featuredImage }: BlogContentProps) => {
         
         // Handle lovable-uploads paths
         if (path.includes('lovable-uploads')) {
-          const fullPath = path.startsWith('/') ? path : `/${path}`;
+          // Remove any leading slashes and ensure proper path format
+          const cleanPath = path.replace(/^\/+/, '');
+          const fullPath = `${window.location.origin}/lovable-uploads/${cleanPath.split('lovable-uploads/').pop()}`;
           console.log('Using lovable-uploads path:', fullPath);
-          return `![${altText}](${window.location.origin}${fullPath})`;
+          return `![${altText}](${fullPath})`;
         }
         
         // Default case: assume it's a lovable-uploads file
