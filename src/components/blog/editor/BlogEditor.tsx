@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/hooks/use-toast'
 import { supabase } from '@/integrations/supabase/client'
-import { Bell, MoreHorizontal } from 'lucide-react'
+import { Bell, MoreHorizontal, Image as ImageIcon } from 'lucide-react'
 
 const BlogEditor = () => {
   const [searchParams] = useSearchParams()
@@ -17,8 +17,11 @@ const BlogEditor = () => {
 
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
+  const [coverImage, setCoverImage] = useState('')
   const [saving, setSaving] = useState(false)
   const [autoSaveTimer, setAutoSaveTimer] = useState<NodeJS.Timeout>()
+  const [wordCount, setWordCount] = useState(0)
+  const [readingTime, setReadingTime] = useState(0)
 
   const loadPost = useCallback(async () => {
     if (!postId) return
@@ -34,6 +37,7 @@ const BlogEditor = () => {
 
       setTitle(post.title || '')
       setContent(post.content || '')
+      setCoverImage(post.featured_image || '')
     } catch (error) {
       console.error('Error loading post:', error)
       toast({
@@ -47,6 +51,16 @@ const BlogEditor = () => {
   useEffect(() => {
     loadPost()
   }, [loadPost])
+
+  const calculateReadingStats = useCallback(() => {
+    const words = content.trim().split(/\s+/).length
+    setWordCount(words)
+    setReadingTime(Math.ceil(words / 200)) // Assuming 200 words per minute reading speed
+  }, [content])
+
+  useEffect(() => {
+    calculateReadingStats()
+  }, [content, calculateReadingStats])
 
   const autoSave = useCallback(async () => {
     if (!postId || !title || !content) return
@@ -98,6 +112,7 @@ const BlogEditor = () => {
             title,
             content,
             status,
+            featured_image: coverImage,
             updated_at: new Date().toISOString(),
             font_settings: {},
           })
@@ -112,6 +127,7 @@ const BlogEditor = () => {
             content,
             slug,
             status,
+            featured_image: coverImage,
             author: session?.user?.email || 'Anonymous',
             author_id: session?.user?.id,
             font_settings: {},
@@ -138,10 +154,36 @@ const BlogEditor = () => {
     }
   }
 
+  const handleCoverImageUpload = async (file: File) => {
+    try {
+      const fileExt = file.name.split('.').pop()
+      const filePath = `${crypto.randomUUID()}.${fileExt}`
+
+      const { error: uploadError } = await supabase.storage
+        .from('blog-images')
+        .upload(filePath, file)
+
+      if (uploadError) throw uploadError
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('blog-images')
+        .getPublicUrl(filePath)
+
+      setCoverImage(publicUrl)
+    } catch (error) {
+      console.error('Error uploading cover image:', error)
+      toast({
+        title: "Error",
+        description: "Failed to upload cover image",
+        variant: "destructive",
+      })
+    }
+  }
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b border-border">
+      <header className="border-b border-border sticky top-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-50">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Button
@@ -156,6 +198,9 @@ const BlogEditor = () => {
             </span>
           </div>
           <div className="flex items-center gap-2">
+            <div className="text-sm text-muted-foreground">
+              {wordCount} words · {readingTime} min read
+            </div>
             <Button
               variant="ghost"
               size="icon"
@@ -192,6 +237,47 @@ const BlogEditor = () => {
 
       {/* Editor */}
       <div className="container mx-auto px-4 py-8 max-w-3xl">
+        {/* Cover Image Upload */}
+        {!coverImage && (
+          <div className="mb-8">
+            <Button
+              variant="outline"
+              onClick={() => document.getElementById('cover-image-upload')?.click()}
+              className="w-full h-40 border-dashed"
+            >
+              <div className="flex flex-col items-center gap-2">
+                <ImageIcon className="h-8 w-8 text-muted-foreground" />
+                <span className="text-muted-foreground">Add cover image</span>
+              </div>
+            </Button>
+            <input
+              id="cover-image-upload"
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => e.target.files?.[0] && handleCoverImageUpload(e.target.files[0])}
+            />
+          </div>
+        )}
+        
+        {coverImage && (
+          <div className="relative mb-8 group">
+            <img
+              src={coverImage}
+              alt="Cover"
+              className="w-full h-[60vh] object-cover rounded-lg"
+            />
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => setCoverImage('')}
+              className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity"
+            >
+              Remove cover
+            </Button>
+          </div>
+        )}
+
         <Input
           value={title}
           onChange={(e) => setTitle(e.target.value)}
@@ -201,6 +287,10 @@ const BlogEditor = () => {
         <TipTapEditor
           content={content}
           onChange={setContent}
+          onImageUpload={async (file) => {
+            const url = await handleCoverImageUpload(file)
+            return url
+          }}
         />
       </div>
     </div>

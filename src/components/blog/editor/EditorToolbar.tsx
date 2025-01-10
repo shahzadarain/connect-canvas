@@ -1,11 +1,12 @@
 import { type Editor } from '@tiptap/react'
 import {
-  Image as ImageIcon,
-  Code,
-  Quote,
-  ListOrdered,
+  Bold,
+  Italic,
   List,
+  Quote,
+  Image as ImageIcon,
   Link,
+  Code,
   MoreHorizontal,
 } from 'lucide-react'
 import { Toggle } from '@/components/ui/toggle'
@@ -25,7 +26,7 @@ export const EditorToolbar = ({ editor, onImageUpload }: EditorToolbarProps) => 
   }
 
   return (
-    <div className="flex items-center gap-1 border border-border rounded-full px-2 py-1 mb-4">
+    <div className="flex items-center gap-1 border border-border rounded-full px-2 py-1 mb-4 sticky top-[73px] bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-40">
       <div className="relative">
         <Button
           size="sm"
@@ -48,20 +49,20 @@ export const EditorToolbar = ({ editor, onImageUpload }: EditorToolbarProps) => 
 
       <Toggle
         size="sm"
-        pressed={editor.isActive('heading', { level: 1 })}
-        onPressedChange={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+        pressed={editor.isActive('bold')}
+        onPressedChange={() => editor.chain().focus().toggleBold().run()}
         className="rounded-full"
       >
-        H1
+        <Bold className="h-4 w-4" />
       </Toggle>
 
       <Toggle
         size="sm"
-        pressed={editor.isActive('heading', { level: 2 })}
-        onPressedChange={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+        pressed={editor.isActive('italic')}
+        onPressedChange={() => editor.chain().focus().toggleItalic().run()}
         className="rounded-full"
       >
-        H2
+        <Italic className="h-4 w-4" />
       </Toggle>
 
       <Separator orientation="vertical" className="h-4" />
@@ -74,17 +75,6 @@ export const EditorToolbar = ({ editor, onImageUpload }: EditorToolbarProps) => 
       >
         <List className="h-4 w-4" />
       </Toggle>
-
-      <Toggle
-        size="sm"
-        pressed={editor.isActive('orderedList')}
-        onPressedChange={() => editor.chain().focus().toggleOrderedList().run()}
-        className="rounded-full"
-      >
-        <ListOrdered className="h-4 w-4" />
-      </Toggle>
-
-      <Separator orientation="vertical" className="h-4" />
 
       <Toggle
         size="sm"

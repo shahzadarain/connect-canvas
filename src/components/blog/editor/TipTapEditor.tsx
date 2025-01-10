@@ -13,7 +13,7 @@ import { supabase } from '@/integrations/supabase/client'
 interface TipTapEditorProps {
   content: string
   onChange: (content: string) => void
-  onImageUpload?: (url: string) => void
+  onImageUpload?: (file: File) => Promise<string | null>
 }
 
 export const TipTapEditor = ({ content, onChange, onImageUpload }: TipTapEditorProps) => {
@@ -21,21 +21,11 @@ export const TipTapEditor = ({ content, onChange, onImageUpload }: TipTapEditorP
   const lowlight = createLowlight(common)
 
   const uploadImage = useCallback(async (file: File) => {
+    if (!onImageUpload) return null
+    
     try {
-      const fileExt = file.name.split('.').pop()
-      const filePath = `${crypto.randomUUID()}.${fileExt}`
-
-      const { error: uploadError, data } = await supabase.storage
-        .from('blog-images')
-        .upload(filePath, file)
-
-      if (uploadError) throw uploadError
-
-      const { data: { publicUrl } } = supabase.storage
-        .from('blog-images')
-        .getPublicUrl(filePath)
-
-      return publicUrl
+      const url = await onImageUpload(file)
+      return url
     } catch (error) {
       console.error('Error uploading image:', error)
       toast({
@@ -45,14 +35,24 @@ export const TipTapEditor = ({ content, onChange, onImageUpload }: TipTapEditorP
       })
       return null
     }
-  }, [toast])
+  }, [onImageUpload, toast])
 
   const editor = useEditor({
     extensions: [
-      StarterKit,
-      Image,
+      StarterKit.configure({
+        heading: {
+          levels: [1, 2]
+        }
+      }),
+      Image.configure({
+        inline: true,
+        allowBase64: true,
+      }),
       Link.configure({
         openOnClick: false,
+        HTMLAttributes: {
+          class: 'text-blue-500 hover:text-blue-700 underline'
+        }
       }),
       CodeBlockLowlight.configure({
         lowlight,
@@ -75,8 +75,7 @@ export const TipTapEditor = ({ content, onChange, onImageUpload }: TipTapEditorP
         editor={editor} 
         onImageUpload={async (file) => {
           const url = await uploadImage(file)
-          if (url && onImageUpload) {
-            onImageUpload(url)
+          if (url) {
             editor.chain().focus().setImage({ src: url }).run()
           }
         }} 
