@@ -24,7 +24,7 @@ export const BlogContent: React.FC<BlogContentProps> = ({ content, featuredImage
         prose-pre:bg-gray-900 dark:prose-pre:bg-gray-800 prose-pre:text-gray-100 prose-pre:shadow-md prose-pre:p-6 
         prose-code:text-blue-600 dark:prose-code:text-blue-400 prose-code:before:content-none prose-code:after:content-none 
         prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:pl-6 prose-blockquote:italic prose-blockquote:text-gray-700 dark:prose-blockquote:text-gray-300
-        [&_table]:w-full [&_table]:border-collapse [&_table]:my-8 [&_table]:bg-white dark:bg-gray-800/50 [&_table]:shadow-lg [&_table]:rounded-lg overflow-hidden
+        [&_table]:w-full [&_table]:border-collapse [&_table]:my-8 [&_table]:bg-white dark:[&_table]:bg-gray-800 [&_table]:shadow-lg [&_table]:rounded-lg overflow-hidden
         [&_thead]:bg-gray-50 dark:[&_thead]:bg-gray-800
         [&_th]:border [&_th]:border-gray-200 dark:[&_th]:border-gray-700 [&_th]:p-4 [&_th]:text-left [&_th]:font-semibold [&_th]:text-gray-900 dark:[&_th]:text-gray-100
         [&_td]:border [&_td]:border-gray-200 dark:[&_td]:border-gray-700 [&_td]:p-4 [&_td]:text-gray-700 dark:[&_td]:text-gray-300

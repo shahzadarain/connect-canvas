@@ -43,7 +43,7 @@ export const BlogContentFormatter = ({ content }: BlogContentFormatterProps) => 
     // Configure DOMPurify to allow certain HTML tags and attributes
     DOMPurify.setConfig({
       ADD_TAGS: ['table', 'tr', 'td', 'th', 'thead', 'tbody', 'style'],
-      ADD_ATTR: ['class', 'style', 'id', 'colspan', 'rowspan', 'align', 'width', 'height', 'valign'],
+      ADD_ATTR: ['class', 'style', 'id', 'colspan', 'rowspan', 'align', 'width', 'height', 'valign', 'target'],
       FORBID_TAGS: ['script'],
       FORBID_ATTR: ['onerror', 'onload', 'onclick']
     });
@@ -160,18 +160,22 @@ export const BlogContentFormatter = ({ content }: BlogContentFormatterProps) => 
 
       // Handle HTML content and regular paragraphs
       const sanitizedContent = DOMPurify.sanitize(line, {
-        ADD_TAGS: ['table', 'tr', 'td', 'th', 'thead', 'tbody', 'style'],
-        ADD_ATTR: ['class', 'style', 'id', 'colspan', 'rowspan', 'align', 'width', 'height', 'valign']
+        ADD_TAGS: ['table', 'tr', 'td', 'th', 'thead', 'tbody', 'style', 'a', 'span', 'br'],
+        ADD_ATTR: ['class', 'style', 'id', 'colspan', 'rowspan', 'align', 'width', 'height', 'valign', 'href', 'target']
       });
 
       if (sanitizedContent.trim()) {
         formattedContent.push(
           <div
             key={currentIndex}
-            className="prose prose-lg dark:prose-invert max-w-none mb-6 [&_table]:w-full [&_table]:border-collapse [&_table]:my-4 
-              [&_th]:border [&_th]:border-gray-300 [&_th]:dark:border-gray-700 [&_th]:p-2 [&_th]:bg-gray-100 [&_th]:dark:bg-gray-800
-              [&_td]:border [&_td]:border-gray-300 [&_td]:dark:border-gray-700 [&_td]:p-2
-              [&_tr:nth-child(even)]:bg-gray-50 [&_tr:nth-child(even)]:dark:bg-gray-900/50"
+            className="prose prose-lg dark:prose-invert max-w-none mb-6 
+              [&_table]:w-full [&_table]:border-collapse [&_table]:my-8 
+              [&_thead]:bg-gray-50 dark:[&_thead]:bg-gray-800
+              [&_th]:border [&_th]:border-gray-200 dark:[&_th]:border-gray-700 [&_th]:p-4 [&_th]:text-left [&_th]:font-semibold [&_th]:text-gray-900 dark:[&_th]:text-gray-100
+              [&_td]:border [&_td]:border-gray-200 dark:[&_td]:border-gray-700 [&_td]:p-4 [&_td]:text-gray-700 dark:[&_td]:text-gray-300
+              [&_tr:nth-child(even)]:bg-gray-50 dark:[&_tr:nth-child(even)]:bg-gray-900/50
+              [&_a]:text-blue-600 dark:[&_a]:text-blue-400 [&_a]:no-underline hover:[&_a]:underline
+              [&_.task]:font-bold [&_.task]:text-red-600 dark:[&_.task]:text-red-400"
             dangerouslySetInnerHTML={{ __html: sanitizedContent }}
           />
         );
