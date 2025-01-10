@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@supabase/auth-helpers-react";
 import { toast } from "sonner";
-import { BlogHeader } from "@/components/blog/BlogHeader";
+import { BlogPageHeader } from "@/components/blog/BlogPageHeader";
 import { FeaturedPost } from "@/components/blog/FeaturedPost";
 import { BlogFilters } from "@/components/blog/BlogFilters";
 import { BlogCard } from "@/components/blog/BlogCard";
@@ -93,7 +93,7 @@ const Blog = () => {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
       <div className="container mx-auto px-4 py-16">
-        <BlogHeader isAdmin={isAdmin} />
+        <BlogPageHeader isAdmin={isAdmin} />
         
         {featuredPost && (
           <FeaturedPost post={featuredPost} isAdmin={isAdmin} />
