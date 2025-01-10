@@ -164,14 +164,16 @@ export const BlogContentFormatter = ({ content }: BlogContentFormatterProps) => 
         ADD_ATTR: ['class', 'style', 'id']
       });
 
-      formattedContent.push(
-        <div
-          key={currentIndex}
-          className="prose prose-lg dark:prose-invert max-w-none mb-6"
-          dangerouslySetInnerHTML={{ __html: sanitizedContent }}
-        />
-      );
-      currentIndex++;
+      if (sanitizedContent.trim()) {
+        formattedContent.push(
+          <div
+            key={currentIndex}
+            className="prose prose-lg dark:prose-invert max-w-none mb-6"
+            dangerouslySetInnerHTML={{ __html: sanitizedContent }}
+          />
+        );
+        currentIndex++;
+      }
     }
 
     return formattedContent;
