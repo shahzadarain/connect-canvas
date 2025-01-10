@@ -1,147 +1,107 @@
 import React from 'react';
-import { BlogContentFormatter } from './BlogContentFormatter';
-import { BlogCoverImage } from './BlogCoverImage';
-import { Share2, ArrowLeft, Clock, Shield, Lock, Database, UserCheck, MessageSquare, Bell } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { TableOfContents } from './TableOfContents';
-import { generateTableOfContents } from '@/utils/blogUtils';
 import { CodeBlock } from './CodeBlock';
+import { BlogHeading } from './BlogHeading';
+import { BlogParagraph } from './BlogParagraph';
 
 interface BlogContentProps {
   content: string;
   featuredImage?: string | null;
 }
 
-export const BlogContent = ({ content, featuredImage }: BlogContentProps) => {
-  const tocItems = generateTableOfContents(content);
-  
-  const fixImagePaths = (content: string) => {
-    console.log('Original content:', content);
-    
-    return content.replace(
-      /!\[(.*?)\]\((.*?)\)/g,
-      (match, altText, path) => {
-        console.log('Processing markdown image:', { match, altText, path });
-        
-        if (path.startsWith('http://') || path.startsWith('https://')) {
-          console.log('Using full URL:', path);
-          return match;
+export const BlogContent: React.FC<BlogContentProps> = ({ content, featuredImage }) => {
+  const processContent = (content: string) => {
+    console.log('Processing blog content');
+    const lines = content.split('\n');
+    const processedContent: JSX.Element[] = [];
+    let codeBlock = '';
+    let inCodeBlock = false;
+    let key = 0;
+
+    lines.forEach((line, index) => {
+      // Handle code blocks
+      if (line.startsWith('```')) {
+        if (inCodeBlock) {
+          processedContent.push(
+            <CodeBlock key={key++} code={codeBlock} language={line.slice(3)} />
+          );
+          codeBlock = '';
+          inCodeBlock = false;
+        } else {
+          inCodeBlock = true;
         }
-        
-        if (path.includes('lovable-uploads')) {
-          const cleanPath = path.replace(/^\/+/, '');
-          const fileName = cleanPath.split('lovable-uploads/').pop();
-          const fullPath = `${window.location.origin}/lovable-uploads/${fileName}`;
-          console.log('Using lovable-uploads path:', fullPath);
-          return `![${altText}](${fullPath})`;
-        }
-        
-        const fileName = path.split('/').pop();
-        const fullPath = `${window.location.origin}/lovable-uploads/${fileName}`;
-        console.log('Converting to full lovable-uploads path:', fullPath);
-        return `![${altText}](${fullPath})`;
+        return;
       }
-    );
+
+      if (inCodeBlock) {
+        codeBlock += line + '\n';
+        return;
+      }
+
+      // Handle images with proper sizing and responsive behavior
+      if (line.startsWith('![')) {
+        const altTextMatch = line.match(/!\[(.*?)\]/);
+        const urlMatch = line.match(/\((.*?)\)/);
+        if (altTextMatch && urlMatch) {
+          const altText = altTextMatch[1];
+          const url = urlMatch[1];
+          console.log('Processing image:', { url, altText });
+          processedContent.push(
+            <div key={key++} className="my-8">
+              <img
+                src={url}
+                alt={altText}
+                className="rounded-lg shadow-lg w-full max-w-4xl mx-auto"
+                onError={(e) => {
+                  console.error('Error loading image:', url);
+                  e.currentTarget.src = '/placeholder.svg';
+                }}
+              />
+            </div>
+          );
+        }
+        return;
+      }
+
+      // Handle headings with proper spacing
+      if (line.startsWith('#')) {
+        const level = line.match(/^#+/)?.[0].length || 1;
+        const text = line.replace(/^#+\s/, '');
+        processedContent.push(
+          <BlogHeading key={key++} level={level} text={text} />
+        );
+        return;
+      }
+
+      // Handle paragraphs with proper typography
+      if (line.trim()) {
+        processedContent.push(
+          <BlogParagraph key={key++} text={line} />
+        );
+      } else {
+        processedContent.push(<div key={key++} className="h-4" />);
+      }
+    });
+
+    return processedContent;
   };
 
-  const processedContent = fixImagePaths(content);
-  console.log('Processed content:', processedContent);
-
   return (
-    <article className="max-w-[728px] mx-auto px-4 md:px-0">
-      <Link 
-        to="/blog" 
-        className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-8 group transition-colors"
-      >
-        <ArrowLeft className="w-4 h-4 mr-2 transition-transform group-hover:-translate-x-1" />
-        Back to Blog
-      </Link>
-
+    <article className="prose prose-lg dark:prose-invert max-w-none">
       {featuredImage && (
-        <div className="mb-8 rounded-xl overflow-hidden shadow-lg">
-          <BlogCoverImage featuredImage={featuredImage} />
+        <div className="mb-8">
+          <img
+            src={featuredImage}
+            alt="Featured"
+            className="w-full h-[400px] object-cover rounded-xl shadow-lg"
+            onError={(e) => {
+              console.error('Error loading featured image:', featuredImage);
+              e.currentTarget.src = '/placeholder.svg';
+            }}
+          />
         </div>
       )}
-
-      <div className="flex flex-col lg:flex-row gap-8">
-        <div className="lg:w-3/4">
-          <div 
-            className="
-              prose prose-lg max-w-none
-              prose-headings:font-sans prose-headings:tracking-tight
-              prose-p:text-lg prose-p:leading-relaxed prose-p:mb-4 prose-p:text-gray-700 dark:prose-p:text-gray-300
-              prose-ul:my-4 prose-ul:space-y-1
-              prose-li:text-gray-700 dark:prose-li:text-gray-300
-              prose-img:rounded-lg prose-img:shadow-lg prose-img:my-8
-              prose-a:text-blue-600 hover:prose-a:text-blue-700 prose-a:no-underline hover:prose-a:underline
-              prose-code:bg-gray-100 dark:prose-code:bg-gray-800 prose-code:p-1 prose-code:rounded
-              prose-pre:bg-gray-100 dark:prose-pre:bg-gray-800 prose-pre:p-4 prose-pre:rounded-lg
-              selection:bg-blue-100/30 dark:selection:bg-blue-900/30
-            "
-          >
-            <BlogContentFormatter content={processedContent} />
-          </div>
-        </div>
-        
-        <aside className="lg:w-1/4">
-          <div className="sticky top-8 space-y-8">
-            <TableOfContents items={tocItems} />
-            
-            <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-4">
-              <h3 className="text-lg font-semibold mb-4">Key Features</h3>
-              <ul className="space-y-3">
-                <li className="flex items-center gap-2">
-                  <Shield className="w-5 h-5 text-blue-500" />
-                  <span>End-to-End Encryption</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <UserCheck className="w-5 h-5 text-blue-500" />
-                  <span>Anonymous Reporting</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Database className="w-5 h-5 text-blue-500" />
-                  <span>Secure Data Storage</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <MessageSquare className="w-5 h-5 text-blue-500" />
-                  <span>Real-time Updates</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Bell className="w-5 h-5 text-blue-500" />
-                  <span>Alert System</span>
-                </li>
-              </ul>
-            </div>
-
-            <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-4">
-              <h3 className="text-lg font-semibold mb-4">Security Features</h3>
-              <ul className="space-y-3">
-                <li className="flex items-center gap-2">
-                  <Lock className="w-5 h-5 text-emerald-500" />
-                  <span>Zero-knowledge Architecture</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Shield className="w-5 h-5 text-emerald-500" />
-                  <span>Military-grade Encryption</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </aside>
-      </div>
-
-      <div className="border-t border-gray-200 dark:border-gray-800 mt-12 pt-8">
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">Share this article</h3>
-          <div className="flex space-x-4">
-            <button 
-              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-              onClick={() => window.open(`https://twitter.com/intent/tweet?url=${window.location.href}`, '_blank')}
-            >
-              <Share2 className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-            </button>
-          </div>
-        </div>
+      <div className="space-y-4">
+        {processContent(content)}
       </div>
     </article>
   );

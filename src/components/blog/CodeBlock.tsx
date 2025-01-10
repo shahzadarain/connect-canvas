@@ -1,43 +1,50 @@
-import React, { useState } from 'react';
-import { Code, Copy, Check } from 'lucide-react';
+import React from 'react';
+import { Copy } from 'lucide-react';
+import { Button } from '../ui/button';
+import { useToast } from '@/hooks/use-toast';
 
 interface CodeBlockProps {
-  language: string;
   code: string;
+  language?: string;
 }
 
-export const CodeBlock = ({ language, code }: CodeBlockProps) => {
-  const [copied, setCopied] = useState(false);
+export const CodeBlock: React.FC<CodeBlockProps> = ({ code, language }) => {
+  const { toast } = useToast();
 
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(code);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(code);
+      toast({
+        title: "Copied!",
+        description: "Code copied to clipboard",
+      });
+    } catch (err) {
+      console.error('Failed to copy code:', err);
+      toast({
+        title: "Error",
+        description: "Failed to copy code",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
-    <div className="my-8 animate-fade-in group rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-lg">
-      <div className="bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 py-2 flex items-center justify-between">
-        <div className="flex items-center space-x-2">
-          <Code className="w-4 h-4 text-blue-500" />
-          <span className="text-sm font-mono text-gray-600 dark:text-gray-400">
-            {language}
-          </span>
-        </div>
-        <button
-          onClick={handleCopy}
-          className="p-1.5 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-          title="Copy code"
+    <div className="relative my-6 rounded-lg overflow-hidden bg-zinc-950">
+      <div className="flex items-center justify-between px-4 py-2 bg-zinc-900">
+        <span className="text-sm text-zinc-400">
+          {language || 'code'}
+        </span>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={copyToClipboard}
+          className="h-8 text-zinc-400 hover:text-white"
         >
-          {copied ? (
-            <Check className="w-4 h-4 text-green-500" />
-          ) : (
-            <Copy className="w-4 h-4 text-gray-500" />
-          )}
-        </button>
+          <Copy className="h-4 w-4" />
+        </Button>
       </div>
-      <pre className="p-4 overflow-x-auto bg-gray-50 dark:bg-gray-800 m-0">
-        <code className="text-gray-800 dark:text-gray-200 whitespace-pre font-mono text-sm">
+      <pre className="p-4 overflow-x-auto">
+        <code className="text-sm font-mono text-zinc-100">
           {code.trim()}
         </code>
       </pre>
