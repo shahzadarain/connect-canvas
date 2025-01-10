@@ -29,14 +29,17 @@ export const PreviewModal = ({ isOpen, onClose, post }: PreviewModalProps) => {
     updated_at: new Date().toISOString(),
     published_at: new Date().toISOString(),
     status: 'draft',
-    featured_image: post.featured_image,
+    featured_image: post.featured_image || null,
     tags: post.tags || [],
     excerpt: post.excerpt || '',
     meta_description: post.meta_description || '',
     meta_keywords: post.meta_keywords || [],
     meta_title: post.meta_title || '',
-    theme: 'light',
-    font_settings: {},
+    theme: post.theme || 'light',
+    font_settings: post.font_settings || {},
+    draft_content: null,
+    last_autosave_at: null,
+    author_id: null
   };
 
   return (
