@@ -3,10 +3,10 @@ import StarterKit from '@tiptap/starter-kit'
 import Image from '@tiptap/extension-image'
 import Link from '@tiptap/extension-link'
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
-import { lowlight } from 'lowlight'
+import { common, createLowlight } from 'lowlight'
 import TextAlign from '@tiptap/extension-text-align'
 import { EditorToolbar } from './EditorToolbar'
-import { useToast } from '@/components/ui/use-toast'
+import { useToast } from '@/hooks/use-toast'
 import { useCallback } from 'react'
 import { supabase } from '@/integrations/supabase/client'
 
@@ -18,6 +18,7 @@ interface TipTapEditorProps {
 
 export const TipTapEditor = ({ content, onChange, onImageUpload }: TipTapEditorProps) => {
   const { toast } = useToast()
+  const lowlight = createLowlight(common)
 
   const uploadImage = useCallback(async (file: File) => {
     try {

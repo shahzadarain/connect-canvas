@@ -4,7 +4,7 @@ import { useSession } from '@supabase/auth-helpers-react'
 import { TipTapEditor } from './TipTapEditor'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { useToast } from '@/components/ui/use-toast'
+import { useToast } from '@/hooks/use-toast'
 import { supabase } from '@/integrations/supabase/client'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { BlogPostMeta } from '../BlogPostMeta'
@@ -31,7 +31,7 @@ const BlogEditor = () => {
       const { data: post, error } = await supabase
         .from('blog_posts')
         .select('*')
-        .eq('id', postId)
+        .eq('id', parseInt(postId, 10))
         .single()
 
       if (error) throw error
@@ -66,8 +66,9 @@ const BlogEditor = () => {
           meta_title: metaTitle,
           meta_description: metaDescription,
           last_autosave_at: new Date().toISOString(),
+          font_settings: {},
         })
-        .eq('id', postId)
+        .eq('id', parseInt(postId, 10))
 
       if (error) throw error
 
@@ -108,8 +109,9 @@ const BlogEditor = () => {
             meta_description: metaDescription,
             status,
             updated_at: new Date().toISOString(),
+            font_settings: {},
           })
-          .eq('id', postId)
+          .eq('id', parseInt(postId, 10))
 
         if (error) throw error
       } else {
@@ -124,6 +126,7 @@ const BlogEditor = () => {
             status,
             author: session?.user?.email || 'Anonymous',
             author_id: session?.user?.id,
+            font_settings: {},
           })
 
         if (error) throw error
