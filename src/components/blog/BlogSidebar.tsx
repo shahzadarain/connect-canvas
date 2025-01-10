@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { BlogPost } from '@/integrations/supabase/types/blog';
@@ -10,6 +10,8 @@ import { BlogTagCloud } from './BlogTagCloud';
 import { Calendar, List } from 'lucide-react';
 
 export const BlogSidebar = ({ currentPostId }: { currentPostId: number }) => {
+  const [selectedTag, setSelectedTag] = useState<string | null>(null);
+
   const { data: relatedPosts, isLoading } = useQuery({
     queryKey: ['related-posts', currentPostId],
     queryFn: async () => {
@@ -58,7 +60,7 @@ export const BlogSidebar = ({ currentPostId }: { currentPostId: number }) => {
 
   const handleTagClick = (tag: string) => {
     console.log('Selected tag:', tag);
-    // Implement tag filtering
+    setSelectedTag(selectedTag === tag ? null : tag);
   };
 
   if (isLoading) {
@@ -82,7 +84,11 @@ export const BlogSidebar = ({ currentPostId }: { currentPostId: number }) => {
       <BlogSearch onSearch={handleSearch} />
       
       {tags && tags.length > 0 && (
-        <BlogTagCloud tags={tags} onTagClick={handleTagClick} />
+        <BlogTagCloud 
+          tags={tags} 
+          onTagClick={handleTagClick} 
+          selectedTag={selectedTag}
+        />
       )}
 
       <div className="space-y-4">
