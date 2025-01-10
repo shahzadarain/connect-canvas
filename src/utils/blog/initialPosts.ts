@@ -186,59 +186,84 @@ In times of humanitarian crises, having a secure and anonymous way to report inc
 
 ## System Architecture
 
-![System Architecture Diagram showing integration of Twilio, WebRTC, and AI Engine](${window.location.origin}/lovable-uploads/6b890cc3-45bc-4001-a802-65a265232058.png)
+Our system architecture integrates multiple layers of security and anonymization:
 
-The system architecture integrates multiple layers of security and anonymization to protect sensitive information while maintaining functionality.
+### Core Components
 
-## Real-time Dashboard
+1. **End-to-End Encryption Layer**
+   - AES-256 encryption for data at rest
+   - TLS 1.3 for data in transit
+   - Zero-knowledge architecture
 
-![Humanitarian Emergency Dashboard showing heat map and metrics](${window.location.origin}/lovable-uploads/2ca356f8-6cc1-4b14-83bf-3d899e1ef925.png)
+2. **Anonymous Routing**
+   - TOR network integration
+   - Multi-hop relay system
+   - IP address masking
 
-The dashboard provides real-time visualization of emergency situations while maintaining anonymity of the reporters.
+3. **Secure Data Storage**
+   - Encrypted databases
+   - Distributed storage
+   - Regular backup systems
 
-## Key Features
+### Real-time Processing
 
-- End-to-end encryption for all communications
-- Anonymous reporting channels
-- Real-time incident mapping
-- AI-powered threat assessment
-- Secure data storage with encryption at rest
-- Multi-language support
-- Offline capability for areas with limited connectivity
+The system processes reports through:
+
+1. **AI-Powered Analysis**
+   - Threat assessment
+   - Priority classification
+   - Pattern recognition
+
+2. **Response Coordination**
+   - Automated alerts
+   - Resource allocation
+   - Team mobilization
 
 ## Implementation Guidelines
 
-1. Set up secure communication channels
-2. Implement encryption protocols
-3. Configure anonymous routing
-4. Deploy monitoring systems
-5. Establish emergency response protocols
+### Security Setup
 
-## Security Considerations
+\`\`\`typescript
+interface SecurityConfig {
+  encryptionLevel: 'AES-256' | 'ChaCha20';
+  routingMethod: 'TOR' | 'I2P';
+  storageType: 'distributed' | 'centralized';
+}
 
-- Data encryption at rest and in transit
-- Anonymous routing through TOR network
-- Secure key management
-- Regular security audits
-- Compliance with humanitarian data protection standards
+const defaultConfig: SecurityConfig = {
+  encryptionLevel: 'AES-256',
+  routingMethod: 'TOR',
+  storageType: 'distributed'
+};
+\`\`\`
+
+### Monitoring System
+
+\`\`\`typescript
+interface MonitoringMetrics {
+  responseTime: number;
+  encryptionStatus: boolean;
+  routingHealth: 'healthy' | 'degraded' | 'failed';
+}
+\`\`\`
 
 ## Impact and Results
 
-The system has significantly improved response times while maintaining complete anonymity for reporters. This has led to:
+The system has significantly improved response times while maintaining complete anonymity:
 
-- 50% increase in incident reporting
-- 30% faster response times
-- 100% maintenance of reporter anonymity
-- Improved trust in the reporting system
+- **50% increase** in incident reporting
+- **30% faster** response times
+- **100% maintenance** of reporter anonymity
+- **Improved trust** in the reporting system
 
 ## Future Developments
 
 We continue to enhance the system with:
 
-- Advanced AI capabilities
-- Improved offline functionality
-- Extended language support
-- Enhanced visualization tools
+1. Advanced AI capabilities
+2. Improved offline functionality
+3. Extended language support
+4. Enhanced visualization tools
 
 For more information about implementing this system, please contact our humanitarian technology team.`,
     excerpt: "A comprehensive system for secure and anonymous incident reporting in humanitarian emergencies, featuring end-to-end encryption and real-time response capabilities.",
