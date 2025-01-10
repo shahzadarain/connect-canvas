@@ -160,8 +160,9 @@ export const BlogContentFormatter = ({ content }: BlogContentFormatterProps) => 
               [&_th]:border [&_th]:border-gray-200 dark:[&_th]:border-gray-700 [&_th]:p-4 [&_th]:text-left [&_th]:font-semibold [&_th]:text-gray-900 dark:[&_th]:text-gray-100
               [&_td]:border [&_td]:border-gray-200 dark:[&_td]:border-gray-700 [&_td]:p-4 [&_td]:text-gray-700 dark:[&_td]:text-gray-300
               [&_tr:nth-child(even)]:bg-gray-50 dark:[&_tr:nth-child(even)]:bg-gray-900/50
-              [&_a]:text-blue-600 dark:[&_a]:text-blue-400 [&_a]:no-underline hover:[&_a]:underline
-              [&_.task]:font-bold [&_.task]:text-red-600 dark:[&_.task]:text-red-400"
+              [&_a]:text-blue-600 dark:[&_a]:text-blue-400 [&_a:hover]:underline [&_a]:no-underline
+              [&_.task]:font-bold [&_.task]:text-red-600 dark:[&_.task]:text-red-400
+              [&_br]:block [&_br]:content-[''] [&_br]:my-2"
             dangerouslySetInnerHTML={{ __html: line }}
           />
         );
