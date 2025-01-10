@@ -28,15 +28,43 @@ export const BlogEditor = ({ initialContent = '', postId }: BlogEditorProps) => 
   const [metaKeywords, setMetaKeywords] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
   const [autoSaveStatus, setAutoSaveStatus] = useState('');
+  const [featuredImage, setFeaturedImage] = useState<string | null>(null);
   const { toast } = useToast();
-
   const lowlight = createLowlight(common);
 
   const editor = useEditor({
     extensions: [
       StarterKit,
-      Image,
-      Link,
+      Image.configure({
+        HTMLAttributes: {
+          class: 'rounded-lg max-w-full h-auto',
+        },
+        uploadImage: async (file) => {
+          try {
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${crypto.randomUUID()}.${fileExt}`;
+            const filePath = `lovable-uploads/${fileName}`;
+
+            const { error: uploadError, data } = await supabase.storage
+              .from('resources')
+              .upload(filePath, file);
+
+            if (uploadError) throw uploadError;
+
+            const { data: { publicUrl } } = supabase.storage
+              .from('resources')
+              .getPublicUrl(filePath);
+
+            return publicUrl;
+          } catch (error) {
+            console.error('Error uploading image:', error);
+            throw error;
+          }
+        },
+      }),
+      Link.configure({
+        openOnClick: false,
+      }),
       TextAlign.configure({
         types: ['heading', 'paragraph'],
       }),
@@ -51,7 +79,6 @@ export const BlogEditor = ({ initialContent = '', postId }: BlogEditorProps) => 
       },
     },
     onUpdate: ({ editor }) => {
-      // Trigger autosave
       handleAutoSave(editor.getHTML());
     },
   });
@@ -69,6 +96,7 @@ export const BlogEditor = ({ initialContent = '', postId }: BlogEditorProps) => 
           excerpt,
           meta_description: metaDescription,
           meta_keywords: metaKeywords,
+          featured_image: featuredImage,
           updated_at: new Date().toISOString(),
         })
         .eq('id', postId);
@@ -80,8 +108,47 @@ export const BlogEditor = ({ initialContent = '', postId }: BlogEditorProps) => 
     } catch (error) {
       console.error('Error auto-saving:', error);
       setAutoSaveStatus('Error saving');
+      toast({
+        title: "Error",
+        description: "Failed to auto-save post",
+        variant: "destructive",
+      });
     }
   }, 2000);
+
+  const handleFeaturedImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${crypto.randomUUID()}.${fileExt}`;
+      const filePath = `lovable-uploads/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('resources')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('resources')
+        .getPublicUrl(filePath);
+
+      setFeaturedImage(publicUrl);
+      toast({
+        title: "Success",
+        description: "Featured image uploaded successfully",
+      });
+    } catch (error) {
+      console.error('Error uploading featured image:', error);
+      toast({
+        title: "Error",
+        description: "Failed to upload featured image",
+        variant: "destructive",
+      });
+    }
+  };
 
   const handleSave = async (status: 'draft' | 'published' = 'draft') => {
     if (!editor) return;
@@ -99,7 +166,9 @@ export const BlogEditor = ({ initialContent = '', postId }: BlogEditorProps) => 
         meta_description: metaDescription,
         meta_keywords: metaKeywords,
         status,
+        featured_image: featuredImage,
         author: 'Admin', // You might want to get this from the authenticated user
+        published_at: status === 'published' ? new Date().toISOString() : null,
       };
 
       const { error } = await supabase
@@ -126,6 +195,34 @@ export const BlogEditor = ({ initialContent = '', postId }: BlogEditorProps) => 
       setSaving(false);
     }
   };
+
+  useEffect(() => {
+    if (postId) {
+      const fetchPost = async () => {
+        const { data: post, error } = await supabase
+          .from('blog_posts')
+          .select('*')
+          .eq('id', postId)
+          .single();
+
+        if (error) {
+          console.error('Error fetching post:', error);
+          return;
+        }
+
+        if (post) {
+          setTitle(post.title);
+          setExcerpt(post.excerpt || '');
+          setMetaDescription(post.meta_description || '');
+          setMetaKeywords(post.meta_keywords || []);
+          setFeaturedImage(post.featured_image);
+          editor?.commands.setContent(post.content);
+        }
+      };
+
+      fetchPost();
+    }
+  }, [postId, editor]);
 
   if (!editor) {
     return null;
@@ -167,6 +264,26 @@ export const BlogEditor = ({ initialContent = '', postId }: BlogEditorProps) => 
             placeholder="Post title..."
             className="text-3xl font-bold w-full bg-transparent border-none focus:outline-none"
           />
+          
+          <div className="space-y-2">
+            <label htmlFor="featured-image" className="block text-sm font-medium text-gray-700">
+              Featured Image
+            </label>
+            <Input
+              id="featured-image"
+              type="file"
+              accept="image/*"
+              onChange={handleFeaturedImageUpload}
+              className="w-full"
+            />
+            {featuredImage && (
+              <img
+                src={featuredImage}
+                alt="Featured"
+                className="mt-2 rounded-lg max-h-48 object-cover"
+              />
+            )}
+          </div>
           
           <EditorToolbar editor={editor} />
           
