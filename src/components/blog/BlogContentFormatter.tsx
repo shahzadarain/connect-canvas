@@ -4,6 +4,7 @@ import { BlogListItem } from './BlogListItem';
 import { BlogHeading } from './BlogHeading';
 import { BlogParagraph } from './BlogParagraph';
 import { formatLinks, formatInlineText } from '@/utils/blogFormatters';
+import DOMPurify from 'dompurify';
 
 interface BlogContentFormatterProps {
   content: string;
@@ -19,11 +20,18 @@ export const BlogContentFormatter = ({ content }: BlogContentFormatterProps) => 
     let inList = false;
     let listItems: string[] = [];
 
+    // Configure DOMPurify to allow certain HTML tags and attributes
+    DOMPurify.setConfig({
+      ADD_TAGS: ['table', 'tr', 'td', 'th', 'thead', 'tbody', 'style'],
+      ADD_ATTR: ['class', 'style']
+    });
+
     const lines = content.split('\n');
 
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i].trim();
 
+      // Skip empty lines
       if (line === '') {
         if (inList) {
           formattedContent.push(
@@ -33,7 +41,7 @@ export const BlogContentFormatter = ({ content }: BlogContentFormatterProps) => 
                   key={idx} 
                   content={item} 
                   index={idx} 
-                  formatContent={(text) => formatLinks(formatInlineText(text))} 
+                  formatContent={(text) => DOMPurify.sanitize(text)} 
                 />
               ))}
             </ul>
@@ -45,39 +53,7 @@ export const BlogContentFormatter = ({ content }: BlogContentFormatterProps) => 
         continue;
       }
 
-      // Handle images with proper path processing
-      if (line.startsWith('![')) {
-        const altTextMatch = line.match(/!\[(.*?)\]/);
-        const urlMatch = line.match(/\((.*?)\)/);
-        
-        if (altTextMatch && urlMatch) {
-          const altText = altTextMatch[1];
-          let imageUrl = urlMatch[1];
-          
-          // Process image URL
-          if (imageUrl.startsWith('/lovable-uploads/')) {
-            imageUrl = `${window.location.origin}${imageUrl}`;
-          }
-          
-          formattedContent.push(
-            <div key={currentIndex} className="my-8">
-              <img
-                src={imageUrl}
-                alt={altText}
-                className="w-full rounded-lg shadow-lg"
-                onError={(e) => {
-                  console.error('Error loading image:', imageUrl);
-                  e.currentTarget.src = '/placeholder.svg';
-                }}
-              />
-              <p className="text-sm text-gray-500 mt-2 text-center italic">{altText}</p>
-            </div>
-          );
-          currentIndex++;
-          continue;
-        }
-      }
-
+      // Handle code blocks
       if (line.startsWith('```')) {
         if (!inCodeBlock) {
           inCodeBlock = true;
@@ -101,6 +77,39 @@ export const BlogContentFormatter = ({ content }: BlogContentFormatterProps) => 
         continue;
       }
 
+      // Handle images
+      if (line.startsWith('![')) {
+        const altTextMatch = line.match(/!\[(.*?)\]/);
+        const urlMatch = line.match(/\((.*?)\)/);
+        
+        if (altTextMatch && urlMatch) {
+          const altText = altTextMatch[1];
+          let imageUrl = urlMatch[1];
+          
+          if (imageUrl.startsWith('/lovable-uploads/')) {
+            imageUrl = `${window.location.origin}${imageUrl}`;
+          }
+          
+          formattedContent.push(
+            <div key={currentIndex} className="my-8">
+              <img
+                src={imageUrl}
+                alt={altText}
+                className="w-full rounded-lg shadow-lg"
+                onError={(e) => {
+                  console.error('Error loading image:', imageUrl);
+                  e.currentTarget.src = '/placeholder.svg';
+                }}
+              />
+              <p className="text-sm text-gray-500 mt-2 text-center italic">{altText}</p>
+            </div>
+          );
+          currentIndex++;
+          continue;
+        }
+      }
+
+      // Handle headings
       if (line.startsWith('#')) {
         const level = Math.min(line.match(/^#+/)[0].length, 5) as 1 | 2 | 3 | 4 | 5;
         const text = line.replace(/^#+\s/, '');
@@ -112,13 +121,14 @@ export const BlogContentFormatter = ({ content }: BlogContentFormatterProps) => 
             level={level}
             content={text}
             id={id}
-            formatContent={(text) => formatLinks(formatInlineText(text))}
+            formatContent={(text) => DOMPurify.sanitize(text)}
           />
         );
         currentIndex++;
         continue;
       }
 
+      // Handle lists
       if (line.startsWith('- ') || line.startsWith('* ') || line.match(/^\d+\./)) {
         inList = true;
         const itemContent = line.replace(/^[-*]\s|^\d+\.\s/, '');
@@ -126,29 +136,20 @@ export const BlogContentFormatter = ({ content }: BlogContentFormatterProps) => 
         continue;
       }
 
+      // Handle HTML content and regular paragraphs
+      const sanitizedContent = DOMPurify.sanitize(line, {
+        ADD_TAGS: ['table', 'tr', 'td', 'th', 'thead', 'tbody', 'style'],
+        ADD_ATTR: ['class', 'style']
+      });
+
       formattedContent.push(
-        <BlogParagraph
+        <div
           key={currentIndex}
-          content={line}
-          formatContent={(text) => formatLinks(formatInlineText(text))}
+          className="prose prose-lg dark:prose-invert max-w-none mb-6"
+          dangerouslySetInnerHTML={{ __html: sanitizedContent }}
         />
       );
       currentIndex++;
-    }
-
-    if (inList && listItems.length > 0) {
-      formattedContent.push(
-        <ul key={currentIndex} className="space-y-1 my-4 list-none pl-0">
-          {listItems.map((item, idx) => (
-            <BlogListItem 
-              key={idx} 
-              content={item} 
-              index={idx} 
-              formatContent={(text) => formatLinks(formatInlineText(text))} 
-            />
-          ))}
-        </ul>
-      );
     }
 
     return formattedContent;
