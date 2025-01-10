@@ -186,13 +186,13 @@ In times of humanitarian crises, having a secure and anonymous way to report inc
 
 ## System Architecture
 
-![System Architecture Diagram showing integration of Twilio, WebRTC, and AI Engine](/lovable-uploads/6b890cc3-45bc-4001-a802-65a265232058.png)
+![System Architecture Diagram showing integration of Twilio, WebRTC, and AI Engine](${window.location.origin}/lovable-uploads/6b890cc3-45bc-4001-a802-65a265232058.png)
 
 The system architecture integrates multiple layers of security and anonymization to protect sensitive information while maintaining functionality.
 
 ## Real-time Dashboard
 
-![Humanitarian Emergency Dashboard showing heat map and metrics](/lovable-uploads/2ca356f8-6cc1-4b14-83bf-3d899e1ef925.png)
+![Humanitarian Emergency Dashboard showing heat map and metrics](${window.location.origin}/lovable-uploads/2ca356f8-6cc1-4b14-83bf-3d899e1ef925.png)
 
 The dashboard provides real-time visualization of emergency situations while maintaining anonymity of the reporters.
 
