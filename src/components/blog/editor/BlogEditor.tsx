@@ -6,9 +6,11 @@ import Link from '@tiptap/extension-link';
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import { common, createLowlight } from 'lowlight';
 import TextAlign from '@tiptap/extension-text-align';
+import { debounce } from 'lodash';
 import { EditorToolbar } from './EditorToolbar';
 import { BlogMetadata } from './BlogMetadata';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -54,7 +56,7 @@ export const BlogEditor = ({ initialContent = '', postId }: BlogEditorProps) => 
     },
   });
 
-  const handleAutoSave = _.debounce(async (content: string) => {
+  const handleAutoSave = debounce(async (content: string) => {
     if (!editor || !postId) return;
     
     try {
