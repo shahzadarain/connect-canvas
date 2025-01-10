@@ -3,6 +3,7 @@ import { CodeBlock } from './CodeBlock';
 import { BlogHeading } from './BlogHeading';
 import { BlogParagraph } from './BlogParagraph';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
+import DOMPurify from 'dompurify';
 
 interface BlogContentProps {
   content: string;
@@ -19,8 +20,11 @@ export const BlogContent: React.FC<BlogContentProps> = ({ content, featuredImage
     let key = 0;
 
     const formatContent = (text: string) => {
-      // Add your content formatting logic here
-      return text;
+      // Allow HTML content to be rendered
+      return DOMPurify.sanitize(text, {
+        ADD_TAGS: ['table', 'tr', 'td', 'th', 'thead', 'tbody', 'style'],
+        ADD_ATTR: ['class', 'style']
+      });
     };
 
     lines.forEach((line, index) => {
