@@ -58,7 +58,7 @@ serve(async (req) => {
     // Generate new articles using OpenAI
     console.log('Generating new articles using OpenAI')
     const completion = await openai.createChatCompletion({
-      model: 'gpt-4o-mini',
+      model: 'gpt-4', // Fixed: Changed from 'gpt-4o-mini' to 'gpt-4'
       messages: [
         {
           role: 'system',
