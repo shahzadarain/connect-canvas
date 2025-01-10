@@ -4,10 +4,10 @@ import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
 import TextAlign from '@tiptap/extension-text-align';
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
-import { lowlight } from 'lowlight';
+import { createLowlight } from 'lowlight';
 import Color from '@tiptap/extension-color';
 import FontFamily from '@tiptap/extension-font-family';
-import EditorToolbar from './EditorToolbar';
+import { EditorToolbar } from './EditorToolbar';
 import { cn } from '@/lib/utils';
 
 interface RichTextEditorProps {
@@ -17,6 +17,8 @@ interface RichTextEditorProps {
 }
 
 export const RichTextEditor = ({ content, onChange, className }: RichTextEditorProps) => {
+  const lowlight = createLowlight();
+
   const editor = useEditor({
     extensions: [
       StarterKit,

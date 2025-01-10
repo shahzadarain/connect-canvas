@@ -27,7 +27,10 @@ export const initializeBlogPosts = async () => {
     console.log(`Inserting ${postsToInsert.length} new posts...`);
     const { data, error } = await supabase
       .from("blog_posts")
-      .insert(postsToInsert)
+      .insert(postsToInsert.map(post => ({
+        ...post,
+        font_settings: post.font_settings || {},
+      })))
       .select();
 
     if (error) {
@@ -44,9 +47,14 @@ export const initializeBlogPosts = async () => {
 };
 
 export const createBlogPost = async (post: BlogPostInput) => {
+  const postData = {
+    ...post,
+    font_settings: post.font_settings || {},
+  };
+
   const { data, error } = await supabase
     .from("blog_posts")
-    .insert([post])
+    .insert([postData])
     .select();
 
   if (error) throw error;
