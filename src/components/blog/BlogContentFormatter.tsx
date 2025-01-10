@@ -151,6 +151,12 @@ export const BlogContentFormatter = ({ content }: BlogContentFormatterProps) => 
 
       // Handle HTML content and regular paragraphs
       if (line.trim()) {
+        const processedContent = line
+          .replace(/&lt;/g, '<')
+          .replace(/&gt;/g, '>')
+          .replace(/&quot;/g, '"')
+          .replace(/&amp;/g, '&');
+
         formattedContent.push(
           <div
             key={currentIndex}
@@ -164,11 +170,7 @@ export const BlogContentFormatter = ({ content }: BlogContentFormatterProps) => 
               [&_.task]:font-bold [&_.task]:text-red-600 dark:[&_.task]:text-red-400
               [&_br]:block [&_br]:content-[''] [&_br]:my-2"
             dangerouslySetInnerHTML={{ 
-              __html: line
-                .replace(/&lt;/g, '<')
-                .replace(/&gt;/g, '>')
-                .replace(/&quot;/g, '"')
-                .replace(/&amp;/g, '&')
+              __html: processedContent
             }}
           />
         );
