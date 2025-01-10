@@ -7,6 +7,7 @@ import { BlogPageHeader } from "@/components/blog/BlogPageHeader";
 import { FeaturedPost } from "@/components/blog/FeaturedPost";
 import { BlogFilters } from "@/components/blog/BlogFilters";
 import { BlogCard } from "@/components/blog/BlogCard";
+import type { BlogPost } from "@/integrations/supabase/types/blog";
 
 const Blog = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -63,7 +64,12 @@ const Blog = () => {
         toast.error("Failed to load blog posts");
         throw error;
       }
-      return data;
+
+      // Ensure font_settings is always a Record<string, unknown>
+      return (data as BlogPost['Row'][]).map(post => ({
+        ...post,
+        font_settings: post.font_settings || {},
+      }));
     },
   });
 
