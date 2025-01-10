@@ -6,7 +6,11 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/hooks/use-toast'
 import { supabase } from '@/integrations/supabase/client'
-import { Bell, MoreHorizontal, Image as ImageIcon } from 'lucide-react'
+import { Bell, Eye, MoreHorizontal, Image as ImageIcon } from 'lucide-react'
+import { SEOMetadataSection } from './SEOMetadataSection'
+import { TagsSection } from './TagsSection'
+import { PreviewModal } from './PreviewModal'
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 
 const BlogEditor = () => {
   const [searchParams] = useSearchParams()
@@ -22,6 +26,11 @@ const BlogEditor = () => {
   const [autoSaveTimer, setAutoSaveTimer] = useState<NodeJS.Timeout>()
   const [wordCount, setWordCount] = useState(0)
   const [readingTime, setReadingTime] = useState(0)
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false)
+  const [metaTitle, setMetaTitle] = useState('')
+  const [metaDescription, setMetaDescription] = useState('')
+  const [metaKeywords, setMetaKeywords] = useState<string[]>([])
+  const [tags, setTags] = useState<string[]>([])
 
   const loadPost = useCallback(async () => {
     if (!postId) return
@@ -38,6 +47,10 @@ const BlogEditor = () => {
       setTitle(post.title || '')
       setContent(post.content || '')
       setCoverImage(post.featured_image || '')
+      setMetaTitle(post.meta_title || '')
+      setMetaDescription(post.meta_description || '')
+      setMetaKeywords(post.meta_keywords || [])
+      setTags(post.tags || [])
     } catch (error) {
       console.error('Error loading post:', error)
       toast({
@@ -114,7 +127,10 @@ const BlogEditor = () => {
             status,
             featured_image: coverImage,
             updated_at: new Date().toISOString(),
-            font_settings: {},
+            meta_title: metaTitle,
+            meta_description: metaDescription,
+            meta_keywords: metaKeywords,
+            tags,
           })
           .eq('id', parseInt(postId, 10))
 
@@ -130,7 +146,10 @@ const BlogEditor = () => {
             featured_image: coverImage,
             author: session?.user?.email || 'Anonymous',
             author_id: session?.user?.id,
-            font_settings: {},
+            meta_title: metaTitle,
+            meta_description: metaDescription,
+            meta_keywords: metaKeywords,
+            tags,
           }])
 
         if (error) throw error
@@ -207,16 +226,40 @@ const BlogEditor = () => {
               variant="ghost"
               size="icon"
               className="rounded-full"
+              onClick={() => setIsPreviewOpen(true)}
             >
-              <Bell className="h-4 w-4" />
+              <Eye className="h-4 w-4" />
             </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="rounded-full"
-            >
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="rounded-full"
+                >
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent>
+                <SheetHeader>
+                  <SheetTitle>Post Settings</SheetTitle>
+                </SheetHeader>
+                <div className="space-y-8 py-4">
+                  <SEOMetadataSection
+                    metaTitle={metaTitle}
+                    metaDescription={metaDescription}
+                    metaKeywords={metaKeywords}
+                    onMetaTitleChange={setMetaTitle}
+                    onMetaDescriptionChange={setMetaDescription}
+                    onMetaKeywordsChange={setMetaKeywords}
+                  />
+                  <TagsSection
+                    tags={tags}
+                    onTagsChange={setTags}
+                  />
+                </div>
+              </SheetContent>
+            </Sheet>
             <Button
               variant="outline"
               size="sm"
@@ -292,8 +335,23 @@ const BlogEditor = () => {
           onImageUpload={handleCoverImageUpload}
         />
       </div>
-    </div>
-  )
-}
 
-export default BlogEditor
+      <PreviewModal
+        isOpen={isPreviewOpen}
+        onClose={() => setIsPreviewOpen(false)}
+        post={{
+          title,
+          content,
+          featured_image: coverImage,
+          author: session?.user?.email,
+          tags,
+          meta_title: metaTitle,
+          meta_description: metaDescription,
+          meta_keywords: metaKeywords,
+        }}
+      />
+    </div>
+  );
+};
+
+export default BlogEditor;
