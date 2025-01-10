@@ -18,7 +18,7 @@ export const BlogPostAuthor = ({ author }: BlogPostAuthorProps) => {
     // Default author info
     return {
       image: "/lovable-uploads/d400063e-16df-4a64-8f55-cd37a44b6c3b.png",
-      bio: "AI expert at the United Nations specializing in data-driven solutions, machine learning, and ethical AI. Proven leadership in advancing innovation and digital transformation for global impact."
+      bio: "Data and AI expert at the United Nations specializing in data-driven solutions, machine learning, and ethical AI. Proven leadership in advancing innovation and digital transformation for global impact."
     };
   };
 
