@@ -5,12 +5,13 @@ import { Link } from "react-router-dom";
 import { BlogSearch } from "@/components/blog/BlogSearch";
 import { BlogTagCloud } from "@/components/blog/BlogTagCloud";
 import { formatDistanceToNow } from "date-fns";
-import { ArrowUpDown, Clock, Grid, List } from "lucide-react";
+import { ArrowUpDown, Clock, Grid, List, Edit } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { calculateReadingTime } from "@/utils/blogUtils";
+import { Badge } from "@/components/ui/badge";
+import { useSession } from "@supabase/auth-helpers-react";
 
-// Array of high-quality placeholder images
 const placeholderImages = [
   "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=800&q=80", // Tech
   "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80", // Data
@@ -22,7 +23,6 @@ const placeholderImages = [
 ];
 
 const getRandomImage = (seed: number) => {
-  // Use the seed to consistently get the same image for the same post
   return placeholderImages[seed % placeholderImages.length];
 };
 
@@ -31,16 +31,40 @@ const Blog = () => {
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const session = useSession();
+
+  const { data: userRoles } = useQuery({
+    queryKey: ["user-roles", session?.user?.id],
+    queryFn: async () => {
+      if (!session?.user?.id) return null;
+      const { data, error } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", session.user.id);
+      
+      if (error) {
+        console.error("Error fetching user roles:", error);
+        throw error;
+      }
+      return data;
+    },
+    enabled: !!session?.user?.id,
+  });
+
+  const isAdmin = userRoles?.some(role => role.role === 'admin');
 
   const { data: posts, isLoading } = useQuery({
-    queryKey: ["blog-posts", sortDirection, searchTerm, selectedTag],
+    queryKey: ["blog-posts", sortDirection, searchTerm, selectedTag, isAdmin],
     queryFn: async () => {
-      console.log("Fetching posts with filters:", { sortDirection, searchTerm, selectedTag });
+      console.log("Fetching posts with filters:", { sortDirection, searchTerm, selectedTag, isAdmin });
       let query = supabase
         .from("blog_posts")
         .select("*")
-        .eq("status", "published")
         .order("published_at", { ascending: sortDirection === 'asc' });
+
+      if (!isAdmin) {
+        query = query.eq("status", "published");
+      }
 
       if (searchTerm) {
         query = query.ilike("title", `%${searchTerm}%`);
@@ -102,9 +126,18 @@ const Blog = () => {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
       <div className="container mx-auto px-4 py-16">
-        <h1 className="text-5xl font-serif text-center mb-16 text-gray-900 dark:text-gray-100">Journal</h1>
+        <div className="flex justify-between items-center mb-16">
+          <h1 className="text-5xl font-serif text-gray-900 dark:text-gray-100">Journal</h1>
+          {isAdmin && (
+            <Link to="/blog/editor">
+              <Button variant="outline" className="gap-2">
+                <Edit className="w-4 h-4" />
+                New Post
+              </Button>
+            </Link>
+          )}
+        </div>
         
-        {/* Featured Post */}
         {featuredPost && (
           <Link 
             to={`/blog/${featuredPost.slug}`}
@@ -119,6 +152,9 @@ const Blog = () => {
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-8">
                 <div className="flex gap-2 mb-4">
+                  {featuredPost.status === 'draft' && (
+                    <Badge variant="secondary">Draft</Badge>
+                  )}
                   {featuredPost.tags?.map((tag, index) => (
                     <span
                       key={index}
@@ -185,7 +221,7 @@ const Blog = () => {
           {posts?.slice(1).map((post) => (
             <Link 
               key={post.id} 
-              to={`/blog/${post.slug}`}
+              to={isAdmin && post.status === 'draft' ? `/blog/editor?id=${post.id}` : `/blog/${post.slug}`}
               className={`group transition-all duration-300 hover:-translate-y-1 block ${
                 viewMode === 'list' ? 'flex gap-6 items-start' : ''
               }`}
@@ -204,6 +240,9 @@ const Blog = () => {
                 
                 <div className="p-6 flex-1">
                   <div className="flex gap-2 mb-3">
+                    {post.status === 'draft' && (
+                      <Badge variant="secondary">Draft</Badge>
+                    )}
                     {post.tags?.slice(0, 2).map((tag, index) => (
                       <span
                         key={index}
