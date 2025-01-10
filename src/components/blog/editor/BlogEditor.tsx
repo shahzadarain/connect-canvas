@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
@@ -8,6 +9,7 @@ import { common, createLowlight } from 'lowlight';
 import TextAlign from '@tiptap/extension-text-align';
 import { debounce } from 'lodash';
 import { EditorToolbar } from './EditorToolbar';
+import { EditorActions } from './EditorActions';
 import { BlogMetadata } from './BlogMetadata';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -15,6 +17,7 @@ import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { BlogPost } from '@/integrations/supabase/types/blog';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface BlogEditorProps {
   initialContent?: string;
@@ -27,9 +30,12 @@ export const BlogEditor = ({ initialContent = '', postId }: BlogEditorProps) => 
   const [metaDescription, setMetaDescription] = useState('');
   const [metaKeywords, setMetaKeywords] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(!!postId);
   const [autoSaveStatus, setAutoSaveStatus] = useState('');
   const [featuredImage, setFeaturedImage] = useState<string | null>(null);
+  const [status, setStatus] = useState<string>('draft');
   const { toast } = useToast();
+  const navigate = useNavigate();
   const lowlight = createLowlight(common);
 
   const editor = useEditor({
@@ -128,7 +134,7 @@ export const BlogEditor = ({ initialContent = '', postId }: BlogEditorProps) => 
     }
   };
 
-  const handleSave = async (status: 'draft' | 'published' = 'draft') => {
+  const handleSave = async (newStatus: 'draft' | 'published' = 'draft') => {
     if (!editor) return;
     
     setSaving(true);
@@ -143,10 +149,10 @@ export const BlogEditor = ({ initialContent = '', postId }: BlogEditorProps) => 
         excerpt,
         meta_description: metaDescription,
         meta_keywords: metaKeywords,
-        status,
+        status: newStatus,
         featured_image: featuredImage,
         author: 'Admin', // You might want to get this from the authenticated user
-        published_at: status === 'published' ? new Date().toISOString() : null,
+        published_at: newStatus === 'published' ? new Date().toISOString() : null,
       };
 
       const { error } = await supabase
@@ -160,8 +166,10 @@ export const BlogEditor = ({ initialContent = '', postId }: BlogEditorProps) => 
 
       toast({
         title: "Success",
-        description: `Blog post ${status === 'published' ? 'published' : 'saved as draft'}`,
+        description: `Blog post ${newStatus === 'published' ? 'published' : 'saved as draft'}`,
       });
+
+      setStatus(newStatus);
     } catch (error) {
       console.error('Error saving blog post:', error);
       toast({
@@ -174,27 +182,64 @@ export const BlogEditor = ({ initialContent = '', postId }: BlogEditorProps) => 
     }
   };
 
+  const handleDelete = async () => {
+    if (!postId) return;
+
+    try {
+      const { error } = await supabase
+        .from('blog_posts')
+        .delete()
+        .eq('id', postId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: "Blog post deleted successfully",
+      });
+
+      navigate('/blog');
+    } catch (error) {
+      console.error('Error deleting post:', error);
+      toast({
+        title: "Error",
+        description: "Failed to delete blog post",
+        variant: "destructive",
+      });
+    }
+  };
+
   useEffect(() => {
     if (postId) {
       const fetchPost = async () => {
-        const { data: post, error } = await supabase
-          .from('blog_posts')
-          .select('*')
-          .eq('id', postId)
-          .single();
+        try {
+          setLoading(true);
+          const { data: post, error } = await supabase
+            .from('blog_posts')
+            .select('*')
+            .eq('id', postId)
+            .single();
 
-        if (error) {
+          if (error) throw error;
+
+          if (post) {
+            setTitle(post.title);
+            setExcerpt(post.excerpt || '');
+            setMetaDescription(post.meta_description || '');
+            setMetaKeywords(post.meta_keywords || []);
+            setFeaturedImage(post.featured_image);
+            setStatus(post.status || 'draft');
+            editor?.commands.setContent(post.content);
+          }
+        } catch (error) {
           console.error('Error fetching post:', error);
-          return;
-        }
-
-        if (post) {
-          setTitle(post.title);
-          setExcerpt(post.excerpt || '');
-          setMetaDescription(post.meta_description || '');
-          setMetaKeywords(post.meta_keywords || []);
-          setFeaturedImage(post.featured_image);
-          editor?.commands.setContent(post.content);
+          toast({
+            title: "Error",
+            description: "Failed to load blog post",
+            variant: "destructive",
+          });
+        } finally {
+          setLoading(false);
         }
       };
 
@@ -204,6 +249,15 @@ export const BlogEditor = ({ initialContent = '', postId }: BlogEditorProps) => 
 
   if (!editor) {
     return null;
+  }
+
+  if (loading) {
+    return (
+      <div className="container mx-auto p-4 space-y-4">
+        <Skeleton className="h-12 w-full" />
+        <Skeleton className="h-96 w-full" />
+      </div>
+    );
   }
 
   const handleImageUpload = async (file: File): Promise<string> => {
@@ -236,26 +290,23 @@ export const BlogEditor = ({ initialContent = '', postId }: BlogEditorProps) => 
           <TabsList>
             <TabsTrigger value="write">Write</TabsTrigger>
             <TabsTrigger value="metadata">Metadata</TabsTrigger>
+            {postId && status === 'published' && (
+              <TabsTrigger value="preview" asChild>
+                <a href={`/blog/${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`} target="_blank" rel="noopener noreferrer">
+                  Preview
+                </a>
+              </TabsTrigger>
+            )}
           </TabsList>
           
-          <div className="flex items-center gap-4">
-            {autoSaveStatus && (
-              <span className="text-sm text-muted-foreground">{autoSaveStatus}</span>
-            )}
-            <Button 
-              variant="outline"
-              onClick={() => handleSave('draft')}
-              disabled={saving}
-            >
-              {saving ? 'Saving...' : 'Save Draft'}
-            </Button>
-            <Button 
-              onClick={() => handleSave('published')}
-              disabled={saving}
-            >
-              {saving ? 'Publishing...' : 'Publish'}
-            </Button>
-          </div>
+          <EditorActions
+            postId={postId}
+            status={status}
+            saving={saving}
+            onSave={handleSave}
+            onDelete={handleDelete}
+            autoSaveStatus={autoSaveStatus}
+          />
         </div>
 
         <TabsContent value="write" className="space-y-4">
@@ -286,7 +337,7 @@ export const BlogEditor = ({ initialContent = '', postId }: BlogEditorProps) => 
             )}
           </div>
           
-          <EditorToolbar editor={editor} />
+          <EditorToolbar editor={editor} onImageUpload={handleImageUpload} />
           
           <div className="min-h-[500px] w-full border rounded-lg p-4">
             <EditorContent editor={editor} />
