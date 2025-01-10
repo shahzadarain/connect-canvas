@@ -19,7 +19,15 @@ export const BlogContent = ({ content, featuredImage }: BlogContentProps) => {
       (match, altText, path) => {
         console.log('Processing markdown image:', { match, altText, path });
         
-        // If it's already a full URL, return as is
+        // If it's a shahzadasghar.com URL, convert it to the current domain
+        if (path.includes('shahzadasghar.com/lovable-uploads/')) {
+          const fileName = path.split('lovable-uploads/').pop();
+          const fullPath = `${window.location.origin}/lovable-uploads/${fileName}`;
+          console.log('Converting shahzadasghar.com URL to:', fullPath);
+          return `![${altText}](${fullPath})`;
+        }
+        
+        // If it's already a full URL (but not shahzadasghar.com), return as is
         if (path.startsWith('http://') || path.startsWith('https://')) {
           console.log('Using full URL:', path);
           return match;
@@ -29,7 +37,8 @@ export const BlogContent = ({ content, featuredImage }: BlogContentProps) => {
         if (path.includes('lovable-uploads')) {
           // Remove any leading slashes and ensure proper path format
           const cleanPath = path.replace(/^\/+/, '');
-          const fullPath = `${window.location.origin}/lovable-uploads/${cleanPath.split('lovable-uploads/').pop()}`;
+          const fileName = cleanPath.split('lovable-uploads/').pop();
+          const fullPath = `${window.location.origin}/lovable-uploads/${fileName}`;
           console.log('Using lovable-uploads path:', fullPath);
           return `![${altText}](${fullPath})`;
         }
