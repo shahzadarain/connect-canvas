@@ -11,9 +11,9 @@ export const BlogPostAuthor = ({ author }: BlogPostAuthorProps) => {
       <div className="flex items-center gap-4">
         <Avatar className="w-16 h-16">
           <img 
-            src={`https://source.unsplash.com/random/200x200?portrait`} 
-            alt={author}
-            className="object-cover"
+            src="/lovable-uploads/d400063e-16df-4a64-8f55-cd37a44b6c3b.png"
+            alt={`${author}'s profile picture`}
+            className="object-cover w-full h-full"
           />
         </Avatar>
         <div>
