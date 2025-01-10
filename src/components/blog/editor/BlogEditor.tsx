@@ -4,7 +4,8 @@ import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
 import Link from '@tiptap/extension-link';
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
-import { lowlight } from 'lowlight';
+import { common, createLowlight } from 'lowlight'
+import TextAlign from '@tiptap/extension-text-align'
 import { EditorToolbar } from './EditorToolbar';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
@@ -20,11 +21,16 @@ export const BlogEditor = ({ initialContent = '', postId }: BlogEditorProps) => 
   const [saving, setSaving] = useState(false);
   const { toast } = useToast();
 
+  const lowlight = createLowlight(common)
+
   const editor = useEditor({
     extensions: [
       StarterKit,
       Image,
       Link,
+      TextAlign.configure({
+        types: ['heading', 'paragraph'],
+      }),
       CodeBlockLowlight.configure({
         lowlight,
       }),

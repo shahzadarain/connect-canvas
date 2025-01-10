@@ -162,21 +162,21 @@ export const EditorToolbar = ({ editor }: EditorToolbarProps) => {
       
       <Button
         size="sm"
-        variant="outline"
+        variant={editor.isActive({ textAlign: 'left' }) ? 'default' : 'outline'}
         onClick={() => editor.chain().focus().setTextAlign('left').run()}
       >
         <AlignLeft className="h-4 w-4" />
       </Button>
       <Button
         size="sm"
-        variant="outline"
+        variant={editor.isActive({ textAlign: 'center' }) ? 'default' : 'outline'}
         onClick={() => editor.chain().focus().setTextAlign('center').run()}
       >
         <AlignCenter className="h-4 w-4" />
       </Button>
       <Button
         size="sm"
-        variant="outline"
+        variant={editor.isActive({ textAlign: 'right' }) ? 'default' : 'outline'}
         onClick={() => editor.chain().focus().setTextAlign('right').run()}
       >
         <AlignRight className="h-4 w-4" />
