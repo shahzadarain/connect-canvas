@@ -206,7 +206,7 @@ export const BlogEditor = ({ initialContent = '', postId }: BlogEditorProps) => 
       const { error } = await supabase
         .from('blog_posts')
         .upsert({
-          id: postId ? parseInt(String(postId)) : undefined,
+          id: id ? parseInt(id) : undefined,
           ...postData,
         });
 
@@ -231,13 +231,13 @@ export const BlogEditor = ({ initialContent = '', postId }: BlogEditorProps) => 
   };
 
   const handleDelete = async () => {
-    if (!postId) return;
+    if (!id) return;
 
     try {
       const { error } = await supabase
         .from('blog_posts')
         .delete()
-        .eq('id', postId);
+        .eq('id', parseInt(id));
 
       if (error) throw error;
 
