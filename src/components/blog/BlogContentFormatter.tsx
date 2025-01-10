@@ -45,6 +45,39 @@ export const BlogContentFormatter = ({ content }: BlogContentFormatterProps) => 
         continue;
       }
 
+      // Handle images with proper path processing
+      if (line.startsWith('![')) {
+        const altTextMatch = line.match(/!\[(.*?)\]/);
+        const urlMatch = line.match(/\((.*?)\)/);
+        
+        if (altTextMatch && urlMatch) {
+          const altText = altTextMatch[1];
+          let imageUrl = urlMatch[1];
+          
+          // Process image URL
+          if (imageUrl.startsWith('/lovable-uploads/')) {
+            imageUrl = `${window.location.origin}${imageUrl}`;
+          }
+          
+          formattedContent.push(
+            <div key={currentIndex} className="my-8">
+              <img
+                src={imageUrl}
+                alt={altText}
+                className="w-full rounded-lg shadow-lg"
+                onError={(e) => {
+                  console.error('Error loading image:', imageUrl);
+                  e.currentTarget.src = '/placeholder.svg';
+                }}
+              />
+              <p className="text-sm text-gray-500 mt-2 text-center italic">{altText}</p>
+            </div>
+          );
+          currentIndex++;
+          continue;
+        }
+      }
+
       if (line.startsWith('```')) {
         if (!inCodeBlock) {
           inCodeBlock = true;
