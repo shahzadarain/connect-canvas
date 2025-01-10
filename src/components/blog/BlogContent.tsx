@@ -1,10 +1,11 @@
 import React from 'react';
 import { BlogContentFormatter } from './BlogContentFormatter';
 import { BlogCoverImage } from './BlogCoverImage';
-import { Share2, ArrowLeft, Clock, Shield, Lock, Database } from 'lucide-react';
+import { Share2, ArrowLeft, Clock, Shield, Lock, Database, UserCheck, MessageSquare, Bell } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { TableOfContents } from './TableOfContents';
 import { generateTableOfContents } from '@/utils/blogUtils';
+import { CodeBlock } from './CodeBlock';
 
 interface BlogContentProps {
   content: string;
@@ -14,7 +15,6 @@ interface BlogContentProps {
 export const BlogContent = ({ content, featuredImage }: BlogContentProps) => {
   const tocItems = generateTableOfContents(content);
   
-  // Function to fix image paths in markdown content
   const fixImagePaths = (content: string) => {
     console.log('Original content:', content);
     
@@ -23,15 +23,12 @@ export const BlogContent = ({ content, featuredImage }: BlogContentProps) => {
       (match, altText, path) => {
         console.log('Processing markdown image:', { match, altText, path });
         
-        // If it's already a full URL, return as is
         if (path.startsWith('http://') || path.startsWith('https://')) {
           console.log('Using full URL:', path);
           return match;
         }
         
-        // Handle lovable-uploads paths
         if (path.includes('lovable-uploads')) {
-          // Remove any leading slashes and ensure proper path format
           const cleanPath = path.replace(/^\/+/, '');
           const fileName = cleanPath.split('lovable-uploads/').pop();
           const fullPath = `${window.location.origin}/lovable-uploads/${fileName}`;
@@ -39,7 +36,6 @@ export const BlogContent = ({ content, featuredImage }: BlogContentProps) => {
           return `![${altText}](${fullPath})`;
         }
         
-        // Default case: assume it's a lovable-uploads file
         const fileName = path.split('/').pop();
         const fullPath = `${window.location.origin}/lovable-uploads/${fileName}`;
         console.log('Converting to full lovable-uploads path:', fullPath);
@@ -99,12 +95,34 @@ export const BlogContent = ({ content, featuredImage }: BlogContentProps) => {
                   <span>End-to-End Encryption</span>
                 </li>
                 <li className="flex items-center gap-2">
-                  <Lock className="w-5 h-5 text-blue-500" />
-                  <span>Anonymous Routing</span>
+                  <UserCheck className="w-5 h-5 text-blue-500" />
+                  <span>Anonymous Reporting</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <Database className="w-5 h-5 text-blue-500" />
-                  <span>Secure Storage</span>
+                  <span>Secure Data Storage</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <MessageSquare className="w-5 h-5 text-blue-500" />
+                  <span>Real-time Updates</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Bell className="w-5 h-5 text-blue-500" />
+                  <span>Alert System</span>
+                </li>
+              </ul>
+            </div>
+
+            <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-4">
+              <h3 className="text-lg font-semibold mb-4">Security Features</h3>
+              <ul className="space-y-3">
+                <li className="flex items-center gap-2">
+                  <Lock className="w-5 h-5 text-emerald-500" />
+                  <span>Zero-knowledge Architecture</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Shield className="w-5 h-5 text-emerald-500" />
+                  <span>Military-grade Encryption</span>
                 </li>
               </ul>
             </div>
