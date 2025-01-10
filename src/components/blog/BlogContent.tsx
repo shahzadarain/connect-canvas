@@ -2,6 +2,7 @@ import React from 'react';
 import { CodeBlock } from './CodeBlock';
 import { BlogHeading } from './BlogHeading';
 import { BlogParagraph } from './BlogParagraph';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
 
 interface BlogContentProps {
   content: string;
@@ -23,11 +24,13 @@ export const BlogContent: React.FC<BlogContentProps> = ({ content, featuredImage
     };
 
     lines.forEach((line, index) => {
-      // Handle code blocks
+      // Handle code blocks with improved styling
       if (line.startsWith('```')) {
         if (inCodeBlock) {
           processedContent.push(
-            <CodeBlock key={key++} code={codeBlock} language={line.slice(3)} />
+            <div key={key++} className="my-8">
+              <CodeBlock code={codeBlock} language={line.slice(3)} />
+            </div>
           );
           codeBlock = '';
           inCodeBlock = false;
@@ -42,7 +45,7 @@ export const BlogContent: React.FC<BlogContentProps> = ({ content, featuredImage
         return;
       }
 
-      // Handle images with proper sizing and responsive behavior
+      // Handle images with proper sizing and error handling
       if (line.startsWith('![')) {
         const altTextMatch = line.match(/!\[(.*?)\]/);
         const urlMatch = line.match(/\((.*?)\)/);
@@ -51,23 +54,28 @@ export const BlogContent: React.FC<BlogContentProps> = ({ content, featuredImage
           const url = urlMatch[1];
           console.log('Processing image:', { url, altText });
           processedContent.push(
-            <div key={key++} className="my-8">
-              <img
-                src={url}
-                alt={altText}
-                className="rounded-lg shadow-lg w-full max-w-4xl mx-auto"
-                onError={(e) => {
-                  console.error('Error loading image:', url);
-                  e.currentTarget.src = '/placeholder.svg';
-                }}
-              />
+            <div key={key++} className="my-12">
+              <AspectRatio ratio={16 / 9} className="bg-muted">
+                <img
+                  src={url}
+                  alt={altText}
+                  className="rounded-lg shadow-lg w-full h-full object-cover hover:opacity-95 transition-opacity duration-200"
+                  onError={(e) => {
+                    console.error('Error loading image:', url);
+                    e.currentTarget.src = '/placeholder.svg';
+                  }}
+                />
+              </AspectRatio>
+              <p className="text-sm text-muted-foreground mt-2 text-center italic">
+                {altText}
+              </p>
             </div>
           );
         }
         return;
       }
 
-      // Handle headings with proper spacing
+      // Handle headings with improved spacing
       if (line.startsWith('#')) {
         const level = line.match(/^#+/)?.[0].length || 1;
         const text = line.replace(/^#+\s/, '');
@@ -86,7 +94,7 @@ export const BlogContent: React.FC<BlogContentProps> = ({ content, featuredImage
         return;
       }
 
-      // Handle paragraphs with proper typography
+      // Handle paragraphs with better typography
       if (line.trim()) {
         processedContent.push(
           <BlogParagraph 
@@ -106,19 +114,21 @@ export const BlogContent: React.FC<BlogContentProps> = ({ content, featuredImage
   return (
     <article className="prose prose-lg dark:prose-invert max-w-none">
       {featuredImage && (
-        <div className="mb-8">
-          <img
-            src={featuredImage}
-            alt="Featured"
-            className="w-full h-[400px] object-cover rounded-xl shadow-lg"
-            onError={(e) => {
-              console.error('Error loading featured image:', featuredImage);
-              e.currentTarget.src = '/placeholder.svg';
-            }}
-          />
+        <div className="mb-12">
+          <AspectRatio ratio={21 / 9}>
+            <img
+              src={featuredImage}
+              alt="Featured"
+              className="w-full h-full object-cover rounded-xl shadow-lg"
+              onError={(e) => {
+                console.error('Error loading featured image:', featuredImage);
+                e.currentTarget.src = '/placeholder.svg';
+              }}
+            />
+          </AspectRatio>
         </div>
       )}
-      <div className="space-y-4">
+      <div className="space-y-6">
         {processContent(content)}
       </div>
     </article>

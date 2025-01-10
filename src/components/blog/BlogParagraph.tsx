@@ -7,11 +7,12 @@ interface BlogParagraphProps {
 
 export const BlogParagraph = ({ content, formatContent }: BlogParagraphProps) => {
   return (
-    <p className="text-xl leading-relaxed mb-8 font-serif tracking-wide text-gray-800 dark:text-gray-200">
+    <p className="text-lg leading-relaxed mb-6 text-gray-800 dark:text-gray-200 font-serif tracking-wide">
       <span 
         dangerouslySetInnerHTML={{ 
           __html: formatContent(content) 
         }}
+        className="prose-p:my-6"
       />
     </p>
   );
