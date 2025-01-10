@@ -43,7 +43,7 @@ export const BlogContentFormatter = ({ content }: BlogContentFormatterProps) => 
     // Configure DOMPurify to allow certain HTML tags and attributes
     DOMPurify.setConfig({
       ADD_TAGS: ['table', 'tr', 'td', 'th', 'thead', 'tbody', 'style'],
-      ADD_ATTR: ['class', 'style', 'id', 'colspan', 'rowspan', 'align'],
+      ADD_ATTR: ['class', 'style', 'id', 'colspan', 'rowspan', 'align', 'width', 'height', 'valign'],
       FORBID_TAGS: ['script'],
       FORBID_ATTR: ['onerror', 'onload', 'onclick']
     });
@@ -161,7 +161,7 @@ export const BlogContentFormatter = ({ content }: BlogContentFormatterProps) => 
       // Handle HTML content and regular paragraphs
       const sanitizedContent = DOMPurify.sanitize(line, {
         ADD_TAGS: ['table', 'tr', 'td', 'th', 'thead', 'tbody', 'style'],
-        ADD_ATTR: ['class', 'style', 'id', 'colspan', 'rowspan', 'align']
+        ADD_ATTR: ['class', 'style', 'id', 'colspan', 'rowspan', 'align', 'width', 'height', 'valign']
       });
 
       if (sanitizedContent.trim()) {
