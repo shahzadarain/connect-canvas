@@ -9,35 +9,22 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
 
 interface EditorToolbarProps {
   editor: Editor;
+  onImageUpload?: (file: File) => Promise<string>;
 }
 
-export const EditorToolbar = ({ editor }: EditorToolbarProps) => {
+export const EditorToolbar = ({ editor, onImageUpload }: EditorToolbarProps) => {
   const { toast } = useToast();
 
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (!file) return;
+    if (!file || !onImageUpload) return;
 
     try {
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${crypto.randomUUID()}.${fileExt}`;
-      const filePath = `lovable-uploads/${fileName}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from('resources')
-        .upload(filePath, file);
-
-      if (uploadError) throw uploadError;
-
-      const { data: { publicUrl } } = supabase.storage
-        .from('resources')
-        .getPublicUrl(filePath);
-
-      editor.chain().focus().setImage({ src: publicUrl }).run();
+      const url = await onImageUpload(file);
+      editor.chain().focus().setImage({ src: url }).run();
 
       toast({
         title: "Success",
