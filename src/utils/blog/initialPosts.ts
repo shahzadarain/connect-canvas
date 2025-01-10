@@ -182,15 +182,13 @@ Our data-driven approach has improved:
     slug: "secure-anonymized-reporting-system-humanitarian-emergencies",
     content: `# Secure Anonymized Reporting System for Humanitarian Emergencies
 
-![Humanitarian Emergency Dashboard](/lovable-uploads/a3d9bf3a-c632-4c5b-a537-7a54e4010218.png)
+![Humanitarian Emergency Dashboard](/lovable-uploads/6f128401-a85d-463e-b38e-a398900209ed.png)
 
 In humanitarian emergencies, timely and accurate reporting of incidents is critical to guide interventions and allocate resources effectively. However, survivors and affected individuals often hesitate to report due to fears of stigma, retaliation, or concerns about data privacy. This paper proposes a secure and anonymized reporting system that leverages widely available technologies, including WhatsApp voice messaging, AI transcription with OpenAI Whisper, Twilio callback options for areas with limited internet, and heat map analytics for data visualization.
 
-## Introduction
+## System Architecture
 
-Humanitarian emergencies require rapid and accurate data collection to facilitate effective response efforts. However, traditional reporting methods often fail to capture critical information due to barriers such as fear of stigma, retaliation, and privacy concerns. This is particularly challenging in displaced populations or areas with limited connectivity.
-
-![System Architecture](/lovable-uploads/fe25457c-e16f-4d5a-bc65-f6fa07c73cf0.png)
+![System Architecture Diagram](/lovable-uploads/a38ac9f0-5180-4c0a-a1f8-95976bc8f777.png)
 
 ## Key Features and Methodology
 
@@ -284,7 +282,7 @@ This paper presents a secure and anonymized reporting system designed to address
     excerpt: "A comprehensive system for secure and anonymous incident reporting in humanitarian emergencies, featuring end-to-end encryption and real-time response capabilities.",
     author: "Sarah Chen",
     status: "published",
-    featured_image: "/lovable-uploads/a3d9bf3a-c632-4c5b-a537-7a54e4010218.png",
+    featured_image: "/lovable-uploads/6f128401-a85d-463e-b38e-a398900209ed.png",
     tags: ["Security", "Humanitarian", "Technology", "Privacy"],
     meta_description: "Learn about our secure anonymized reporting system for humanitarian emergencies, featuring end-to-end encryption and real-time response capabilities.",
     meta_keywords: ["humanitarian tech", "secure reporting", "anonymous reporting", "emergency response", "crisis management"]
