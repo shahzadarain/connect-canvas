@@ -15,6 +15,7 @@ import { BlogPostHero } from '@/components/blog/BlogPostHero';
 import { BlogPostAuthor } from '@/components/blog/BlogPostAuthor';
 import { BlogPostNavigation } from '@/components/blog/BlogPostNavigation';
 import { toast } from 'sonner';
+import { RelatedPosts } from '@/components/blog/RelatedPosts';
 
 const BlogPost = () => {
   const { slug } = useParams();
@@ -119,25 +120,30 @@ const BlogPost = () => {
         <ReadingProgress progress={readingProgress} />
         <BlogPostHero post={post} />
         
-        <div className="max-w-4xl mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_250px] gap-12">
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-8 mb-16">
-              <BlogContent content={post.content} />
-              <ShareButtons url={window.location.href} title={post.title} />
+        <div className="max-w-7xl mx-auto px-4 py-12">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-12">
+            <div className="space-y-8">
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-8">
+                <BlogContent content={post.content} />
+                <ShareButtons url={window.location.href} title={post.title} />
+              </div>
+              <BlogPostNavigation />
+              <RelatedPosts currentPostId={post.id} category={post.category} tags={post.tags} />
             </div>
 
             <aside className="space-y-8">
               <div className="sticky top-8">
                 <TableOfContents items={tocItems} />
                 <BlogPostAuthor author={post.author} />
-                <div className="text-sm text-gray-500 dark:text-gray-400 mt-4 text-center">
-                  {post.view_count || 0} views
+                <div className="mt-8 p-6 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
+                  <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
+                    <span>Views</span>
+                    <span className="font-medium">{post.view_count || 0}</span>
+                  </div>
                 </div>
               </div>
             </aside>
           </div>
-
-          <BlogPostNavigation />
         </div>
       </article>
     </PageTransition>
