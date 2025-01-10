@@ -17,6 +17,11 @@ export const BlogContent: React.FC<BlogContentProps> = ({ content, featuredImage
     let inCodeBlock = false;
     let key = 0;
 
+    const formatContent = (text: string) => {
+      // Add your content formatting logic here
+      return text;
+    };
+
     lines.forEach((line, index) => {
       // Handle code blocks
       if (line.startsWith('```')) {
@@ -66,16 +71,29 @@ export const BlogContent: React.FC<BlogContentProps> = ({ content, featuredImage
       if (line.startsWith('#')) {
         const level = line.match(/^#+/)?.[0].length || 1;
         const text = line.replace(/^#+\s/, '');
-        processedContent.push(
-          <BlogHeading key={key++} level={level} text={text} />
-        );
+        const id = text.toLowerCase().replace(/[^\w]+/g, '-');
+        if (level >= 1 && level <= 5) {
+          processedContent.push(
+            <BlogHeading 
+              key={key++} 
+              level={level as 1 | 2 | 3 | 4 | 5} 
+              content={text}
+              id={id}
+              formatContent={formatContent}
+            />
+          );
+        }
         return;
       }
 
       // Handle paragraphs with proper typography
       if (line.trim()) {
         processedContent.push(
-          <BlogParagraph key={key++} text={line} />
+          <BlogParagraph 
+            key={key++} 
+            content={line}
+            formatContent={formatContent}
+          />
         );
       } else {
         processedContent.push(<div key={key++} className="h-4" />);

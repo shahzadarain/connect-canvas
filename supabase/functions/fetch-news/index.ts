@@ -1,6 +1,6 @@
-import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.38.4'
-import { Configuration, OpenAIApi } from 'https://esm.sh/openai@3.3.0'
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.38.4"
+import { Configuration, OpenAIApi } from "https://esm.sh/openai@3.3.0"
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -58,7 +58,7 @@ serve(async (req) => {
     // Generate new articles using OpenAI
     console.log('Generating new articles using OpenAI')
     const completion = await openai.createChatCompletion({
-      model: 'gpt-4',
+      model: 'gpt-4o-mini',
       messages: [
         {
           role: 'system',
