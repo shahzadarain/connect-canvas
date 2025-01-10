@@ -39,7 +39,9 @@ export const PreviewModal = ({ isOpen, onClose, post }: PreviewModalProps) => {
     font_settings: post.font_settings || {},
     draft_content: null,
     last_autosave_at: null,
-    author_id: null
+    author_id: null,
+    category: post.category || null,
+    view_count: 0
   };
 
   return (

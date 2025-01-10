@@ -1,3 +1,5 @@
+import { Json } from './common';
+
 export interface BlogPost {
   Row: {
     id: number
