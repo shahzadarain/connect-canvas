@@ -14,7 +14,7 @@ interface UNJob {
   job_link: string;
 }
 
-async function fetchJobsFromPage(pageUrl: string): Promise<UNJob[]> {
+async function fetchJobsFromPage(pageUrl: string): Promise<{ jobs: UNJob[], nextPageLink: string | null }> {
   try {
     console.log('Fetching jobs from:', pageUrl);
     const response = await fetch(pageUrl);
@@ -56,12 +56,16 @@ async function fetchJobsFromPage(pageUrl: string): Promise<UNJob[]> {
     });
 
     // Find next page link if it exists
-    const nextPageLink = $('.next a').attr('href');
-    console.log('Next page link:', nextPageLink);
+    const nextLink = $('.next a').attr('href');
+    console.log('Found next page link:', nextLink);
+    
+    // Ensure we're getting the full URL for the next page
+    const nextPageLink = nextLink ? new URL(nextLink, 'https://unjobs.org').toString() : null;
+    console.log('Constructed next page URL:', nextPageLink);
 
     return {
       jobs,
-      nextPageLink: nextPageLink ? `https://unjobs.org${nextPageLink}` : null
+      nextPageLink
     };
   } catch (error) {
     console.error('Error fetching jobs from page:', error);
@@ -71,19 +75,25 @@ async function fetchJobsFromPage(pageUrl: string): Promise<UNJob[]> {
 
 async function fetchAllJobs(): Promise<UNJob[]> {
   const allJobs: UNJob[] = [];
-  let currentUrl = 'https://unjobs.org/';
+  let currentUrl = 'https://unjobs.org/new';  // Changed to start from the newest jobs page
   let pageCount = 1;
-  const MAX_PAGES = 5; // Limit to 5 pages to avoid timeouts
+  const MAX_PAGES = 10; // Increased to 10 pages to get more jobs
 
   while (currentUrl && pageCount <= MAX_PAGES) {
-    console.log(`Fetching page ${pageCount}...`);
+    console.log(`Fetching page ${pageCount} from URL: ${currentUrl}`);
     const { jobs, nextPageLink } = await fetchJobsFromPage(currentUrl);
     allJobs.push(...jobs);
     console.log(`Found ${jobs.length} jobs on page ${pageCount}. Total jobs so far: ${allJobs.length}`);
     
-    if (!nextPageLink) break;
+    if (!nextPageLink) {
+      console.log('No more pages to fetch');
+      break;
+    }
     currentUrl = nextPageLink;
     pageCount++;
+    
+    // Add a small delay between requests to be respectful to the server
+    await new Promise(resolve => setTimeout(resolve, 1000));
   }
 
   return allJobs;
