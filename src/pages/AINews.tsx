@@ -17,12 +17,18 @@ const AINews = () => {
   const { data: articles, isLoading, error, refetch } = useQuery({
     queryKey: ["ai-news"],
     queryFn: async () => {
+      console.log('Fetching AI news articles...');
       const { data, error } = await supabase
         .from("news_articles")
         .select("*")
         .order("published_at", { ascending: false });
       
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching news articles:', error);
+        throw error;
+      }
+      
+      console.log('Fetched articles:', data);
       return data;
     },
   });
@@ -125,9 +131,9 @@ const AINews = () => {
               </div>
             ))}
           </div>
-        ) : (
+        ) : articles && articles.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {articles?.map((article) => (
+            {articles.map((article) => (
               <article
                 key={article.id}
                 className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200"
@@ -155,6 +161,12 @@ const AINews = () => {
               </article>
             ))}
           </div>
+        ) : (
+          <Alert className="max-w-4xl mx-auto">
+            <AlertDescription>
+              No news articles available at the moment. {userRole === 'admin' && 'Click the Update News button to fetch the latest articles.'}
+            </AlertDescription>
+          </Alert>
         )}
       </div>
     </div>
