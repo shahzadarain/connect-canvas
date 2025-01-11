@@ -13,7 +13,7 @@ serve(async (req) => {
   }
 
   try {
-    console.log('Starting AI news scraping from futuretools.io...')
+    console.log('Starting AI news scraping...')
     
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
@@ -27,6 +27,7 @@ serve(async (req) => {
     })
 
     if (!response.ok) {
+      console.error(`Failed to fetch: ${response.status}`)
       throw new Error(`Failed to fetch: ${response.status}`)
     }
 
@@ -38,20 +39,30 @@ serve(async (req) => {
 
     console.log('Parsing HTML and extracting articles...')
 
-    $('.link-block-8.w-inline-block').each((i, element) => {
+    $('.collection-item-6').each((i, element) => {
       const articleElement = $(element)
-      const dateText = articleElement.find('.text-block-30.blue-text-dm').text().trim()
-      const title = articleElement.find('.text-block-27.white-text-db-gc').text().trim()
-      const description = articleElement.find('.text-block-29.white-text-db-gc').text().trim()
-      const url = articleElement.attr('href')
+      const dateText = articleElement.find('.text-block-30').text().trim()
+      const title = articleElement.find('.text-block-27').text().trim()
+      const source = articleElement.find('.text-block-28').text().trim()
+      const linkElement = articleElement.find('.link-block-8')
+      const url = linkElement.attr('href')
       
+      // Parse the date
       const publishedAt = new Date(dateText)
+      
+      console.log('Found article:', {
+        title,
+        source,
+        dateText,
+        url,
+        publishedAt
+      })
       
       if (title && url && publishedAt >= thirtyDaysAgo) {
         newsArticles.push({
           title,
           url,
-          description,
+          description: `Source: ${source}`,
           published_at: publishedAt.toISOString(),
           created_at: new Date().toISOString(),
           category: 'ai'
