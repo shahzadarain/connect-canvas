@@ -1,12 +1,20 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { format } from "date-fns";
-import { Newspaper, ExternalLink } from "lucide-react";
+import { Newspaper, ExternalLink, RefreshCw } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
+import { useSession } from "@supabase/auth-helpers-react";
+import { useState } from "react";
 
 const AINews = () => {
-  const { data: articles, isLoading, error } = useQuery({
+  const [isUpdating, setIsUpdating] = useState(false);
+  const session = useSession();
+  const { toast } = useToast();
+  
+  const { data: articles, isLoading, error, refetch } = useQuery({
     queryKey: ["ai-news"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -18,6 +26,48 @@ const AINews = () => {
       return data;
     },
   });
+
+  const { data: userRole } = useQuery({
+    queryKey: ["user-role", session?.user?.id],
+    enabled: !!session?.user?.id,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", session?.user?.id)
+        .single();
+      
+      if (error) throw error;
+      return data?.role;
+    },
+  });
+
+  const updateNews = async () => {
+    try {
+      setIsUpdating(true);
+      const { error } = await supabase.functions.invoke('fetch-ai-news', {
+        method: 'POST',
+      });
+
+      if (error) throw error;
+
+      await refetch();
+      toast({
+        title: "Success",
+        description: "AI news have been updated successfully",
+        className: "bg-white dark:bg-gray-800",
+      });
+    } catch (error) {
+      console.error('Error updating AI news:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update AI news. Please try again later",
+        variant: "destructive",
+      });
+    } finally {
+      setIsUpdating(false);
+    }
+  };
 
   if (error) {
     console.error("Error fetching news:", error);
@@ -38,9 +88,19 @@ const AINews = () => {
             <Newspaper className="inline-block mr-4 h-12 w-12" />
             AI Daily Chronicle
           </h1>
-          <p className="text-xl text-gray-500">
+          <p className="text-xl text-gray-500 mb-8">
             Your daily source for the latest in artificial intelligence
           </p>
+          {userRole === 'admin' && (
+            <Button
+              onClick={updateNews}
+              disabled={isUpdating}
+              className="flex items-center gap-2 transition-transform hover:scale-105 mx-auto"
+            >
+              <RefreshCw className={`w-4 h-4 ${isUpdating ? 'animate-spin' : ''}`} />
+              {isUpdating ? 'Updating News...' : 'Update News'}
+            </Button>
+          )}
         </div>
 
         {isLoading ? (
