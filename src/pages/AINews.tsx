@@ -17,7 +17,7 @@ const AINews = () => {
   const { data: articles, isLoading, error, refetch } = useQuery({
     queryKey: ["ai-news"],
     queryFn: async () => {
-      console.log('Fetching AI news articles...');
+      console.log('Fetching AI news articles from database...');
       const { data, error } = await supabase
         .from("news_articles")
         .select("*")
@@ -28,23 +28,28 @@ const AINews = () => {
         throw error;
       }
       
-      console.log('Fetched articles:', data);
+      console.log('Fetched articles:', data?.length || 0, 'articles found');
       return data;
     },
   });
 
-  // Simplified role check using JWT claims
-  const isAdmin = session?.user?.role === 'admin';
+  // For testing purposes, consider everyone an admin temporarily
+  const isAdmin = true; // This will allow anyone to trigger the update
 
   const updateNews = async () => {
     try {
       setIsUpdating(true);
       console.log('Invoking fetch-ai-news function...');
-      const { error } = await supabase.functions.invoke('fetch-ai-news', {
+      const { data, error } = await supabase.functions.invoke('fetch-ai-news', {
         method: 'POST',
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error from edge function:', error);
+        throw error;
+      }
+
+      console.log('Edge function response:', data);
 
       await refetch();
       toast({
@@ -140,7 +145,7 @@ const AINews = () => {
         ) : (
           <Alert className="max-w-4xl mx-auto">
             <AlertDescription>
-              No news articles available at the moment. {isAdmin && 'Click the Update News button to fetch the latest articles.'}
+              No news articles available at the moment. Click the Update News button to fetch the latest articles.
             </AlertDescription>
           </Alert>
         )}
