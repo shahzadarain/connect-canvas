@@ -479,6 +479,39 @@ export type Database = {
           },
         ]
       }
+      un_jobs: {
+        Row: {
+          created_at: string | null
+          id: number
+          job_id: string
+          job_link: string
+          organization: string
+          title: string
+          update_time: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: never
+          job_id: string
+          job_link: string
+          organization: string
+          title: string
+          update_time: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: never
+          job_id?: string
+          job_link?: string
+          organization?: string
+          title?: string
+          update_time?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string | null

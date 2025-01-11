@@ -21,6 +21,7 @@ import Learning from "@/pages/Learning";
 import NotFound from "@/pages/NotFound";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import BookDiscussions from "@/pages/BookDiscussions";
+import UNJobs from "@/pages/UNJobs";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -59,6 +60,7 @@ function App() {
                 <Route path="/ideas" element={<IdeasList />} />
                 <Route path="/journey" element={<Journey />} />
                 <Route path="/learning" element={<Learning />} />
+                <Route path="/un-jobs" element={<UNJobs />} />
                 <Route
                   path="/reading"
                   element={
