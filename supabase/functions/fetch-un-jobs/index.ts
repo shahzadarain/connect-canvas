@@ -1,5 +1,5 @@
-import { createClient } from '@supabase/supabase-js';
-import * as cheerio from 'cheerio';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.38.4';
+import * as cheerio from 'https://esm.sh/cheerio@1.0.0-rc.12';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
