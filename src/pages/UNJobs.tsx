@@ -1,17 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { format } from "date-fns";
-import { Briefcase, ExternalLink, RefreshCw } from "lucide-react";
+import { Briefcase, ExternalLink, RefreshCw, Building2, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { useSession } from "@supabase/auth-helpers-react";
 import { useState } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Badge } from "@/components/ui/badge";
 
 const UNJobs = () => {
   const [isUpdating, setIsUpdating] = useState(false);
-  const session = useSession();
   const { toast } = useToast();
 
   const { data: jobs, isLoading, error, refetch } = useQuery({
@@ -21,7 +20,8 @@ const UNJobs = () => {
       const { data, error } = await supabase
         .from("un_jobs")
         .select("*")
-        .order("update_time", { ascending: false });
+        .order("update_time", { ascending: false })
+        .limit(100); // Increased limit to fetch more jobs
 
       if (error) {
         console.error('Error fetching UN jobs:', error);
@@ -75,16 +75,21 @@ const UNJobs = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl md:text-6xl mb-4">
-            <Briefcase className="inline-block mr-4 h-12 w-12" />
+          <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl md:text-6xl mb-4">
+            <Briefcase className="inline-block mr-4 h-12 w-12 text-blue-600 dark:text-blue-400" />
             UN Job Opportunities
           </h1>
-          <p className="text-xl text-gray-500 mb-8">
-            Explore the latest job opportunities at the United Nations
+          <p className="text-xl text-gray-500 dark:text-gray-400 mb-8 max-w-2xl mx-auto">
+            Explore the latest job opportunities at the United Nations. Updated regularly with new positions from various UN organizations worldwide.
           </p>
+          {jobs && (
+            <Badge variant="secondary" className="text-lg">
+              {jobs.length} Available Positions
+            </Badge>
+          )}
         </div>
 
         {isLoading ? (
@@ -92,7 +97,7 @@ const UNJobs = () => {
             {[...Array(6)].map((_, i) => (
               <div
                 key={i}
-                className="animate-pulse bg-white rounded-lg shadow-md p-6"
+                className="animate-pulse bg-white dark:bg-gray-800 rounded-lg shadow-md p-6"
               >
                 <Skeleton className="h-4 w-3/4 mb-4" />
                 <Skeleton className="h-8 w-full mb-4" />
@@ -105,24 +110,30 @@ const UNJobs = () => {
             {jobs.map((job) => (
               <div
                 key={job.id}
-                className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 p-6"
+                className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 p-6 border border-gray-200 dark:border-gray-700 group hover:scale-[1.02]"
               >
                 <div className="flex justify-between items-start mb-4">
-                  <span className="text-sm font-medium text-blue-600">
-                    {job.organization}
-                  </span>
-                  <time className="text-sm text-gray-500">
-                    {format(new Date(job.update_time), "MMM d, yyyy")}
-                  </time>
+                  <div className="flex items-center text-blue-600 dark:text-blue-400">
+                    <Building2 className="w-4 h-4 mr-2" />
+                    <span className="text-sm font-medium">
+                      {job.organization}
+                    </span>
+                  </div>
+                  <div className="flex items-center text-gray-500 dark:text-gray-400">
+                    <Calendar className="w-4 h-4 mr-2" />
+                    <time className="text-sm">
+                      {format(new Date(job.update_time), "MMM d, yyyy")}
+                    </time>
+                  </div>
                 </div>
-                <h2 className="text-xl font-bold text-gray-900 mb-4 line-clamp-2">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4 line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                   {job.title}
                 </h2>
                 <a
                   href={job.job_link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors duration-200"
+                  className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors duration-200 group-hover:underline"
                 >
                   View Details
                   <ExternalLink className="ml-2 h-4 w-4" />
@@ -142,9 +153,10 @@ const UNJobs = () => {
           <Button
             onClick={updateJobs}
             disabled={isUpdating}
-            className="flex items-center gap-2 transition-transform hover:scale-105 mx-auto"
+            size="lg"
+            className="flex items-center gap-2 transition-all duration-200 hover:scale-105 mx-auto bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800"
           >
-            <RefreshCw className={`w-4 h-4 ${isUpdating ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-5 h-5 ${isUpdating ? 'animate-spin' : ''}`} />
             {isUpdating ? 'Updating Jobs...' : 'Update Jobs'}
           </Button>
         </div>
