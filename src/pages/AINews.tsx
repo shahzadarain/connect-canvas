@@ -5,13 +5,11 @@ import { Newspaper, ExternalLink, RefreshCw } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast";
-import { useSession } from "@supabase/auth-helpers-react";
+import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 
 const AINews = () => {
   const [isUpdating, setIsUpdating] = useState(false);
-  const session = useSession();
   const { toast } = useToast();
   
   const { data: articles, isLoading, error, refetch } = useQuery({
@@ -33,16 +31,11 @@ const AINews = () => {
     },
   });
 
-  // For testing purposes, consider everyone an admin temporarily
-  const isAdmin = true; // This will allow anyone to trigger the update
-
   const updateNews = async () => {
     try {
       setIsUpdating(true);
       console.log('Invoking fetch-ai-news function...');
-      const { data, error } = await supabase.functions.invoke('fetch-ai-news', {
-        method: 'POST',
-      });
+      const { data, error } = await supabase.functions.invoke('fetch-ai-news');
 
       if (error) {
         console.error('Error from edge function:', error);
@@ -90,16 +83,14 @@ const AINews = () => {
           <p className="text-xl text-gray-500 mb-8">
             Your daily source for the latest in artificial intelligence
           </p>
-          {isAdmin && (
-            <Button
-              onClick={updateNews}
-              disabled={isUpdating}
-              className="flex items-center gap-2 transition-transform hover:scale-105 mx-auto"
-            >
-              <RefreshCw className={`w-4 h-4 ${isUpdating ? 'animate-spin' : ''}`} />
-              {isUpdating ? 'Updating News...' : 'Update News'}
-            </Button>
-          )}
+          <Button
+            onClick={updateNews}
+            disabled={isUpdating}
+            className="flex items-center gap-2 transition-transform hover:scale-105 mx-auto"
+          >
+            <RefreshCw className={`w-4 h-4 ${isUpdating ? 'animate-spin' : ''}`} />
+            {isUpdating ? 'Updating News...' : 'Update News'}
+          </Button>
         </div>
 
         {isLoading ? (
