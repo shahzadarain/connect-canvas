@@ -13,7 +13,7 @@ serve(async (req) => {
   }
 
   try {
-    console.log('Starting AI news scraping...')
+    console.log('Starting AI news scraping from futuretools.io...')
     
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
