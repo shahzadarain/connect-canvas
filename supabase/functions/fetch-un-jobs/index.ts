@@ -16,11 +16,13 @@ interface UNJob {
 
 async function fetchJobs(): Promise<UNJob[]> {
   try {
+    console.log('Starting to fetch UN jobs...');
     const response = await fetch('https://unjobs.org/');
     const html = await response.text();
     const $ = cheerio.load(html);
     const jobs: UNJob[] = [];
 
+    console.log('Parsing HTML content...');
     $('.job').each((_, element) => {
       const jobElement = $(element);
       const titleElement = jobElement.find('a.jtitle');
@@ -33,6 +35,7 @@ async function fetchJobs(): Promise<UNJob[]> {
       const update_time = timeElement.attr('datetime') || '';
 
       if (job_id && title && organization && update_time && job_link) {
+        console.log('Found valid job:', { job_id, title });
         jobs.push({
           job_id,
           title,
@@ -43,6 +46,7 @@ async function fetchJobs(): Promise<UNJob[]> {
       }
     });
 
+    console.log(`Successfully parsed ${jobs.length} jobs`);
     return jobs;
   } catch (error) {
     console.error('Error fetching jobs:', error);
@@ -56,13 +60,14 @@ Deno.serve(async (req) => {
   }
 
   try {
+    console.log('Starting UN jobs update process...');
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
     const jobs = await fetchJobs();
-    console.log(`Fetched ${jobs.length} jobs`);
+    console.log(`Fetched ${jobs.length} jobs, preparing to update database`);
 
     for (const job of jobs) {
       const { error } = await supabaseClient

@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { useSession } from "@supabase/auth-helpers-react";
 import { useState } from "react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const UNJobs = () => {
   const [isUpdating, setIsUpdating] = useState(false);
@@ -15,12 +17,18 @@ const UNJobs = () => {
   const { data: jobs, isLoading, error, refetch } = useQuery({
     queryKey: ["un-jobs"],
     queryFn: async () => {
+      console.log('Fetching UN jobs from database...');
       const { data, error } = await supabase
         .from("un_jobs")
         .select("*")
         .order("update_time", { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching UN jobs:', error);
+        throw error;
+      }
+      
+      console.log('Fetched jobs:', data?.length || 0, 'jobs found');
       return data;
     },
   });
@@ -43,6 +51,7 @@ const UNJobs = () => {
   const updateJobs = async () => {
     try {
       setIsUpdating(true);
+      console.log('Invoking fetch-un-jobs function...');
       const { error } = await supabase.functions.invoke('fetch-un-jobs', {
         method: 'POST',
       });
@@ -71,15 +80,11 @@ const UNJobs = () => {
     console.error("Error fetching jobs:", error);
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-red-50 border-l-4 border-red-400 p-4">
-          <div className="flex">
-            <div className="ml-3">
-              <p className="text-sm text-red-700">
-                Error loading jobs. Please try again later.
-              </p>
-            </div>
-          </div>
-        </div>
+        <Alert variant="destructive">
+          <AlertDescription>
+            Error loading jobs. Please try again later.
+          </AlertDescription>
+        </Alert>
       </div>
     );
   }
@@ -95,16 +100,6 @@ const UNJobs = () => {
           <p className="text-xl text-gray-500 mb-8">
             Explore the latest job opportunities at the United Nations
           </p>
-          {userRole === 'admin' && (
-            <Button
-              onClick={updateJobs}
-              disabled={isUpdating}
-              className="flex items-center gap-2 transition-transform hover:scale-105 mx-auto"
-            >
-              <RefreshCw className={`w-4 h-4 ${isUpdating ? 'animate-spin' : ''}`} />
-              {isUpdating ? 'Updating Jobs...' : 'Update Jobs'}
-            </Button>
-          )}
         </div>
 
         {isLoading ? (
@@ -114,15 +109,15 @@ const UNJobs = () => {
                 key={i}
                 className="animate-pulse bg-white rounded-lg shadow-md p-6"
               >
-                <div className="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
-                <div className="h-8 bg-gray-200 rounded w-full mb-4"></div>
-                <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                <Skeleton className="h-4 w-3/4 mb-4" />
+                <Skeleton className="h-8 w-full mb-4" />
+                <Skeleton className="h-4 w-1/2" />
               </div>
             ))}
           </div>
-        ) : (
+        ) : jobs && jobs.length > 0 ? (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {jobs?.map((job) => (
+            {jobs.map((job) => (
               <div
                 key={job.id}
                 className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 p-6"
@@ -150,7 +145,26 @@ const UNJobs = () => {
               </div>
             ))}
           </div>
+        ) : (
+          <Alert>
+            <AlertDescription>
+              No jobs available at the moment. Click the Update Jobs button to fetch the latest opportunities.
+            </AlertDescription>
+          </Alert>
         )}
+
+        <div className="mt-12 text-center">
+          {userRole === 'admin' && (
+            <Button
+              onClick={updateJobs}
+              disabled={isUpdating}
+              className="flex items-center gap-2 transition-transform hover:scale-105 mx-auto"
+            >
+              <RefreshCw className={`w-4 h-4 ${isUpdating ? 'animate-spin' : ''}`} />
+              {isUpdating ? 'Updating Jobs...' : 'Update Jobs'}
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   );
