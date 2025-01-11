@@ -14,7 +14,7 @@ interface UNJob {
   job_link: string;
 }
 
-async function fetchJobsFromPage(pageUrl: string): Promise<{ jobs: UNJob[], nextPageLink: string | null }> {
+async function fetchJobsFromPage(pageUrl: string): Promise<{ jobs: UNJob[], nextPageNumber: number | null }> {
   try {
     console.log('Fetching jobs from:', pageUrl);
     const response = await fetch(pageUrl);
@@ -55,17 +55,17 @@ async function fetchJobsFromPage(pageUrl: string): Promise<{ jobs: UNJob[], next
       }
     });
 
-    // Find next page link if it exists
-    const nextLink = $('.next a').attr('href');
-    console.log('Found next page link:', nextLink);
+    // Check if there are more jobs by looking for the next page link
+    const hasMoreJobs = $('.next').length > 0;
+    const currentPageMatch = pageUrl.match(/\/new\/(\d+)$/);
+    const currentPage = currentPageMatch ? parseInt(currentPageMatch[1]) : 1;
+    const nextPageNumber = hasMoreJobs ? currentPage + 1 : null;
     
-    // Ensure we're getting the full URL for the next page
-    const nextPageLink = nextLink ? new URL(nextLink, 'https://unjobs.org').toString() : null;
-    console.log('Constructed next page URL:', nextPageLink);
+    console.log('Current page:', currentPage, 'Next page number:', nextPageNumber);
 
     return {
       jobs,
-      nextPageLink
+      nextPageNumber
     };
   } catch (error) {
     console.error('Error fetching jobs from page:', error);
@@ -75,22 +75,25 @@ async function fetchJobsFromPage(pageUrl: string): Promise<{ jobs: UNJob[], next
 
 async function fetchAllJobs(): Promise<UNJob[]> {
   const allJobs: UNJob[] = [];
-  let currentUrl = 'https://unjobs.org/new';  // Changed to start from the newest jobs page
-  let pageCount = 1;
-  const MAX_PAGES = 10; // Increased to 10 pages to get more jobs
+  let currentPage = 1;
+  const MAX_PAGES = 10; // Fetch up to 10 pages
 
-  while (currentUrl && pageCount <= MAX_PAGES) {
-    console.log(`Fetching page ${pageCount} from URL: ${currentUrl}`);
-    const { jobs, nextPageLink } = await fetchJobsFromPage(currentUrl);
-    allJobs.push(...jobs);
-    console.log(`Found ${jobs.length} jobs on page ${pageCount}. Total jobs so far: ${allJobs.length}`);
+  while (currentPage <= MAX_PAGES) {
+    const pageUrl = currentPage === 1 
+      ? 'https://unjobs.org/new' 
+      : `https://unjobs.org/new/${currentPage}`;
     
-    if (!nextPageLink) {
+    console.log(`Fetching page ${currentPage} from URL: ${pageUrl}`);
+    const { jobs, nextPageNumber } = await fetchJobsFromPage(pageUrl);
+    allJobs.push(...jobs);
+    console.log(`Found ${jobs.length} jobs on page ${currentPage}. Total jobs so far: ${allJobs.length}`);
+    
+    if (!nextPageNumber) {
       console.log('No more pages to fetch');
       break;
     }
-    currentUrl = nextPageLink;
-    pageCount++;
+    
+    currentPage = nextPageNumber;
     
     // Add a small delay between requests to be respectful to the server
     await new Promise(resolve => setTimeout(resolve, 1000));
