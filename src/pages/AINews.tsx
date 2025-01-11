@@ -83,14 +83,6 @@ const AINews = () => {
           <p className="text-xl text-gray-500 mb-8">
             Your daily source for the latest in artificial intelligence
           </p>
-          <Button
-            onClick={updateNews}
-            disabled={isUpdating}
-            className="flex items-center gap-2 transition-transform hover:scale-105 mx-auto"
-          >
-            <RefreshCw className={`w-4 h-4 ${isUpdating ? 'animate-spin' : ''}`} />
-            {isUpdating ? 'Updating News...' : 'Update News'}
-          </Button>
         </div>
 
         {isLoading ? (
@@ -143,6 +135,17 @@ const AINews = () => {
             </AlertDescription>
           </Alert>
         )}
+
+        <div className="mt-12 text-center">
+          <Button
+            onClick={updateNews}
+            disabled={isUpdating}
+            className="flex items-center gap-2 transition-transform hover:scale-105 mx-auto"
+          >
+            <RefreshCw className={`w-4 h-4 ${isUpdating ? 'animate-spin' : ''}`} />
+            {isUpdating ? 'Updating News...' : 'Update News'}
+          </Button>
+        </div>
       </div>
     </div>
   );

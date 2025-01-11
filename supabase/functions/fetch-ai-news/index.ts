@@ -8,7 +8,6 @@ const corsHeaders = {
 }
 
 serve(async (req) => {
-  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders })
   }
@@ -49,7 +48,12 @@ serve(async (req) => {
         const dateText = articleElement.find('.text-block-30').text().trim()
         const title = articleElement.find('.text-block-27').text().trim()
         const source = articleElement.find('.text-block-28').text().trim()
-        const url = articleElement.find('.link-block-8').attr('href')
+        let url = articleElement.find('.link-block-8').attr('href')
+        
+        // Replace utm_source in URL
+        if (url) {
+          url = url.replace('utm_source=futuretools.io', 'utm_source=shahzadasghar.com')
+        }
         
         // Parse the date
         const publishedAt = new Date(dateText)
