@@ -33,21 +33,6 @@ const UNJobs = () => {
     },
   });
 
-  const { data: userRole } = useQuery({
-    queryKey: ["user-role", session?.user?.id],
-    enabled: !!session?.user?.id,
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", session?.user?.id)
-        .single();
-      
-      if (error) throw error;
-      return data?.role;
-    },
-  });
-
   const updateJobs = async () => {
     try {
       setIsUpdating(true);
@@ -154,16 +139,14 @@ const UNJobs = () => {
         )}
 
         <div className="mt-12 text-center">
-          {userRole === 'admin' && (
-            <Button
-              onClick={updateJobs}
-              disabled={isUpdating}
-              className="flex items-center gap-2 transition-transform hover:scale-105 mx-auto"
-            >
-              <RefreshCw className={`w-4 h-4 ${isUpdating ? 'animate-spin' : ''}`} />
-              {isUpdating ? 'Updating Jobs...' : 'Update Jobs'}
-            </Button>
-          )}
+          <Button
+            onClick={updateJobs}
+            disabled={isUpdating}
+            className="flex items-center gap-2 transition-transform hover:scale-105 mx-auto"
+          >
+            <RefreshCw className={`w-4 h-4 ${isUpdating ? 'animate-spin' : ''}`} />
+            {isUpdating ? 'Updating Jobs...' : 'Update Jobs'}
+          </Button>
         </div>
       </div>
     </div>
