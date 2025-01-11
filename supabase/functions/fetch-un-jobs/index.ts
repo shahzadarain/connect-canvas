@@ -14,10 +14,10 @@ interface UNJob {
   job_link: string;
 }
 
-async function fetchJobs(): Promise<UNJob[]> {
+async function fetchJobsFromPage(pageUrl: string): Promise<UNJob[]> {
   try {
-    console.log('Starting to fetch UN jobs...');
-    const response = await fetch('https://unjobs.org/');
+    console.log('Fetching jobs from:', pageUrl);
+    const response = await fetch(pageUrl);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -26,7 +26,6 @@ async function fetchJobs(): Promise<UNJob[]> {
     const jobs: UNJob[] = [];
 
     console.log('Parsing HTML content...');
-    // Select all job elements on the page
     $('.job').each((_, element) => {
       try {
         const jobElement = $(element);
@@ -36,7 +35,6 @@ async function fetchJobs(): Promise<UNJob[]> {
         const job_id = jobElement.attr('id')?.trim() || '';
         const title = titleElement.text().trim();
         const job_link = titleElement.attr('href') || '';
-        // Get organization by finding the text after the <br> tag
         const organization = jobElement.find('br').get(0)?.nextSibling?.nodeValue?.trim() || '';
         const update_time = timeElement.attr('datetime') || '';
 
@@ -57,12 +55,38 @@ async function fetchJobs(): Promise<UNJob[]> {
       }
     });
 
-    console.log(`Successfully parsed ${jobs.length} jobs`);
-    return jobs;
+    // Find next page link if it exists
+    const nextPageLink = $('.next a').attr('href');
+    console.log('Next page link:', nextPageLink);
+
+    return {
+      jobs,
+      nextPageLink: nextPageLink ? `https://unjobs.org${nextPageLink}` : null
+    };
   } catch (error) {
-    console.error('Error fetching jobs:', error);
+    console.error('Error fetching jobs from page:', error);
     throw error;
   }
+}
+
+async function fetchAllJobs(): Promise<UNJob[]> {
+  const allJobs: UNJob[] = [];
+  let currentUrl = 'https://unjobs.org/';
+  let pageCount = 1;
+  const MAX_PAGES = 5; // Limit to 5 pages to avoid timeouts
+
+  while (currentUrl && pageCount <= MAX_PAGES) {
+    console.log(`Fetching page ${pageCount}...`);
+    const { jobs, nextPageLink } = await fetchJobsFromPage(currentUrl);
+    allJobs.push(...jobs);
+    console.log(`Found ${jobs.length} jobs on page ${pageCount}. Total jobs so far: ${allJobs.length}`);
+    
+    if (!nextPageLink) break;
+    currentUrl = nextPageLink;
+    pageCount++;
+  }
+
+  return allJobs;
 }
 
 Deno.serve(async (req) => {
@@ -77,8 +101,8 @@ Deno.serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
-    const jobs = await fetchJobs();
-    console.log(`Fetched ${jobs.length} jobs, preparing to update database`);
+    const jobs = await fetchAllJobs();
+    console.log(`Fetched total of ${jobs.length} jobs, preparing to update database`);
 
     // Process jobs in batches to avoid potential timeout issues
     const batchSize = 50;
