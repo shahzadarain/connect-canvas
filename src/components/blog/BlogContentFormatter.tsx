@@ -70,14 +70,16 @@ export const BlogContentFormatter = ({ content }: BlogContentFormatterProps) => 
       if (line.startsWith('```')) {
         if (!inCodeBlock) {
           inCodeBlock = true;
-          currentLanguage = line.slice(3).toLowerCase() || 'plaintext';
+          // Support both 'js' and 'javascript' language identifiers
+          const lang = line.slice(3).toLowerCase();
+          currentLanguage = lang === 'js' || lang === 'javascript' ? 'javascript' : lang || 'plaintext';
           currentCode = '';
           continue;
         } else {
           inCodeBlock = false;
           formattedContent.push(
             <div key={currentIndex} className="my-6 animate-fade-in">
-              <CodeBlock language={currentLanguage} code={currentCode} />
+              <CodeBlock language={currentLanguage} code={currentCode.trim()} />
             </div>
           );
           currentIndex++;
@@ -141,7 +143,7 @@ export const BlogContentFormatter = ({ content }: BlogContentFormatterProps) => 
         continue;
       }
 
-      // Handle lists - only if line starts with - or * and doesn't contain HTML
+      // Handle lists
       if ((line.startsWith('- ') || line.startsWith('* ') || line.match(/^\d+\./)) && !line.includes('<')) {
         inList = true;
         const itemContent = line.replace(/^[-*]\s|^\d+\.\s/, '');
