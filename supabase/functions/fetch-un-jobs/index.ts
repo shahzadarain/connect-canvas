@@ -34,18 +34,21 @@ async function fetchJobsFromPage(pageUrl: string): Promise<{ jobs: UNJob[], next
         
         const job_id = jobElement.attr('id')?.trim() || '';
         const title = titleElement.text().trim();
-        const job_link = titleElement.attr('href') || '';
+        // Get the relative URL path and ensure it starts with a forward slash
+        const jobPath = titleElement.attr('href')?.startsWith('/') 
+          ? titleElement.attr('href') 
+          : `/${titleElement.attr('href')}` || '';
         const organization = jobElement.find('br').get(0)?.nextSibling?.nodeValue?.trim() || '';
         const update_time = timeElement.attr('datetime') || '';
 
-        if (job_id && title && organization && update_time && job_link) {
+        if (job_id && title && organization && update_time && jobPath) {
           console.log(`Found valid job: ${job_id} - ${title}`);
           jobs.push({
             job_id,
             title,
             organization,
             update_time,
-            job_link: `https://unjobs.org${job_link}`,
+            job_link: `https://unjobs.org${jobPath}`, // Correctly construct the URL
           });
         } else {
           console.log('Skipped invalid job entry:', { job_id, title, organization });
@@ -55,17 +58,22 @@ async function fetchJobsFromPage(pageUrl: string): Promise<{ jobs: UNJob[], next
       }
     });
 
-    // Check if there are more jobs by looking for the next page link
-    const hasMoreJobs = $('.next').length > 0;
+    // Get the total number of jobs found on this page
+    console.log(`Found ${jobs.length} jobs on current page`);
+
+    // Check for next page by looking at pagination
+    const nextPageElement = $('.next');
+    const hasNextPage = nextPageElement.length > 0;
+    
+    // Extract current page number from URL or default to 1
     const currentPageMatch = pageUrl.match(/\/new\/(\d+)$/);
     const currentPage = currentPageMatch ? parseInt(currentPageMatch[1]) : 1;
-    const nextPageNumber = hasMoreJobs ? currentPage + 1 : null;
     
-    console.log('Current page:', currentPage, 'Next page number:', nextPageNumber);
-
+    console.log('Current page:', currentPage, 'Has next page:', hasNextPage);
+    
     return {
       jobs,
-      nextPageNumber
+      nextPageNumber: hasNextPage ? currentPage + 1 : null
     };
   } catch (error) {
     console.error('Error fetching jobs from page:', error);
@@ -76,29 +84,43 @@ async function fetchJobsFromPage(pageUrl: string): Promise<{ jobs: UNJob[], next
 async function fetchAllJobs(): Promise<UNJob[]> {
   const allJobs: UNJob[] = [];
   let currentPage = 1;
-  const MAX_PAGES = 10; // Fetch up to 10 pages
+  const MAX_PAGES = 10; // Fetch up to 10 pages to get around 250 jobs
 
   while (currentPage <= MAX_PAGES) {
+    // Construct the URL for the current page
     const pageUrl = currentPage === 1 
       ? 'https://unjobs.org/new' 
       : `https://unjobs.org/new/${currentPage}`;
     
-    console.log(`Fetching page ${currentPage} from URL: ${pageUrl}`);
-    const { jobs, nextPageNumber } = await fetchJobsFromPage(pageUrl);
-    allJobs.push(...jobs);
-    console.log(`Found ${jobs.length} jobs on page ${currentPage}. Total jobs so far: ${allJobs.length}`);
+    console.log(`Fetching page ${currentPage}/${MAX_PAGES} from URL: ${pageUrl}`);
     
-    if (!nextPageNumber) {
-      console.log('No more pages to fetch');
+    try {
+      const { jobs, nextPageNumber } = await fetchJobsFromPage(pageUrl);
+      
+      if (jobs.length === 0) {
+        console.log('No jobs found on current page, stopping pagination');
+        break;
+      }
+      
+      allJobs.push(...jobs);
+      console.log(`Added ${jobs.length} jobs. Total jobs collected: ${allJobs.length}`);
+      
+      if (!nextPageNumber) {
+        console.log('No more pages available');
+        break;
+      }
+      
+      currentPage = nextPageNumber;
+      
+      // Add a delay between requests to be respectful to the server
+      await new Promise(resolve => setTimeout(resolve, 1000));
+    } catch (error) {
+      console.error(`Error fetching page ${currentPage}:`, error);
       break;
     }
-    
-    currentPage = nextPageNumber;
-    
-    // Add a small delay between requests to be respectful to the server
-    await new Promise(resolve => setTimeout(resolve, 1000));
   }
 
+  console.log(`Completed fetching all jobs. Total jobs collected: ${allJobs.length}`);
   return allJobs;
 }
 
