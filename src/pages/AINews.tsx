@@ -27,24 +27,31 @@ const AINews = () => {
     },
   });
 
-  const { data: userRole } = useQuery({
+  const { data: userRole, isLoading: isLoadingRole } = useQuery({
     queryKey: ["user-role", session?.user?.id],
     enabled: !!session?.user?.id,
     queryFn: async () => {
-      console.log('Fetching user role for:', session?.user?.id);
-      const { data, error } = await supabase
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", session?.user?.id)
-        .single();
-      
-      if (error) {
-        console.error('Error fetching user role:', error);
-        throw error;
+      try {
+        console.log('Fetching user role for:', session?.user?.id);
+        const { data, error } = await supabase
+          .from("user_roles")
+          .select("role")
+          .eq("user_id", session?.user?.id)
+          .single();
+        
+        if (error) {
+          console.error('Error fetching user role:', error);
+          return null;
+        }
+        
+        console.log('User role data:', data);
+        return data?.role;
+      } catch (error) {
+        console.error('Unexpected error fetching role:', error);
+        return null;
       }
-      console.log('User role data:', data);
-      return data?.role;
     },
+    retry: false
   });
 
   const updateNews = async () => {
@@ -96,7 +103,7 @@ const AINews = () => {
           <p className="text-xl text-gray-500 mb-8">
             Your daily source for the latest in artificial intelligence
           </p>
-          {userRole === 'admin' && (
+          {!isLoadingRole && userRole === 'admin' && (
             <Button
               onClick={updateNews}
               disabled={isUpdating}
