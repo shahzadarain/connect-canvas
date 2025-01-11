@@ -33,32 +33,8 @@ const AINews = () => {
     },
   });
 
-  const { data: userRole, isLoading: isLoadingRole } = useQuery({
-    queryKey: ["user-role", session?.user?.id],
-    enabled: !!session?.user?.id,
-    queryFn: async () => {
-      try {
-        console.log('Fetching user role for:', session?.user?.id);
-        const { data, error } = await supabase
-          .from("user_roles")
-          .select("role")
-          .eq("user_id", session?.user?.id)
-          .single();
-        
-        if (error) {
-          console.error('Error fetching user role:', error);
-          return null;
-        }
-        
-        console.log('User role data:', data);
-        return data?.role;
-      } catch (error) {
-        console.error('Unexpected error fetching role:', error);
-        return null;
-      }
-    },
-    retry: false
-  });
+  // Simplified role check using JWT claims
+  const isAdmin = session?.user?.role === 'admin';
 
   const updateNews = async () => {
     try {
@@ -109,7 +85,7 @@ const AINews = () => {
           <p className="text-xl text-gray-500 mb-8">
             Your daily source for the latest in artificial intelligence
           </p>
-          {!isLoadingRole && userRole === 'admin' && (
+          {isAdmin && (
             <Button
               onClick={updateNews}
               disabled={isUpdating}
@@ -164,7 +140,7 @@ const AINews = () => {
         ) : (
           <Alert className="max-w-4xl mx-auto">
             <AlertDescription>
-              No news articles available at the moment. {userRole === 'admin' && 'Click the Update News button to fetch the latest articles.'}
+              No news articles available at the moment. {isAdmin && 'Click the Update News button to fetch the latest articles.'}
             </AlertDescription>
           </Alert>
         )}
