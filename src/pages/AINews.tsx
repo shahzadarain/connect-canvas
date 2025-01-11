@@ -5,7 +5,7 @@ import { Newspaper, ExternalLink, RefreshCw } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 import { useSession } from "@supabase/auth-helpers-react";
 import { useState } from "react";
 
@@ -31,13 +31,18 @@ const AINews = () => {
     queryKey: ["user-role", session?.user?.id],
     enabled: !!session?.user?.id,
     queryFn: async () => {
+      console.log('Fetching user role for:', session?.user?.id);
       const { data, error } = await supabase
         .from("user_roles")
         .select("role")
         .eq("user_id", session?.user?.id)
         .single();
       
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching user role:', error);
+        throw error;
+      }
+      console.log('User role data:', data);
       return data?.role;
     },
   });
@@ -45,6 +50,7 @@ const AINews = () => {
   const updateNews = async () => {
     try {
       setIsUpdating(true);
+      console.log('Invoking fetch-ai-news function...');
       const { error } = await supabase.functions.invoke('fetch-ai-news', {
         method: 'POST',
       });
@@ -55,7 +61,6 @@ const AINews = () => {
       toast({
         title: "Success",
         description: "AI news have been updated successfully",
-        className: "bg-white dark:bg-gray-800",
       });
     } catch (error) {
       console.error('Error updating AI news:', error);
