@@ -18,31 +18,42 @@ async function fetchJobs(): Promise<UNJob[]> {
   try {
     console.log('Starting to fetch UN jobs...');
     const response = await fetch('https://unjobs.org/');
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
     const html = await response.text();
     const $ = cheerio.load(html);
     const jobs: UNJob[] = [];
 
     console.log('Parsing HTML content...');
+    // Select all job elements on the page
     $('.job').each((_, element) => {
-      const jobElement = $(element);
-      const titleElement = jobElement.find('a.jtitle');
-      const timeElement = jobElement.find('time.upd.timeago');
-      
-      const job_id = jobElement.attr('id') || '';
-      const title = titleElement.text().trim();
-      const job_link = titleElement.attr('href') || '';
-      const organization = jobElement.find('br').get(0)?.nextSibling?.nodeValue?.trim() || '';
-      const update_time = timeElement.attr('datetime') || '';
+      try {
+        const jobElement = $(element);
+        const titleElement = jobElement.find('a.jtitle');
+        const timeElement = jobElement.find('time.upd.timeago');
+        
+        const job_id = jobElement.attr('id')?.trim() || '';
+        const title = titleElement.text().trim();
+        const job_link = titleElement.attr('href') || '';
+        // Get organization by finding the text after the <br> tag
+        const organization = jobElement.find('br').get(0)?.nextSibling?.nodeValue?.trim() || '';
+        const update_time = timeElement.attr('datetime') || '';
 
-      if (job_id && title && organization && update_time && job_link) {
-        console.log('Found valid job:', { job_id, title });
-        jobs.push({
-          job_id,
-          title,
-          organization,
-          update_time,
-          job_link: `https://unjobs.org${job_link}`,
-        });
+        if (job_id && title && organization && update_time && job_link) {
+          console.log(`Found valid job: ${job_id} - ${title}`);
+          jobs.push({
+            job_id,
+            title,
+            organization,
+            update_time,
+            job_link: `https://unjobs.org${job_link}`,
+          });
+        } else {
+          console.log('Skipped invalid job entry:', { job_id, title, organization });
+        }
+      } catch (error) {
+        console.error('Error processing individual job:', error);
       }
     });
 
@@ -69,22 +80,27 @@ Deno.serve(async (req) => {
     const jobs = await fetchJobs();
     console.log(`Fetched ${jobs.length} jobs, preparing to update database`);
 
-    for (const job of jobs) {
+    // Process jobs in batches to avoid potential timeout issues
+    const batchSize = 50;
+    for (let i = 0; i < jobs.length; i += batchSize) {
+      const batch = jobs.slice(i, i + batchSize);
       const { error } = await supabaseClient
         .from('un_jobs')
         .upsert(
-          {
+          batch.map(job => ({
             job_id: job.job_id,
             title: job.title,
             organization: job.organization,
             update_time: job.update_time,
             job_link: job.job_link,
-          },
+          })),
           { onConflict: 'job_id' }
         );
 
       if (error) {
-        console.error('Error upserting job:', error);
+        console.error(`Error upserting batch ${i / batchSize + 1}:`, error);
+      } else {
+        console.log(`Successfully processed batch ${i / batchSize + 1} of ${Math.ceil(jobs.length / batchSize)}`);
       }
     }
 
