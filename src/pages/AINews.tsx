@@ -19,7 +19,7 @@ const AINews = () => {
       const { data, error } = await supabase
         .from("news_articles")
         .select("*")
-        .order("published_at", { ascending: false });
+        .order('published_at', { ascending: false });
       
       if (error) {
         console.error('Error fetching news articles:', error);
@@ -121,6 +121,9 @@ const AINews = () => {
                 <h2 className="text-xl font-bold text-gray-900 mb-4 font-serif leading-tight">
                   {article.title}
                 </h2>
+                <p className="text-gray-600 mb-4 line-clamp-3">
+                  {article.description}
+                </p>
                 <a
                   href={article.url}
                   target="_blank"
