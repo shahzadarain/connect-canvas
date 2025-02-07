@@ -18,6 +18,7 @@ export type Database = {
           image_url: string | null
           issuer: string
           link: string | null
+          tags: string[] | null
           title: string
         }
         Insert: {
@@ -28,6 +29,7 @@ export type Database = {
           image_url?: string | null
           issuer: string
           link?: string | null
+          tags?: string[] | null
           title: string
         }
         Update: {
@@ -38,6 +40,7 @@ export type Database = {
           image_url?: string | null
           issuer?: string
           link?: string | null
+          tags?: string[] | null
           title?: string
         }
         Relationships: []
