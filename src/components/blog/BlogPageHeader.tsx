@@ -9,7 +9,7 @@ interface BlogPageHeaderProps {
 
 export const BlogPageHeader = ({ isAdmin }: BlogPageHeaderProps) => {
   return (
-    <div className="flex justify-end items-center mb-16">
+    <div className="flex justify-end items-center mb-8">
       {isAdmin && (
         <Link to="/blog/editor">
           <Button variant="outline" className="gap-2">
@@ -21,3 +21,4 @@ export const BlogPageHeader = ({ isAdmin }: BlogPageHeaderProps) => {
     </div>
   );
 };
+
