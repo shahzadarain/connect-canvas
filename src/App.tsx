@@ -22,6 +22,8 @@ import NotFound from "@/pages/NotFound";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import BookDiscussions from "@/pages/BookDiscussions";
 import UNJobs from "@/pages/UNJobs";
+import { VisitorTracker } from "@/components/analytics/VisitorTracker";
+import { AnalyticsDashboard } from "@/components/analytics/AnalyticsDashboard";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -39,6 +41,7 @@ function App() {
         <Router>
           <div className="min-h-screen bg-background flex flex-col">
             <Navigation />
+            <VisitorTracker />
             <main className="flex-grow">
               <Routes>
                 <Route path="/" element={<Index />} />
@@ -80,6 +83,14 @@ function App() {
                 <Route
                   path="/ai-humanitarian/training"
                   element={<AIHumanitarianTraining />}
+                />
+                <Route
+                  path="/analytics"
+                  element={
+                    <ProtectedRoute>
+                      <AnalyticsDashboard />
+                    </ProtectedRoute>
+                  }
                 />
                 <Route path="*" element={<NotFound />} />
               </Routes>
