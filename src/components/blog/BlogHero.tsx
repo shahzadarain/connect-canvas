@@ -3,31 +3,46 @@ import { motion } from "framer-motion";
 
 export const BlogHero = () => {
   return (
-    <div className="relative bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 dark:from-blue-800 dark:via-blue-700 dark:to-indigo-800">
-      {/* Animated grid background */}
-      <div className="absolute inset-0 bg-grid-white/[0.2] bg-grid-16 [mask-image:linear-gradient(0deg,transparent,black)] opacity-50" />
+    <div className="relative h-[280px] sm:h-[320px] bg-gradient-to-br from-blue-600 via-purple-500 to-indigo-600 dark:from-blue-800 dark:via-purple-700 dark:to-indigo-800 overflow-hidden">
+      {/* Animated particles background */}
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9ImN1cnJlbnRDb2xvciIvPjwvc3ZnPg==')] 
+          bg-[length:24px_24px] text-white/[0.2] [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]" />
+      </div>
       
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/10" />
-      
-      <div className="relative container mx-auto px-4 py-28 sm:py-36">
+      {/* Content wrapper */}
+      <div className="relative h-full container mx-auto px-4 flex flex-col justify-center items-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          className="text-center space-y-6"
+          transition={{ 
+            duration: 0.8,
+            ease: [0.22, 1, 0.36, 1]
+          }}
+          className="text-center max-w-3xl"
         >
-          <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl lg:text-7xl">
+          <motion.h1 
+            className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-3"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.8 }}
+          >
             Insights & Ideas
-          </h1>
-          <p className="mt-6 text-lg leading-8 text-blue-50 max-w-2xl mx-auto">
-            Explore our collection of articles, tutorials, and deep dives into technology, development, and more
-          </p>
+          </motion.h1>
+          <motion.p 
+            className="text-md md:text-lg text-blue-50/90 max-w-xl mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.8 }}
+          >
+            Explore our collection of articles, tutorials, and deep dives
+          </motion.p>
         </motion.div>
       </div>
-      
-      {/* Bottom decorative line */}
-      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 via-indigo-500 to-blue-400" />
+
+      {/* Decorative elements */}
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background/80 to-transparent pointer-events-none" />
     </div>
   );
 };
