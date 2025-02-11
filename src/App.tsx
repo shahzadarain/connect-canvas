@@ -1,3 +1,4 @@
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SessionContextProvider } from "@supabase/auth-helpers-react";
@@ -24,6 +25,7 @@ import BookDiscussions from "@/pages/BookDiscussions";
 import UNJobs from "@/pages/UNJobs";
 import { VisitorTracker } from "@/components/analytics/VisitorTracker";
 import { AnalyticsDashboard } from "@/components/analytics/AnalyticsDashboard";
+import DagDashboard from "@/pages/DagDashboard";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -92,6 +94,7 @@ function App() {
                     </ProtectedRoute>
                   }
                 />
+                <Route path="/dashboards" element={<DagDashboard />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </main>
