@@ -309,6 +309,456 @@ export type Database = {
         }
         Relationships: []
       }
+      image_visitors: {
+        Row: {
+          browser: string | null
+          city: string | null
+          country: string | null
+          device: string | null
+          id: string
+          image_id: string | null
+          ip: string | null
+          referrer: string | null
+          timestamp: string | null
+        }
+        Insert: {
+          browser?: string | null
+          city?: string | null
+          country?: string | null
+          device?: string | null
+          id?: string
+          image_id?: string | null
+          ip?: string | null
+          referrer?: string | null
+          timestamp?: string | null
+        }
+        Update: {
+          browser?: string | null
+          city?: string | null
+          country?: string | null
+          device?: string | null
+          id?: string
+          image_id?: string | null
+          ip?: string | null
+          referrer?: string | null
+          timestamp?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "image_visitors_image_id_fkey"
+            columns: ["image_id"]
+            isOneToOne: false
+            referencedRelation: "images"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      images: {
+        Row: {
+          created_at: string | null
+          file_name: string
+          id: string
+          short_link: string
+          storage_path: string | null
+          url: string
+          view_count: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          file_name: string
+          id?: string
+          short_link: string
+          storage_path?: string | null
+          url: string
+          view_count?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          file_name?: string
+          id?: string
+          short_link?: string
+          storage_path?: string | null
+          url?: string
+          view_count?: number | null
+        }
+        Relationships: []
+      }
+      jobs_candidate_skills: {
+        Row: {
+          candidate_id: string | null
+          created_at: string | null
+          id: string
+          level: number | null
+          skill_id: string | null
+        }
+        Insert: {
+          candidate_id?: string | null
+          created_at?: string | null
+          id?: string
+          level?: number | null
+          skill_id?: string | null
+        }
+        Update: {
+          candidate_id?: string | null
+          created_at?: string | null
+          id?: string
+          level?: number | null
+          skill_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jobs_candidate_skills_candidate_id_fkey"
+            columns: ["candidate_id"]
+            isOneToOne: false
+            referencedRelation: "jobs_candidates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "jobs_candidate_skills_skill_id_fkey"
+            columns: ["skill_id"]
+            isOneToOne: false
+            referencedRelation: "jobs_skills"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      jobs_candidates: {
+        Row: {
+          bio: string | null
+          cover_letter: string | null
+          created_at: string | null
+          education: string | null
+          email: string
+          experience: string | null
+          full_name: string
+          id: string
+          location: string | null
+          phone: string | null
+          profile_image_url: string | null
+          profile_visible: boolean | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          bio?: string | null
+          cover_letter?: string | null
+          created_at?: string | null
+          education?: string | null
+          email: string
+          experience?: string | null
+          full_name: string
+          id?: string
+          location?: string | null
+          phone?: string | null
+          profile_image_url?: string | null
+          profile_visible?: boolean | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          bio?: string | null
+          cover_letter?: string | null
+          created_at?: string | null
+          education?: string | null
+          email?: string
+          experience?: string | null
+          full_name?: string
+          id?: string
+          location?: string | null
+          phone?: string | null
+          profile_image_url?: string | null
+          profile_visible?: boolean | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      jobs_companies: {
+        Row: {
+          address: string | null
+          brand_color: string | null
+          city: string | null
+          company_size: string | null
+          country: string | null
+          created_at: string | null
+          email: string
+          facebook: string | null
+          full_description: string | null
+          id: string
+          industry: string | null
+          linkedin: string | null
+          logo_url: string | null
+          name: string
+          phone: string | null
+          short_description: string | null
+          state: string | null
+          twitter: string | null
+          updated_at: string | null
+          website: string | null
+          zip: string | null
+        }
+        Insert: {
+          address?: string | null
+          brand_color?: string | null
+          city?: string | null
+          company_size?: string | null
+          country?: string | null
+          created_at?: string | null
+          email: string
+          facebook?: string | null
+          full_description?: string | null
+          id?: string
+          industry?: string | null
+          linkedin?: string | null
+          logo_url?: string | null
+          name: string
+          phone?: string | null
+          short_description?: string | null
+          state?: string | null
+          twitter?: string | null
+          updated_at?: string | null
+          website?: string | null
+          zip?: string | null
+        }
+        Update: {
+          address?: string | null
+          brand_color?: string | null
+          city?: string | null
+          company_size?: string | null
+          country?: string | null
+          created_at?: string | null
+          email?: string
+          facebook?: string | null
+          full_description?: string | null
+          id?: string
+          industry?: string | null
+          linkedin?: string | null
+          logo_url?: string | null
+          name?: string
+          phone?: string | null
+          short_description?: string | null
+          state?: string | null
+          twitter?: string | null
+          updated_at?: string | null
+          website?: string | null
+          zip?: string | null
+        }
+        Relationships: []
+      }
+      jobs_match_results: {
+        Row: {
+          candidate_id: string | null
+          created_at: string | null
+          experience_match: boolean | null
+          explanation: string | null
+          id: string
+          job_id: string | null
+          location_match: boolean
+          score: number
+          semantic_match_score: number
+          skills_match_score: number
+          updated_at: string | null
+        }
+        Insert: {
+          candidate_id?: string | null
+          created_at?: string | null
+          experience_match?: boolean | null
+          explanation?: string | null
+          id?: string
+          job_id?: string | null
+          location_match: boolean
+          score: number
+          semantic_match_score: number
+          skills_match_score: number
+          updated_at?: string | null
+        }
+        Update: {
+          candidate_id?: string | null
+          created_at?: string | null
+          experience_match?: boolean | null
+          explanation?: string | null
+          id?: string
+          job_id?: string | null
+          location_match?: boolean
+          score?: number
+          semantic_match_score?: number
+          skills_match_score?: number
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jobs_match_results_candidate_id_fkey"
+            columns: ["candidate_id"]
+            isOneToOne: false
+            referencedRelation: "jobs_candidates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "jobs_match_results_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "jobs_postings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      jobs_posting_skills: {
+        Row: {
+          created_at: string | null
+          id: string
+          job_id: string | null
+          level: number | null
+          skill_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          job_id?: string | null
+          level?: number | null
+          skill_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          job_id?: string | null
+          level?: number | null
+          skill_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jobs_posting_skills_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "jobs_postings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "jobs_posting_skills_skill_id_fkey"
+            columns: ["skill_id"]
+            isOneToOne: false
+            referencedRelation: "jobs_skills"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      jobs_postings: {
+        Row: {
+          company_id: string | null
+          created_at: string | null
+          description: string
+          id: string
+          job_type: string | null
+          location: string
+          remote: boolean | null
+          requirements: string | null
+          salary_max: number | null
+          salary_min: number | null
+          status: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          company_id?: string | null
+          created_at?: string | null
+          description: string
+          id?: string
+          job_type?: string | null
+          location: string
+          remote?: boolean | null
+          requirements?: string | null
+          salary_max?: number | null
+          salary_min?: number | null
+          status?: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          company_id?: string | null
+          created_at?: string | null
+          description?: string
+          id?: string
+          job_type?: string | null
+          location?: string
+          remote?: boolean | null
+          requirements?: string | null
+          salary_max?: number | null
+          salary_min?: number | null
+          status?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jobs_postings_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "jobs_companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      jobs_resumes: {
+        Row: {
+          candidate_id: string | null
+          created_at: string | null
+          file_name: string
+          file_path: string
+          file_size: number
+          file_type: string
+          id: string
+          updated_at: string | null
+        }
+        Insert: {
+          candidate_id?: string | null
+          created_at?: string | null
+          file_name: string
+          file_path: string
+          file_size: number
+          file_type: string
+          id?: string
+          updated_at?: string | null
+        }
+        Update: {
+          candidate_id?: string | null
+          created_at?: string | null
+          file_name?: string
+          file_path?: string
+          file_size?: number
+          file_type?: string
+          id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jobs_resumes_candidate_id_fkey"
+            columns: ["candidate_id"]
+            isOneToOne: false
+            referencedRelation: "jobs_candidates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      jobs_skills: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          id: string
+          name: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          id?: string
+          name: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
       learning_resources: {
         Row: {
           author: string | null
@@ -670,7 +1120,7 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "admin" | "user"
+      app_role: "admin" | "user" | "candidate" | "employer"
     }
     CompositeTypes: {
       [_ in never]: never
