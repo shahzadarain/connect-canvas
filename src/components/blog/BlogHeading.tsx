@@ -13,11 +13,11 @@ type HeadingClasses = Record<HeadingLevel, string>;
 
 export const BlogHeading: React.FC<BlogHeadingProps> = ({ level, content, id, formatContent }) => {
   const headingClasses: HeadingClasses = {
-    1: 'text-4xl md:text-5xl font-bold mb-8 text-gray-900 dark:text-gray-100',
-    2: 'text-3xl font-bold mb-6 text-gray-800 dark:text-gray-200',
-    3: 'text-2xl font-bold mb-4 text-gray-800 dark:text-gray-200',
-    4: 'text-xl font-bold mb-3 text-gray-700 dark:text-gray-300',
-    5: 'text-lg font-bold mb-2 text-gray-700 dark:text-gray-300'
+    1: 'text-4xl md:text-5xl font-bold mb-8 text-gray-900 dark:text-gray-100 border-b pb-4 border-gray-200 dark:border-gray-700',
+    2: 'text-3xl font-bold mb-6 text-gray-800 dark:text-gray-200 mt-10 border-l-4 border-blue-500 pl-4',
+    3: 'text-2xl font-bold mb-4 text-gray-800 dark:text-gray-200 mt-8',
+    4: 'text-xl font-bold mb-3 text-gray-700 dark:text-gray-300 mt-6',
+    5: 'text-lg font-bold mb-2 text-gray-700 dark:text-gray-300 mt-4'
   };
 
   const HeadingTag = `h${level}` as const;
@@ -35,8 +35,8 @@ export const BlogHeading: React.FC<BlogHeadingProps> = ({ level, content, id, fo
         href={`#${id}`}
         className="absolute -left-6 top-1/2 -translate-y-1/2 opacity-0 
           group-hover:opacity-100 transition-opacity duration-200 
-          text-gray-400 hover:text-gray-600 dark:text-gray-500 
-          dark:hover:text-gray-300"
+          text-gray-400 hover:text-blue-500 dark:text-gray-500 
+          dark:hover:text-blue-400"
         aria-label="Link to section"
       >
         #

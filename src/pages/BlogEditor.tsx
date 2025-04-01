@@ -1,15 +1,16 @@
-
 import React, { useState } from 'react';
 import BlogEditor from '@/components/blog/editor/BlogEditor';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { createAISafeguardingPost } from '@/utils/blog/addAISafeguardingPost';
 import { updatePovertyMappingPost } from '@/utils/blog/updatePovertyMappingPost';
+import { updateAIIndustryPost } from '@/utils/blog/updateAIIndustryPost';
 
 const BlogEditorPage = () => {
   const { toast } = useToast();
   const [isAdding, setIsAdding] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [isUpdatingIndustry, setIsUpdatingIndustry] = useState(false);
 
   const handleAddAISafeguardingPost = async () => {
     setIsAdding(true);
@@ -51,6 +52,26 @@ const BlogEditorPage = () => {
     }
   };
 
+  const handleUpdateAIIndustryPost = async () => {
+    setIsUpdatingIndustry(true);
+    try {
+      await updateAIIndustryPost();
+      toast({
+        title: "Success",
+        description: "AI Industry blog post updated successfully",
+      });
+    } catch (error) {
+      console.error('Error updating AI Industry post:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update AI Industry blog post",
+        variant: "destructive",
+      });
+    } finally {
+      setIsUpdatingIndustry(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-4">
@@ -68,6 +89,14 @@ const BlogEditorPage = () => {
             variant="outline"
           >
             {isUpdating ? 'Updating...' : 'Update Poverty Mapping SEO'}
+          </Button>
+
+          <Button 
+            onClick={handleUpdateAIIndustryPost} 
+            disabled={isUpdatingIndustry}
+            variant="secondary"
+          >
+            {isUpdatingIndustry ? 'Updating...' : 'Improve AI Industry Blog Format'}
           </Button>
         </div>
       </div>

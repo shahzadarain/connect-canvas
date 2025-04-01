@@ -11,12 +11,13 @@ interface BlogListItemProps {
 export const BlogListItem = ({ content, index, formatContent }: BlogListItemProps) => {
   return (
     <li
-      className="flex items-start gap-2 text-gray-700 dark:text-gray-300 
-        py-1 rounded-lg transition-colors duration-200 animate-fade-in"
+      className="flex items-start gap-3 text-gray-700 dark:text-gray-300 
+        py-2 px-3 rounded-lg transition-colors duration-200 animate-fade-in
+        hover:bg-gray-50 dark:hover:bg-gray-800/50"
       style={{ animationDelay: `${index * 100}ms` }}
     >
-      <span className="flex-shrink-0 w-2 h-2 mt-2.5">
-        <Circle className="w-2 h-2 text-blue-500 fill-current" />
+      <span className="flex-shrink-0 w-5 h-5 mt-1">
+        <Circle className="w-4 h-4 text-blue-500 fill-current" />
       </span>
       <span className="flex-1 text-base leading-relaxed">
         {formatContent(content)}
