@@ -1,16 +1,15 @@
+
 import React from 'react';
 
 const PLACEHOLDER_IMAGES = [
-  'photo-1486718448742-163732cd1544',
-  'photo-1439337153520-7082a56a81f4',
-  'photo-1497604401993-f2e922e5cb0a',
-  'photo-1473177104440-ffee2f376098',
-  'photo-1494891848038-7bd202a2afeb',
-  'photo-1551038247-3d9af20df552',
-  'photo-1433832597046-4f10e10ac764',
-  'photo-1493397212122-2b85dda8106b',
-  'photo-1466442929976-97f336a657be',
-  'photo-1492321936769-b49830bc1d1e',
+  'photo-1488590528505-98d2b5aba04b',
+  'photo-1518770660439-4636190af475',
+  'photo-1461749280684-dccba630e2f6',
+  'photo-1486312338219-ce68d2c6f44d',
+  'photo-1581091226825-a6a2a5aee158',
+  'photo-1531297484001-80022131f5a1',
+  'photo-1487058792275-0ad4aaf24ca7',
+  'photo-1498050108023-c5249f4df085',
 ];
 
 interface BlogCoverImageProps {
@@ -18,6 +17,8 @@ interface BlogCoverImageProps {
 }
 
 export const BlogCoverImage = ({ featuredImage }: BlogCoverImageProps) => {
+  const [imageError, setImageError] = React.useState(false);
+
   const getRandomPlaceholderImage = () => {
     const randomIndex = Math.floor(Math.random() * PLACEHOLDER_IMAGES.length);
     const imageId = PLACEHOLDER_IMAGES[randomIndex];
@@ -54,19 +55,23 @@ export const BlogCoverImage = ({ featuredImage }: BlogCoverImageProps) => {
     return fullUrl;
   };
 
-  const imageUrl = processImageUrl(featuredImage || '');
+  // Use a placeholder if there's an error or no image
+  const finalImageUrl = imageError || !featuredImage
+    ? getRandomPlaceholderImage()
+    : processImageUrl(featuredImage);
 
   return (
-    <div className="relative aspect-[2/1] rounded-xl overflow-hidden shadow-2xl">
+    <div className="relative aspect-[2/1] rounded-xl overflow-hidden shadow-2xl mb-12">
       <img
-        src={imageUrl}
+        src={finalImageUrl}
         alt="Blog post cover"
         className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-        onError={(e) => {
-          console.error('Error loading image:', imageUrl);
-          e.currentTarget.src = getRandomPlaceholderImage();
+        onError={() => {
+          console.error('Error loading image:', featuredImage);
+          setImageError(true);
         }}
       />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
     </div>
   );
 };

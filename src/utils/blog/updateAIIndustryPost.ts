@@ -21,7 +21,7 @@ export const updateAIIndustryPost = async () => {
       throw new Error('Blog post not found');
     }
 
-    // Clean up the content by removing reference links
+    // Clean up the content
     let updatedContent = existingPost.content;
     
     // Remove reference links like [1], [2], etc.
@@ -29,6 +29,12 @@ export const updateAIIndustryPost = async () => {
     
     // Remove any "References" section at the end if it exists
     updatedContent = updatedContent.replace(/## References[\s\S]*$/, '');
+    
+    // Remove URLs in parentheses
+    updatedContent = updatedContent.replace(/\(https?:\/\/[^\s\)]+\)/g, '');
+    
+    // Remove standalone URLs
+    updatedContent = updatedContent.replace(/https?:\/\/[^\s]+/g, '');
     
     // Add spacing between paragraphs for better readability
     updatedContent = updatedContent.replace(/\n\n/g, '\n\n\n');
@@ -53,7 +59,8 @@ export const updateAIIndustryPost = async () => {
       .update({
         content: updatedContent,
         tags: tags,
-        status: 'published' // Ensure it's published
+        status: 'published', // Ensure it's published
+        featured_image: '/lovable-uploads/photo-1488590528505-98d2b5aba04b.jpeg' // Add a default featured image
       })
       .eq('id', existingPost.id);
 
