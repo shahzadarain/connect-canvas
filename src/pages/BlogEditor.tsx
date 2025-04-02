@@ -5,12 +5,14 @@ import { useToast } from '@/hooks/use-toast';
 import { createAISafeguardingPost } from '@/utils/blog/addAISafeguardingPost';
 import { updatePovertyMappingPost } from '@/utils/blog/updatePovertyMappingPost';
 import { updateAIIndustryPost } from '@/utils/blog/updateAIIndustryPost';
+import { createMCPPost } from '@/utils/blog/addMCPPost';
 
 const BlogEditorPage = () => {
   const { toast } = useToast();
   const [isAdding, setIsAdding] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isUpdatingIndustry, setIsUpdatingIndustry] = useState(false);
+  const [isAddingMCP, setIsAddingMCP] = useState(false);
 
   const handleAddAISafeguardingPost = async () => {
     setIsAdding(true);
@@ -72,6 +74,26 @@ const BlogEditorPage = () => {
     }
   };
 
+  const handleAddMCPPost = async () => {
+    setIsAddingMCP(true);
+    try {
+      await createMCPPost();
+      toast({
+        title: "Success",
+        description: "Model Context Protocol blog post added successfully",
+      });
+    } catch (error) {
+      console.error('Error adding MCP post:', error);
+      toast({
+        title: "Error",
+        description: "Failed to add Model Context Protocol blog post",
+        variant: "destructive",
+      });
+    } finally {
+      setIsAddingMCP(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-4">
@@ -97,6 +119,15 @@ const BlogEditorPage = () => {
             variant="secondary"
           >
             {isUpdatingIndustry ? 'Updating...' : 'Improve AI Industry Blog Format'}
+          </Button>
+
+          <Button 
+            onClick={handleAddMCPPost} 
+            disabled={isAddingMCP}
+            variant="default"
+            className="bg-blue-600 hover:bg-blue-700"
+          >
+            {isAddingMCP ? 'Adding...' : 'Add MCP Blog Post'}
           </Button>
         </div>
       </div>
