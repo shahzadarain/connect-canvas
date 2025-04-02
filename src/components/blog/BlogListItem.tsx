@@ -13,7 +13,8 @@ export const BlogListItem = ({ content, index, formatContent }: BlogListItemProp
     <li
       className="flex items-start gap-4 text-gray-700 dark:text-gray-300 
         py-3 px-4 rounded-lg transition-colors duration-200 animate-fade-in
-        hover:bg-gray-50 dark:hover:bg-gray-800/50 mb-3"
+        hover:bg-gray-50 dark:hover:bg-gray-800/50 mb-4 border border-transparent
+        hover:border-gray-200 dark:hover:border-gray-700"
       style={{ animationDelay: `${index * 100}ms` }}
     >
       <span className="flex-shrink-0 w-5 h-5 mt-1">

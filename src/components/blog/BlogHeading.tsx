@@ -16,7 +16,7 @@ export const BlogHeading: React.FC<BlogHeadingProps> = ({ level, content, id, fo
     1: 'text-4xl md:text-5xl font-bold mb-10 mt-6 text-gray-900 dark:text-gray-100 border-b pb-4 border-gray-200 dark:border-gray-700',
     2: 'text-3xl font-bold mb-8 mt-14 text-gray-800 dark:text-gray-200 border-l-4 border-blue-500 pl-4 py-2 bg-gray-50 dark:bg-gray-800/60 rounded-r-lg shadow-sm',
     3: 'text-2xl font-bold mb-6 mt-12 text-gray-800 dark:text-gray-200 pb-2 border-b border-gray-200 dark:border-gray-700',
-    4: 'text-xl font-bold mb-4 mt-10 text-gray-700 dark:text-gray-300 pb-1',
+    4: 'text-xl font-bold mb-4 mt-10 text-gray-700 dark:text-gray-300 pb-1 border-b border-gray-100 dark:border-gray-800',
     5: 'text-lg font-bold mb-3 mt-8 text-gray-700 dark:text-gray-300'
   };
 
